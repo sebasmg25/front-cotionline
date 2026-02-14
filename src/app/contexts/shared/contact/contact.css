@@ -1,0 +1,150 @@
+/* ==========================================
+  1. Estilos Globales de la Sección
+  ==========================================
+*/
+.contact-section {
+  padding: 80px 20px;
+  background-color: white;
+  text-align: center;
+}
+
+.section-header h1 {
+  font-size: 36px;
+  font-weight: 700;
+  color: #333;
+  margin-bottom: 50px;
+}
+
+/* ==========================================
+  2. Estructura del FAQ (Dos Columnas)
+  ==========================================
+*/
+.faq-container {
+  display: flex;
+  justify-content: center;
+  gap: 50px;
+  max-width: 1000px;
+  margin: 0 auto 80px auto; /* Espacio antes del CTA */
+  text-align: left;
+}
+
+.faq-column {
+  flex: 1; /* Ambas columnas ocupan el mismo espacio */
+  min-width: 45%;
+}
+
+.faq-item {
+  margin-bottom: 30px;
+}
+
+/* 3. Estilos de Pregunta y Respuesta */
+.faq-question {
+  display: flex;
+  align-items: flex-start;
+  font-size: 18px;
+  font-weight: 500;
+  color: #333;
+  margin-top: 0;
+  margin-bottom: 8px;
+}
+
+.question-icon {
+  font-size: 24px;
+  color: #3f51b5; /* Icono azul */
+  margin-right: 10px;
+  margin-top: 2px;
+}
+
+.faq-answer {
+  font-size: 15px;
+  color: #666;
+  line-height: 1.5;
+  /* Alinea el texto con la pregunta, quitando el espacio del icono */
+  padding-left: 34px;
+}
+
+/* ==========================================
+  4. Bloque de Llamada a la Acción (CTA)
+  ==========================================
+*/
+.cta-block {
+  max-width: 1000px;
+  margin: 0 auto;
+  background-color: #3f51b5; /* Fondo azul oscuro/principal */
+  padding: 40px 60px;
+  border-radius: 12px;
+
+  /* Flexbox para alinear contenido y botón */
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.cta-content {
+  text-align: left;
+  max-width: 60%;
+}
+
+.cta-title {
+  font-size: 30px;
+  font-weight: 700;
+  color: white;
+  margin: 0 0 5px 0;
+}
+
+.cta-subtitle {
+  font-size: 16px;
+  color: #c5cae9; /* Azul claro para el subtítulo */
+  margin: 0;
+}
+
+.cta-button-final {
+  /* Botón de Material plano (mat-flat-button) con estilo blanco */
+  background-color: white;
+  color: #3f51b5; /* Texto azul */
+  font-weight: 600;
+  font-size: 16px;
+  height: 50px;
+  padding: 0 25px;
+  border-radius: 8px;
+  /* Quita la sombra por defecto de mat-flat-button en este caso */
+  box-shadow: none !important;
+}
+
+/* ==========================================
+  5. Diseño Responsivo
+  ==========================================
+*/
+@media (max-width: 800px) {
+  /* Para tabletas y móviles, las FAQ pasan a una sola columna */
+  .faq-container {
+    flex-direction: column;
+    gap: 0;
+    padding: 0 10px;
+  }
+
+  /* El CTA pasa a ser una columna vertical */
+  .cta-block {
+    flex-direction: column;
+    text-align: center;
+    padding: 30px 20px;
+  }
+
+  .cta-content {
+    max-width: 100%;
+    margin-bottom: 20px;
+  }
+
+  .cta-button-final {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .section-header h1 {
+    font-size: 30px;
+  }
+  .cta-title {
+    font-size: 24px;
+  }
+}

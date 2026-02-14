@@ -1,0 +1,118 @@
+/* ==========================================
+  1. Estilos del Contenedor Principal
+  ==========================================
+*/
+.features-section {
+  padding: 80px 50px; /* Espaciado interno de la sección */
+  background-color: white;
+}
+
+/* ==========================================
+  2. Encabezado
+  ==========================================
+*/
+.section-header {
+  text-align: center;
+  margin-bottom: 50px;
+  max-width: 700px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.section-header h1 {
+  font-size: 36px;
+  font-weight: 700;
+  color: #333;
+  margin-bottom: 10px;
+}
+
+.section-header p {
+  font-size: 16px;
+  color: #666;
+  line-height: 1.5;
+}
+
+.section-header p strong {
+  /* Estilo para "cotizapp" */
+  font-weight: 600;
+  color: #3f51b5; /* Color primario azul */
+}
+
+/* ==========================================
+  3. CSS Grid para la Disposición
+  ==========================================
+*/
+.features-grid {
+  display: grid;
+  /* Por defecto: 3 columnas de igual tamaño con un espacio de 30px */
+  grid-template-columns: repeat(3, 1fr);
+  gap: 50px 30px;
+  /* Centrar el grid */
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* ==========================================
+  4. Estilos de la Tarjeta Individual (Feature Card)
+  ==========================================
+*/
+.feature-card {
+  text-align: center;
+}
+
+/* Contenedor del Ícono */
+.icon-wrapper {
+  /* Simula el círculo o fondo del ícono */
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  background-color: #e8f0fe; /* Fondo azul muy claro */
+  margin-bottom: 15px;
+}
+
+.feature-icon {
+  /* Estilo del ícono */
+  font-size: 36px;
+  color: #3f51b5; /* Color azul primario */
+}
+
+.feature-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: #333;
+  margin-top: 0;
+  margin-bottom: 10px;
+}
+
+.feature-description {
+  font-size: 14px;
+  color: #666;
+  line-height: 1.4;
+  /* Limita el ancho del texto para mejor lectura */
+  max-width: 250px;
+  margin: 0 auto;
+}
+
+/* ==========================================
+  5. Diseño Responsivo
+  ==========================================
+*/
+@media (max-width: 992px) {
+  /* En pantallas medianas (tabletas), cambia a 2 columnas */
+  .features-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 600px) {
+  /* En móviles, cambia a 1 columna */
+  .features-grid {
+    grid-template-columns: 1fr;
+  }
+  .features-section {
+    padding: 50px 20px;
+  }
+}

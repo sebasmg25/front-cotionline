@@ -1,0 +1,78 @@
+<mat-sidenav-container class="sidenav-container">
+  <!-- 1. Sidenav (El menú lateral oscuro) -->
+  <!-- Usamos la clase 'expanded' por defecto para que se vea ancho, ya que no hay lógica de colapso. -->
+  <mat-sidenav mode="side" opened="true" disableClose="true" class="custom-sidenav expanded">
+    <!-- Cabecera del Sidenav: Logo y Botón de Cierre -->
+    <div class="sidenav-header">
+      <!-- Logo visible por defecto -->
+      <div class="logo-area">
+        <!-- El 'A' y el texto "Angular" de la imagen -->
+        <span class="logo-text">Inicio</span>
+      </div>
+
+      <!-- Botón de Cierre (la 'X' o 'close' de la imagen) -->
+      <button mat-icon-button class="toggle-button">
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+
+    <!-- Lista de Navegación -->
+    <mat-nav-list class="nav-list">
+      <!-- Item 1: Dashboard (Inactivo) -->
+      <mat-list-item class="nav-item">
+        <mat-icon matListItemIcon>home</mat-icon>
+        <span class="nav-label">Dashboard</span>
+      </mat-list-item>
+
+      <!-- Item 3: Statistics (Inactivo) -->
+      <mat-list-item class="nav-item" (click)="businessDashboard()">
+        <mat-icon matListItemIcon>business</mat-icon>
+        <span class="nav-label">Negocio</span>
+      </mat-list-item>
+
+      <!-- Item 4: Coupens (Inactivo) -->
+      <mat-list-item class="nav-item" (click)="branchDashboard()">
+        <mat-icon matListItemIcon>sell</mat-icon>
+        <span class="nav-label">Sucursales</span>
+      </mat-list-item>
+
+      <!-- Item 5: Pages (Inactivo) -->
+      <mat-list-item class="nav-item" (click)="quotationRequestDashboard()">
+        <mat-icon matListItemIcon>description</mat-icon>
+        <span class="nav-label">Solicitudes de cotización</span>
+      </mat-list-item>
+
+      <!-- Item 6: Media (Inactivo) -->
+      <mat-list-item class="nav-item">
+        <mat-icon matListItemIcon>camera_alt</mat-icon>
+        <span class="nav-label">Cotizaciones</span>
+      </mat-list-item>
+
+      <!-- Item 7: Settings (Inactivo) -->
+      <mat-list-item class="nav-item" (click)="updatePlanDashboard()">
+        <mat-icon matListItemIcon>workspace_premium</mat-icon>
+        <span class="nav-label">Actualizar plan</span>
+      </mat-list-item>
+
+      <mat-list-item class="nav-item">
+        <mat-icon matListItemIcon>group</mat-icon>
+        <span class="nav-label">Colaboradores</span>
+      </mat-list-item>
+
+      <mat-list-item class="nav-item">
+        <mat-icon matListItemIcon>settings</mat-icon>
+        <span class="nav-label">Settings</span>
+      </mat-list-item>
+    </mat-nav-list>
+
+    <!-- Puedes añadir aquí un Pie de página estático si lo deseas, pero la imagen no lo muestra explícitamente -->
+  </mat-sidenav>
+
+  <!-- 2. Contenido Principal de la Aplicación (Placeholder) -->
+  <mat-sidenav-content class="sidenav-content">
+    <div class="main-content-wrapper">
+      <h1 class="text-3xl font-bold text-gray-800 mb-6">Contenido Principal</h1>
+      <p class="text-gray-600">Esta es el área donde se cargará el contenido de la aplicación.</p>
+    </div>
+  </mat-sidenav-content>
+</mat-sidenav-container>

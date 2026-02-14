@@ -1,0 +1,233 @@
+/* Importante: Reemplaza todos los estilos de precios que tienes con esta estructura */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+
+/* ==========================================
+   1. CONTENEDOR HOST (CRÍTICO)
+   ========================================== */
+:host {
+  display: flex;
+  justify-content: center;
+  padding: 40px 20px;
+  font-family: 'Inter', sans-serif;
+  background-color: #f8fafc;
+
+  /* ESTILO CRÍTICO: Aplica el margen de desplazamiento directamente a la etiqueta 
+     que contiene el ID de anclaje (es decir, <app-update-plan id="prices-section">) */
+  scroll-margin-top: 70px;
+}
+
+/* Sección Principal */
+.pricing-section {
+  max-width: 1200px;
+  width: 100%;
+  text-align: center;
+}
+
+/* Encabezado */
+.section-header h1 {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #333;
+  margin-bottom: 0.5rem;
+}
+
+.section-header p {
+  font-size: 1.125rem;
+  color: #64748b;
+  margin-bottom: 3rem;
+}
+
+/* Selector de Precios (Switcher) */
+.pricing-switcher-wrapper {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 3rem;
+}
+
+.pricing-switcher {
+  display: flex;
+  background-color: #e2e8f0;
+  border-radius: 9999px;
+  padding: 4px;
+  gap: 8px;
+}
+
+.switcher-option {
+  padding: 10px 20px;
+  border-radius: 9999px;
+  font-weight: 600;
+  cursor: pointer;
+  color: #475569;
+  transition: all 0.2s ease-in-out;
+  position: relative;
+}
+
+.switcher-option.active {
+  background-color: #ffffff;
+  color: #1e293b;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+}
+
+.badge {
+  position: absolute;
+  top: -10px;
+  right: -20px;
+  background-color: #ef4444;
+  color: white;
+  padding: 2px 8px;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  transform: rotate(5deg);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Grid de Planes */
+.plans-grid {
+  display: grid;
+  grid-template-columns: repeat(1, 1fr);
+  gap: 20px;
+}
+
+@media (min-width: 768px) {
+  .plans-grid {
+    grid-template-columns: repeat(3, 1fr);
+    align-items: stretch;
+  }
+}
+
+/* Estilo de las Tarjetas de Plan */
+.plan-card {
+  border-radius: 1rem;
+  padding: 24px;
+  transition: all 0.3s ease-in-out;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  background-color: white;
+}
+
+.plan-card:hover {
+  transform: translateY(-5px);
+}
+
+.best-seller {
+  border: 3px solid #3f51b5;
+  position: relative;
+  overflow: hidden;
+}
+
+.best-ribbon {
+  position: absolute;
+  top: 0;
+  right: 0;
+  background-color: #3f51b5;
+  color: white;
+  font-weight: 700;
+  padding: 4px 20px;
+  font-size: 0.8rem;
+  transform: rotate(45deg) translate(20px, -20px);
+  transform-origin: 100% 0%;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.plan-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #1e293b;
+  margin-bottom: 0.5rem;
+}
+
+/* Precio */
+.plan-price {
+  font-size: 3rem;
+  font-weight: 700;
+  color: #3f51b5;
+  margin-bottom: 1rem;
+  line-height: 1;
+}
+
+.best-seller .plan-price {
+  color: #3f51b5;
+}
+
+.price-period {
+  font-size: 1.1rem;
+  font-weight: 400;
+  color: #64748b;
+}
+
+/* Estilos de Ahorro Anual */
+.annual-save-message {
+  color: #3f51b5;
+  font-weight: 600;
+  font-size: 0.9rem;
+  margin-top: -10px;
+  margin-bottom: 5px;
+  height: 20px;
+}
+
+.annual-save-message.empty-placeholder {
+  height: 20px;
+  visibility: hidden;
+}
+
+.original-price {
+  text-decoration: line-through;
+  color: #94a3b8;
+  font-weight: 400;
+  font-size: 0.8rem;
+}
+
+/* Lista de Características */
+.plan-features {
+  list-style: none;
+  padding: 0;
+  margin: 20px 0 30px;
+  text-align: left;
+  flex-grow: 1;
+}
+
+.feature-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 12px;
+  font-size: 1rem;
+  color: #475569;
+}
+
+.check-icon {
+  color: #3f51b5;
+  margin-right: 8px;
+  font-size: 18px;
+}
+
+.close-icon {
+  color: #475569;
+  margin-right: 8px;
+  font-size: 18px;
+}
+
+/* Botones */
+.card-actions-bottom {
+  display: flex;
+  justify-content: center;
+  padding: 0;
+}
+
+.plan-button {
+  width: 100%;
+  font-weight: 700;
+  padding: 10px 0;
+  border-radius: 0.75rem;
+}
+
+.mat-mdc-unelevated-button.mat-primary {
+  background-color: #3f51b5;
+}
+
+.mat-mdc-unelevated-button.mat-accent {
+  background-color: #94a3b8;
+}

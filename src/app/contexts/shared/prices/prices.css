@@ -1,0 +1,198 @@
+/* ==========================================
+  1. Contenedor y Encabezado
+  ==========================================
+*/
+.pricing-section {
+  padding: 80px 20px;
+  background-color: white;
+  text-align: center;
+}
+
+.section-header h1 {
+  font-size: 36px;
+  font-weight: 700;
+  color: #333;
+  margin-bottom: 10px;
+}
+
+.section-header p {
+  font-size: 16px;
+  color: #666;
+  max-width: 600px;
+  margin: 0 auto 40px auto;
+}
+
+/* ==========================================
+  2. Selector Mensual/Anual
+  ==========================================
+*/
+.pricing-switcher-wrapper {
+  margin-bottom: 40px;
+}
+
+.pricing-switcher {
+  display: inline-flex;
+  border-radius: 8px;
+  background-color: #f0f0f0; /* Fondo gris claro */
+  padding: 4px;
+}
+
+.switcher-option {
+  padding: 8px 15px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  border-radius: 5px;
+  transition: all 0.2s ease;
+}
+
+.switcher-option.active {
+  background-color: white;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  color: #333;
+}
+
+.switcher-option.annual {
+  display: flex;
+  align-items: center;
+}
+
+.badge {
+  background-color: #5c6bc0; /* Color azul para el badge */
+  color: white;
+  font-size: 11px;
+  padding: 2px 6px;
+  border-radius: 4px;
+  margin-left: 8px;
+  font-weight: 600;
+}
+
+/* ==========================================
+  3. CSS Grid para Planes
+  ==========================================
+*/
+.plans-grid {
+  display: grid;
+  /* 4 columnas en desktop */
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+  max-width: 1300px;
+  margin: 0 auto;
+  align-items: stretch; /* Asegura que todas las tarjetas tengan la misma altura */
+}
+
+/* ==========================================
+  4. Estilos de la Tarjeta (mat-card)
+  ==========================================
+*/
+.plan-card {
+  /* Estilo general de la tarjeta */
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 20px;
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+}
+
+.plan-title {
+  font-size: 16px;
+  font-weight: 600;
+  margin-top: 0;
+  margin-bottom: 10px;
+  color: #555;
+  text-transform: uppercase;
+}
+
+.plan-price {
+  font-size: 36px;
+  font-weight: 700;
+  color: #3f51b5; /* Color azul principal */
+  margin-bottom: 25px;
+}
+
+.price-period {
+  font-size: 16px;
+  font-weight: 500;
+  color: #777;
+}
+
+/* 5. Lista de Características */
+.plan-features {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  flex-grow: 1; /* Esto empuja el botón hacia abajo para alineación */
+}
+
+.feature-item {
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+  color: #555;
+  margin-bottom: 10px;
+}
+
+.check-icon {
+  font-size: 18px;
+  color: #4caf50; /* Color verde para el check */
+  margin-right: 8px;
+}
+
+/* 6. Botón en la Parte Inferior */
+.card-actions-bottom {
+  padding: 15px 0 0 0;
+  display: flex;
+  justify-content: center;
+}
+
+.plan-button {
+  width: 100%;
+  height: 44px;
+  font-weight: 600;
+}
+
+/* 7. Estilo de la Tarjeta BEST SELLER */
+.plan-card.best-seller {
+  position: relative;
+  /* Estilo para destacarla */
+  border-color: #3f51b5;
+}
+
+.best-ribbon {
+  /* Simula la esquina azul */
+  position: absolute;
+  top: 0;
+  right: 0;
+  background-color: #3f51b5;
+  color: white;
+  padding: 0 10px;
+  font-size: 12px;
+  font-weight: 700;
+  transform: translateY(-50%) translateX(50%) rotate(45deg);
+  transform-origin: 100% 0;
+  width: 100px;
+  text-align: center;
+  /* Clip Path para simular el corte */
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+  z-index: 10;
+}
+
+/* ==========================================
+  8. Diseño Responsivo
+  ==========================================
+*/
+@media (max-width: 1100px) {
+  /* En tabletas, cambia a 2 columnas */
+  .plans-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 650px) {
+  /* En móviles, cambia a 1 columna */
+  .plans-grid {
+    grid-template-columns: 1fr;
+    padding: 0 10px;
+  }
+}

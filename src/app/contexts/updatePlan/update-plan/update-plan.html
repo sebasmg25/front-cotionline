@@ -1,0 +1,181 @@
+<section class="pricing-section">
+  <header class="section-header">
+    <h1>Mejora tu plan de CotiOnline</h1>
+    <p>
+      Elige el plan que mejor se adapte a tu volumen de negocio y obtén acceso a gestión avanzada y
+      más colaboradores.
+    </p>
+  </header>
+
+  <!-- Selector Mensual/Anual -->
+
+  <div class="pricing-switcher-wrapper">
+    <div class="pricing-switcher">
+      <span
+        class="switcher-option"
+        [class.active]="billingCycle() === 'mensual'"
+        (click)="selectBillingCycle('mensual')"
+      >
+        Mensual
+      </span>
+      <span
+        class="switcher-option annual"
+        [class.active]="billingCycle() === 'anual'"
+        (click)="selectBillingCycle('anual')"
+      >
+        Anual <span class="badge">-15%</span>
+      </span>
+    </div>
+  </div>
+
+  <div class="plans-grid">
+    <!-- ======================= PLAN GRATUITO (Trial) ======================= -->
+    <!-- Este plan no cambia con el selector -->
+    <mat-card class="plan-card free-plan">
+      <mat-card-content>
+        <h2 class="plan-title">GRATUITO</h2>
+        <p class="plan-price">$0<span class="price-period"> /14 días (Prueba)</span></p>
+
+        <ul class="plan-features">
+          <li class="feature-item">
+            <mat-icon class="check-icon">check</mat-icon> 14 Días de Acceso
+          </li>
+          <li class="feature-item">
+            <mat-icon class="check-icon">check</mat-icon> 5 Solicitudes de Cotización
+          </li>
+          <li class="feature-item">
+            <mat-icon class="check-icon">check</mat-icon> 5 Cotizaciones Generadas
+          </li>
+          <li class="feature-item">
+            <!-- Nuevo: Clientes Ilimitados (Check) -->
+            <mat-icon class="check-icon">check</mat-icon> Clientes Ilimitados
+          </li>
+          <li class="feature-item">
+            <!-- Modificado: Seguimiento de Cotizaciones (Close) -->
+            <mat-icon class="close-icon">close</mat-icon> Seguimiento de Cotizaciones
+          </li>
+          <li class="feature-item">
+            <mat-icon class="close-icon">close</mat-icon> Gestión de Negocio
+          </li>
+          <li class="feature-item">
+            <mat-icon class="close-icon">close</mat-icon> Colaboradores: 0
+          </li>
+        </ul>
+      </mat-card-content>
+      <mat-card-actions class="card-actions-bottom">
+        <button mat-flat-button color="accent" class="plan-button">Plan Actual</button>
+      </mat-card-actions>
+    </mat-card>
+
+    <!-- ======================= PLAN BÁSICO ======================= -->
+    <mat-card class="plan-card">
+      <mat-card-content>
+        <h2 class="plan-title">BÁSICO</h2>
+        <!-- Mensaje de ahorro solo visible en modo Anual -->
+        @if (billingCycle() === 'anual') {
+        <p class="annual-save-message">
+          ¡Ahorras 15%!
+          <span class="original-price">
+            ({{ getOriginalMonthlyPrice('basico') | currency : 'USD' : 'symbol' : '1.0-0' }} /Mes)
+          </span>
+        </p>
+        }
+        <!-- Espacio reservado para el mensaje de ahorro si no es anual -->
+        @else {
+        <p class="annual-save-message empty-placeholder"></p>
+        }
+        <p class="plan-price">
+          <!-- Muestra el precio actual (Mensual o Anual) -->
+          {{ getCurrentPrice('basico') | currency : 'USD' : 'symbol' : '1.0-0' }}
+          <span class="price-period"> /{{ billingCycle() === 'mensual' ? 'Mes' : 'Año' }}</span>
+        </p>
+
+        <ul class="plan-features">
+          <li class="feature-item">
+            <mat-icon class="check-icon">check</mat-icon> Vigencia:
+            {{ billingCycle() === 'mensual' ? '1 Mes' : '1 Año' }}
+          </li>
+          <li class="feature-item">
+            <mat-icon class="check-icon">check</mat-icon> 25 Solicitudes de Cotización
+          </li>
+          <li class="feature-item">
+            <mat-icon class="check-icon">check</mat-icon> 25 Cotizaciones Generadas
+          </li>
+          <li class="feature-item">
+            <!-- Nuevo: Clientes Ilimitados (Check) -->
+            <mat-icon class="check-icon">check</mat-icon> Clientes Ilimitados
+          </li>
+          <li class="feature-item">
+            <!-- Nuevo: Seguimiento de Cotizaciones (Check) -->
+            <mat-icon class="check-icon">check</mat-icon> Seguimiento de Cotizaciones
+          </li>
+          <li class="feature-item">
+            <mat-icon class="check-icon">check</mat-icon> Gestión de Negocio
+          </li>
+          <li class="feature-item">
+            <mat-icon class="check-icon">check</mat-icon> 1 Colaborador Adicional
+          </li>
+        </ul>
+      </mat-card-content>
+      <mat-card-actions class="card-actions-bottom">
+        <button mat-flat-button color="primary" class="plan-button">Seleccionar Básico</button>
+      </mat-card-actions>
+    </mat-card>
+
+    <!-- ======================= PLAN PREMIUM (Destacado) ======================= -->
+    <mat-card class="plan-card best-seller">
+      <div class="best-ribbon">MÁS POPULAR</div>
+      <mat-card-content>
+        <h2 class="plan-title">PREMIUM</h2>
+        <!-- Mensaje de ahorro solo visible en modo Anual -->
+        @if (billingCycle() === 'anual') {
+        <p class="annual-save-message">
+          ¡Ahorras 15%!
+          <span class="original-price">
+            ({{ getOriginalMonthlyPrice('premium') | currency : 'USD' : 'symbol' : '1.0-0' }} /Mes)
+          </span>
+        </p>
+        }
+        <!-- Espacio reservado para el mensaje de ahorro si no es anual -->
+        @else {
+        <p class="annual-save-message empty-placeholder"></p>
+        }
+        <p class="plan-price">
+          <!-- Muestra el precio actual (Mensual o Anual) -->
+          {{ getCurrentPrice('premium') | currency : 'USD' : 'symbol' : '1.0-0' }}
+          <span class="price-period"> /{{ billingCycle() === 'mensual' ? 'Mes' : 'Año' }}</span>
+        </p>
+
+        <ul class="plan-features">
+          <li class="feature-item">
+            <mat-icon class="check-icon">check</mat-icon> Vigencia:
+            {{ billingCycle() === 'mensual' ? '1 Mes' : '1 Año' }}
+          </li>
+          <li class="feature-item">
+            <mat-icon class="check-icon">check</mat-icon> Solicitudes de Cotización Ilimitadas
+          </li>
+          <li class="feature-item">
+            <mat-icon class="check-icon">check</mat-icon> Cotizaciones Generadas Ilimitadas
+          </li>
+          <li class="feature-item">
+            <!-- Nuevo: Clientes Ilimitados (Check) -->
+            <mat-icon class="check-icon">check</mat-icon> Clientes Ilimitados
+          </li>
+          <li class="feature-item">
+            <!-- Nuevo: Seguimiento de Cotizaciones (Check) -->
+            <mat-icon class="check-icon">check</mat-icon> Seguimiento de Cotizaciones
+          </li>
+          <li class="feature-item">
+            <mat-icon class="check-icon">check</mat-icon> Gestión de Negocio
+          </li>
+          <li class="feature-item">
+            <mat-icon class="check-icon">check</mat-icon> Colaboradores Ilimitados
+          </li>
+        </ul>
+      </mat-card-content>
+      <mat-card-actions class="card-actions-bottom">
+        <button mat-flat-button color="primary" class="plan-button">Seleccionar Premium</button>
+      </mat-card-actions>
+    </mat-card>
+  </div>
+</section>

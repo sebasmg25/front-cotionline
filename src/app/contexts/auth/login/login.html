@@ -1,0 +1,45 @@
+<h2 mat-dialog-title class="dialog-title-container">
+  Ingresa a cotionline!
+  <!-- Botón estándar de cierre de diálogo de Angular Material -->
+  <button mat-icon-button [mat-dialog-close]="true" class="close-button">
+    <mat-icon>close</mat-icon>
+  </button>
+</h2>
+
+<mat-dialog-content>
+  <div class="form-container">
+    <h3 class="welcome-text">Bienvenido</h3>
+
+    <form>
+      <mat-form-field appearance="outline" class="full-width-input">
+        <mat-label>Correo electrónico *</mat-label>
+        <input
+          [(ngModel)]="email"
+          matInput
+          placeholder="Correo electrónico"
+          type="email"
+          name="email"
+        />
+        <mat-icon matPrefix>mail</mat-icon>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width-input">
+        <mat-label>Contraseña *</mat-label>
+        <input
+          [(ngModel)]="password"
+          matInput
+          type="password"
+          placeholder="Contraseña"
+          name="password"
+        />
+        <mat-icon matPrefix>key</mat-icon>
+      </mat-form-field>
+
+      <mat-checkbox color="primary" class="remember-checkbox"> Recordar </mat-checkbox>
+    </form>
+  </div>
+</mat-dialog-content>
+
+<mat-dialog-actions class="action-buttons-center">
+  <button (click)="login()" mat-raised-button color="primary" class="access-button">Acceder</button>
+</mat-dialog-actions>

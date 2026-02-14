@@ -1,0 +1,45 @@
+<div class="register-wrapper">
+  <mat-card class="register-form-card">
+    <mat-card-header>
+      <mat-card-title>Registro de Sede o Sucursal</mat-card-title>
+      <mat-card-subtitle>Información de ubicación de tu nueva sucursal.</mat-card-subtitle>
+    </mat-card-header>
+
+    <mat-card-content>
+      <!-- 1. Campo de Nombre de la Sucursal -->
+      <mat-form-field appearance="outline" class="full-width-input">
+        <mat-label>Nombre de la Sede</mat-label>
+        <input
+          [(ngModel)]="name"
+          matInput
+          placeholder="Ej. Sucursal Principal / Almacén Sur"
+          required
+        />
+        <mat-icon matPrefix>apartment</mat-icon>
+        <mat-hint>Nombre de referencia para esta ubicación.</mat-hint>
+      </mat-form-field>
+
+      <!-- 2. Campo de Dirección -->
+      <mat-form-field appearance="outline" class="full-width-input">
+        <mat-label>Dirección</mat-label>
+        <input [(ngModel)]="address" matInput placeholder="Ej. Calle 123 # 45 - 67" required />
+        <mat-icon matPrefix>location_on</mat-icon>
+        <mat-hint>Dirección física completa de la sede.</mat-hint>
+      </mat-form-field>
+
+      <!-- 3. Campo de Ciudad -->
+      <mat-form-field appearance="outline" class="full-width-input">
+        <mat-label>Ciudad</mat-label>
+        <input [(ngModel)]="city" matInput placeholder="Ej. Bogotá / Medellín" required />
+        <mat-icon matPrefix>location_city</mat-icon>
+        <mat-hint>Ciudad donde se ubica la sede.</mat-hint>
+      </mat-form-field>
+    </mat-card-content>
+
+    <mat-card-actions class="card-actions-center">
+      <button (click)="registerBranch()" mat-raised-button color="primary" class="register-button">
+        CREAR SEDE
+      </button>
+    </mat-card-actions>
+  </mat-card>
+</div>

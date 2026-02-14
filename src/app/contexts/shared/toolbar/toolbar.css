@@ -1,0 +1,122 @@
+/*
+  ==========================================
+  1. Estilos del Contenedor Principal (Toolbar)
+  ==========================================
+*/
+.main-toolbar {
+  background: white;
+  display: flex;
+  justify-content: center; /* Centra el contenido horizontalmente (el div.toolbar-content) */
+  align-items: center;
+  height: 64px;
+  padding: 0; /* Quitamos el padding lateral para que el div interno lo controle */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05); /* Sombra sutil, recomendada para toolbars */
+
+  /* --- CAMBIOS AÑADIDOS PARA POSICIONAMIENTO FIJO --- */
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000; /* Asegura que la barra esté por encima de todo el contenido */
+  /* ------------------------------------------------ */
+}
+
+/* 1.1. Contenedor de Contenido (Nuevo) */
+.toolbar-content {
+  /* Limita el ancho del contenido interno, forzando que no se expanda al 100% */
+  max-width: 1200px;
+  width: 100%;
+  padding: 0 30px; /* Agrega el espaciado lateral dentro del contenedor limitado */
+  display: flex;
+  align-items: center;
+  justify-content: space-between; /* Distribuye espacio entre logo, nav y botón */
+}
+
+/* 2. Empujador de Espacio (toolbar-spacer) */
+/* Esto empuja los enlaces hacia el centro/derecha */
+.toolbar-spacer {
+  flex: 1 1 auto; /* Mantiene la función de empuje */
+  max-width: 150px; /* Limita el espacio máximo que puede tomar el separador, acercando los elementos */
+}
+
+/*
+  ==========================================
+  3. Estilos del Logo y Título
+  ==========================================
+*/
+.logo-container {
+  display: flex;
+  align-items: center;
+}
+
+.app-title {
+  font-weight: 700;
+  font-size: 24px;
+  color: #3f51b5;
+  margin-left: 0;
+  white-space: nowrap; /* Evita que el logo se rompa en varias líneas */
+}
+
+/*
+  ==========================================
+  4. Estilos de los Enlaces de Navegación
+  ==========================================
+*/
+
+/* Contenedor de los enlaces */
+.nav-links {
+  display: flex;
+  align-items: center;
+  margin-right: 15px;
+}
+
+/* Estilos de los botones (mat-button) */
+.nav-button {
+  font-size: 14px;
+  font-weight: 500;
+  color: #333;
+  margin: 0 10px; /* Aumenté el margen para dar un poco más de aire */
+  text-transform: uppercase;
+  transition: color 0.2s ease;
+}
+
+.nav-button:hover {
+  color: #3f51b5;
+}
+
+/*
+  ==========================================
+  5. Botón de Llamada a la Acción (CTA) - CORREGIDO
+  ==========================================
+*/
+.cta-button {
+  height: 40px;
+  font-weight: 600;
+  font-size: 14px;
+  padding: 0 20px;
+  border-radius: 20px; /* Borde más redondeado */
+
+  /* CORRECCIÓN DE COLOR (Fondo blanco, borde sutil, texto azul) */
+  background-color: white !important;
+  color: #3f51b5 !important; /* Texto de color primario (azul) */
+  border: 2px solid #3f51b5; /* Borde azul para destacarlo */
+  box-shadow: none !important; /* Quitar cualquier sombra para un look más limpio */
+}
+
+/* ==========================================
+  6. Responsive Design
+  ==========================================
+*/
+@media (max-width: 900px) {
+  /* En pantallas más pequeñas, ocultamos los enlaces y el botón CTA, 
+     asumiendo que aparecería un menú hamburguesa */
+  .nav-links,
+  .cta-button {
+    display: none;
+  }
+
+  .toolbar-content {
+    /* Asegura que el logo se centre si no hay más elementos */
+    justify-content: center;
+  }
+}
