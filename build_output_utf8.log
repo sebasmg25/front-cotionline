@@ -1,0 +1,142 @@
+﻿
+> front-cotionline@0.0.0 build
+> ng build
+
+node.exe : [1m[33m[
+baseline-browser-mapp
+ing] The data in 
+this module is over 
+two months old.  To 
+ensure accurate 
+Baseline data, 
+please update: `npm 
+i baseline-browser-ma
+pping@latest 
+-D`[39m[22m
+En línea: 1 
+Carácter: 1
++ & "C:\nvm4w\nodejs/
+node.exe" "C:\nvm4w\n
+odejs/node_modules/np
+m/bin/np ...
++ ~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~
+    + CategoryInfo   
+           : NotSpe  
+  cified: ([1m[3   
+ 3m[basel...t -D`    
+[39m[22m:Strin    
+g) [], RemoteExc    
+eption
+    + FullyQualified 
+   ErrorId : Native  
+  CommandError
+ 
+[33mÔØ»[39m Building...
+[32mÔ£ö[39m Building...
+[1mInitial chunk files[22m  [2m | [22m[1mNames[22m                     [2m | [22m [1mRaw size[22m[2m | [22m[1mEstimated transfer size[22m
+[32mchunk-VQ3WZYCB.js[39m    [2m | [22m[2m-[22m                         [2m | [22m[36m211.65 kB[39m[2m | [22m               [36m60.99 kB[39m
+[32mchunk-E2PHFYOT.js[39m    [2m | [22m[2m-[22m                         [2m | [22m [36m73.34 kB[39m[2m | [22m               [36m18.25 kB[39m
+[32mpolyfills-5CFQRCPP.js[39m[2m | [22m[2mpolyfills[22m                 [2m | [22m [36m34.59 kB[39m[2m | [22m               [36m11.33 kB[39m
+[32mstyles-ILC3FJEL.css[39m  [2m | [22m[2mstyles[22m                    [2m | [22m  [36m8.60 kB[39m[2m | [22m                [36m1.47 kB[39m
+[32mmain-66K4Z3XP.js[39m     [2m | [22m[2mmain[22m                      [2m | [22m  [36m1.50 kB[39m[2m | [22m              [36m537 bytes[39m
+
+[1m [22m                    [2m | [22m[1mInitial total[22m             [2m | [22m[1m329.69 kB[22m[2m | [22m               [1m92.58 kB[22m
+
+[1mLazy chunk files[22m     [2m | [22m[1mNames[22m                     [2m | [22m [1mRaw size[22m[2m | [22m[1mEstimated transfer size[22m
+[32mchunk-YZWWCPRU.js[39m    [2m | [22m[2m-[22m                         [2m | [22m [36m91.81 kB[39m[2m | [22m               [36m18.78 kB[39m
+[32mchunk-6GAYXDHW.js[39m    [2m | [22m[2mlanding-page[22m              [2m | [22m [36m79.17 kB[39m[2m | [22m               [36m16.11 kB[39m
+[32mchunk-5NODWO3W.js[39m    [2m | [22m[2m-[22m                         [2m | [22m [36m67.69 kB[39m[2m | [22m               [36m11.90 kB[39m
+[32mchunk-JWX6WUNQ.js[39m    [2m | [22m[2mdashboard[22m                 [2m | [22m [36m56.98 kB[39m[2m | [22m                [36m9.68 kB[39m
+[32mchunk-XFGUI5GV.js[39m    [2m | [22m[2m-[22m                         [2m | [22m [36m46.55 kB[39m[2m | [22m               [36m10.81 kB[39m
+[32mchunk-AGUMLI6N.js[39m    [2m | [22m[2mlist-products[22m             [2m | [22m [36m42.82 kB[39m[2m | [22m                [36m9.44 kB[39m
+[32mchunk-DTNDUHML.js[39m    [2m | [22m[2m-[22m                         [2m | [22m [36m40.77 kB[39m[2m | [22m                [36m8.47 kB[39m
+[32mchunk-IV6ZFDLM.js[39m    [2m | [22m[2mregister-quotation-request[22m[2m | [22m [36m38.25 kB[39m[2m | [22m                [36m9.70 kB[39m
+[32mchunk-Y6M67MQM.js[39m    [2m | [22m[2m-[22m                         [2m | [22m [36m15.74 kB[39m[2m | [22m                [36m3.12 kB[39m
+[32mchunk-DXEGQUVN.js[39m    [2m | [22m[2m-[22m                         [2m | [22m  [36m7.14 kB[39m[2m | [22m                [36m1.54 kB[39m
+[32mchunk-RZFMGQFK.js[39m    [2m | [22m[2medit-product[22m              [2m | [22m  [36m6.94 kB[39m[2m | [22m                [36m2.23 kB[39m
+[32mchunk-GT7YE4GX.js[39m    [2m | [22m[2m-[22m                         [2m | [22m  [36m5.80 kB[39m[2m | [22m                [36m1.80 kB[39m
+[32mchunk-WIF5RY4W.js[39m    [2m | [22m[2mregister-product[22m          [2m | [22m  [36m5.48 kB[39m[2m | [22m                [36m1.79 kB[39m
+[32mchunk-4PZXLMJU.js[39m    [2m | [22m[2mregister-business[22m         [2m | [22m  [36m4.90 kB[39m[2m | [22m                [36m1.73 kB[39m
+[32mchunk-PRQCGZAV.js[39m    [2m | [22m[2mregister-branch[22m           [2m | [22m  [36m4.64 kB[39m[2m | [22m                [36m1.68 kB[39m
+[2m...and 7 more lazy chunks files. Use "--verbose" to show all the files.[22m
+
+Application bundle generation failed. [7.382 seconds] - 2026-02-26T20:10:08.847Z
+
+[1m[33m[33mÔû▓ [4
+3;33m[[43;30mWARNING
+[43;33m][0m 
+[1mNG8113: Prices 
+is not used within 
+the template of 
+LandingPage[0m 
+[1m[35m[plugin 
+angular-compiler][0m
+
+    src/app/ui/landin
+gPage/landing-page/la
+nding-page.ts:14:32:
+[37m      14 Ôöé   
+imports: [Toolbar, 
+Functions, 
+[32mPrices[37m, 
+Contact, Register, 
+Login, ...
+         ÔòÁ         
+                     
+   [32m~~~~~~[0m
+
+
+[33mÔû▓ [43;33m[[4
+3;30mWARNING[43;33m]
+[0m [1mNG8113: 
+Login is not used 
+within the template 
+of LandingPage[0m 
+[1m[35m[plugin 
+angular-compiler][0m
+
+    src/app/ui/landin
+gPage/landing-page/la
+nding-page.ts:14:59:
+[37m      14 Ôöé 
+...s, Prices, 
+Contact, Register, 
+[32mLogin[37m, 
+MatDialogModule, 
+UpdatePlan],
+         ÔòÁ         
+                     
+    [32m~~~~~[0m
+
+
+[33mÔû▓ [43;33m[[4
+3;30mWARNING[43;33m]
+[0m [1mcss-inline-f
+onts:https://fonts.go
+ogleapis.com/css2?fam
+ily=Inter:wght@400;60
+0;700&display=swap 
+exceeded maximum 
+budget. Budget 4.00 
+kB was not met by 
+5.13 kB with a total 
+of 9.13 kB.[0m
+
+[39m[22m
+[1m[31m[31mX [41;
+31m[[41;97mERROR[41
+;31m][0m [1mcss-inl
+ine-fonts:https://fon
+ts.googleapis.com/css
+2?family=Inter:wght@4
+00;600;700&display=sw
+ap exceeded maximum 
+budget. Budget 8.00 
+kB was not met by 
+1.13 kB with a total 
+of 9.13 kB.[0m
+
+[39m[22m

@@ -43,4 +43,25 @@ export const routes: Routes = [
     loadComponent: () =>
       import('./contexts/updatePlan/update-plan/update-plan').then((m) => m.UpdatePlan),
   },
+  {
+    path: 'dashboard/products',
+    loadComponent: () =>
+      import('./contexts/product/views/list-products/list-products').then(
+        (m) => m.ListProducts,
+      ),
+  },
+  {
+    path: 'dashboard/products/register',
+    loadComponent: () =>
+      import('./contexts/product/views/register-product/register-product').then(
+        (m) => m.RegisterProduct,
+      ),
+  },
+  {
+    path: 'dashboard/products/edit/:id',
+    loadComponent: () =>
+      import('./contexts/product/views/edit-product/edit-product').then(
+        (m) => m.EditProduct,
+      ),
+  },
 ];

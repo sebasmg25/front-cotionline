@@ -1,0 +1,51 @@
+<div class="register-wrapper">
+  <mat-card class="register-form-card">
+    <mat-card-header>
+      <button mat-icon-button (click)="goBack()" class="back-button" aria-label="Volver atrás">
+        <mat-icon>arrow_back</mat-icon>
+      </button>
+      <mat-card-title>Registrar Producto</mat-card-title>
+      <mat-card-subtitle>Ingresa los detalles del nuevo producto</mat-card-subtitle>
+    </mat-card-header>
+
+    <mat-card-content>
+      <form [formGroup]="productForm" (ngSubmit)="onSubmit()" class="product-form">
+        
+        <mat-form-field appearance="outline" class="full-width-input">
+          <mat-label>Nombre del Producto</mat-label>
+          <input matInput formControlName="name" placeholder="Ej: Monitor 27 pulgadas">
+          <mat-error *ngIf="productForm.get('name')?.hasError('required')">El nombre es requerido</mat-error>
+          <mat-error *ngIf="productForm.get('name')?.hasError('minlength')">El nombre debe tener al menos 3 caracteres</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-width-input">
+          <mat-label>Descripción</mat-label>
+          <textarea matInput formControlName="description" rows="3" placeholder="Detalles del producto..."></textarea>
+          <mat-error *ngIf="productForm.get('description')?.hasError('required')">La descripción es requerida</mat-error>
+        </mat-form-field>
+
+        <div class="form-row">
+          <mat-form-field appearance="outline" class="half-width-input">
+            <mat-label>Unidad de medida</mat-label>
+            <input matInput type="string" formControlName="measure_unit" placeholder="Ej: 1500.00" min="0" step="0.01">
+            <mat-error *ngIf="productForm.get('measure_unit')?.hasError('required')">La unidad de medida es requerida</mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="half-width-input">
+            <mat-label>Stock Inicial</mat-label>
+            <input matInput type="number" formControlName="stock" placeholder="Ej: 10" min="0" step="1">
+            <mat-error *ngIf="productForm.get('stock')?.hasError('required')">El stock es requerido</mat-error>
+            <mat-error *ngIf="productForm.get('stock')?.hasError('min')">El stock no puede ser negativo</mat-error>
+          </mat-form-field>
+        </div>
+
+      </form>
+    </mat-card-content>
+
+    <mat-card-actions class="card-actions-center">
+      <button mat-raised-button color="primary" class="submit-button" [disabled]="productForm.invalid || isSaving" (click)="onSubmit()">
+        {{ isSaving ? 'Guardando...' : 'Guardar Producto' }}
+      </button>
+    </mat-card-actions>
+  </mat-card>
+</div>

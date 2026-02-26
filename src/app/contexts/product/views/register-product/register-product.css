@@ -1,0 +1,57 @@
+.register-wrapper {
+  padding: 24px;
+  display: flex;
+  justify-content: center;
+}
+
+.register-form-card {
+  width: 100%;
+  max-width: 600px;
+  border-radius: 12px;
+}
+
+mat-card-header {
+  position: relative;
+  margin-bottom: 20px;
+  display: block;
+  text-align: center;
+}
+
+.back-button {
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+
+.product-form {
+  display: flex;
+  flex-direction: column;
+}
+
+.full-width-input {
+  width: 100%;
+  margin-bottom: 8px;
+}
+
+.form-row {
+  display: flex;
+  gap: 16px;
+  width: 100%;
+}
+
+.half-width-input {
+  flex: 1;
+}
+
+.card-actions-center {
+  display: flex;
+  justify-content: center;
+  padding: 16px;
+}
+
+.submit-button {
+  width: 100%;
+  padding: 8px;
+  font-size: 16px;
+  border-radius: 8px;
+}
