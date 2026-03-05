@@ -1,9 +1,8 @@
 <mat-toolbar class="main-toolbar">
   <!-- Nuevo contenedor para limitar el ancho y centrar el contenido -->
   <div class="toolbar-content">
-    <div class="logo-container">
-      <!-- <img src="assets/cotizapp-logo.svg" alt="cotizapp Logo" class="app-logo" /> -->
-      <span class="app-title">Cotionline</span>
+    <div class="logo-container" (click)="emitScroll('home')" style="cursor: pointer;">
+      <img src="assets/img/logo-cotionline.svg" alt="Cotionline Logo" class="logo-landing">
     </div>
 
     <!-- El spacer ahora solo separa el logo del menú -->

@@ -1,0 +1,187 @@
+.edit-wrapper {
+  padding: 24px;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  min-height: 80vh;
+}
+
+.dual-view-container {
+  display: flex;
+  gap: 30px;
+  width: 100%;
+  max-width: 1200px;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: stretch;
+}
+
+/* CARDS COMMON STYLES */
+.info-display-card,
+.edit-form-card,
+.error-card {
+  flex: 1;
+  min-width: 320px;
+  max-width: 520px;
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 0 8px 32px rgba(0, 28, 48, 0.1);
+  border-radius: 20px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+/* INFO DISPLAY CARD */
+.info-display-card {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.9), rgba(241, 246, 249, 0.8));
+}
+
+.header-icon {
+  width: 48px;
+  height: 48px;
+  background: rgba(0, 28, 48, 0.05);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 16px;
+}
+
+.header-icon mat-icon {
+  font-size: 32px;
+  width: 32px;
+  height: 32px;
+}
+
+.current-info-content {
+  padding: 24px !important;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.info-item {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 12px;
+  background: rgba(255, 255, 255, 0.5);
+  border-radius: 12px;
+  transition: all 0.3s ease;
+}
+
+.info-item:hover {
+  background: white;
+  transform: translateX(5px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.info-item mat-icon {
+  color: var(--primary-dark);
+  opacity: 0.7;
+}
+
+.info-text {
+  display: flex;
+  flex-direction: column;
+}
+
+.info-text .label {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: #666;
+  font-weight: 600;
+}
+
+.info-text .value {
+  font-size: 16px;
+  color: var(--primary-dark);
+  font-weight: 700;
+  margin-top: 2px;
+}
+
+/* EDIT FORM CARD */
+.edit-form-card mat-card-header {
+  position: relative;
+  display: flex;
+  padding: 24px 24px 16px;
+}
+
+.back-button {
+  margin-right: 8px;
+}
+
+.user-form {
+  padding: 16px 24px;
+  display: flex;
+  flex-direction: column;
+}
+
+.full-width-input {
+  width: 100%;
+  margin-bottom: 8px;
+}
+
+.form-row {
+  display: flex;
+  gap: 16px;
+  width: 100%;
+}
+
+.half-width-input {
+  flex: 1;
+}
+
+.card-actions-center {
+  padding: 24px;
+  justify-content: center;
+}
+
+.submit-button {
+  width: 100%;
+  padding: 12px !important;
+  font-size: 16px !important;
+  font-weight: 600 !important;
+  border-radius: 12px !important;
+  height: 48px;
+}
+
+/* LOADING & ERROR */
+.loading-overlay {
+  padding: 16px;
+  text-align: center;
+  color: var(--primary-dark);
+  font-style: italic;
+}
+
+.not-found-message {
+  padding: 48px 24px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+.not-found-message mat-icon {
+  font-size: 64px;
+  width: 64px;
+  height: 64px;
+}
+
+@media (max-width: 800px) {
+  .dual-view-container {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .info-display-card,
+  .edit-form-card {
+    width: 100%;
+    max-width: 100%;
+  }
+}

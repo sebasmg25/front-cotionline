@@ -3,8 +3,22 @@
   ==========================================
 */
 .features-section {
-  padding: 80px 50px; /* Espaciado interno de la sección */
-  background-color: white;
+  padding: 120px 5vw;
+  background-color: var(--soft-bg);
+  position: relative;
+  overflow: hidden;
+}
+
+.features-section::before {
+  content: '';
+  position: absolute;
+  top: -10%;
+  right: -5%;
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(circle, rgba(23, 107, 135, 0.05), transparent);
+  border-radius: 50%;
+  z-index: 0;
 }
 
 /* ==========================================
@@ -13,29 +27,26 @@
 */
 .section-header {
   text-align: center;
-  margin-bottom: 50px;
-  max-width: 700px;
+  margin-bottom: 80px;
+  max-width: 800px;
   margin-left: auto;
   margin-right: auto;
+  position: relative;
+  z-index: 1;
 }
 
 .section-header h1 {
-  font-size: 36px;
-  font-weight: 700;
-  color: #333;
-  margin-bottom: 10px;
+  font-size: 44px;
+  font-weight: 800;
+  color: var(--primary-dark);
+  margin-bottom: 20px;
+  letter-spacing: -1.5px;
 }
 
 .section-header p {
-  font-size: 16px;
-  color: #666;
-  line-height: 1.5;
-}
-
-.section-header p strong {
-  /* Estilo para "cotizapp" */
-  font-weight: 600;
-  color: #3f51b5; /* Color primario azul */
+  font-size: 18px;
+  color: #555;
+  line-height: 1.6;
 }
 
 /* ==========================================
@@ -44,12 +55,12 @@
 */
 .features-grid {
   display: grid;
-  /* Por defecto: 3 columnas de igual tamaño con un espacio de 30px */
-  grid-template-columns: repeat(3, 1fr);
-  gap: 50px 30px;
-  /* Centrar el grid */
-  max-width: 1200px;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 40px;
+  max-width: 1400px;
   margin: 0 auto;
+  position: relative;
+  z-index: 1;
 }
 
 /* ==========================================
@@ -57,42 +68,64 @@
   ==========================================
 */
 .feature-card {
+  background: rgba(255, 255, 255, 0.6) !important;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  padding: 50px 30px;
+  border-radius: 30px;
   text-align: center;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  box-shadow: 0 10px 30px rgba(0, 28, 48, 0.03);
+}
+
+.feature-card:hover {
+  transform: translateY(-12px);
+  background: white !important;
+  box-shadow: 0 20px 40px rgba(0, 28, 48, 0.08);
+  border-color: rgba(23, 107, 135, 0.2);
 }
 
 /* Contenedor del Ícono */
 .icon-wrapper {
-  /* Simula el círculo o fondo del ícono */
   display: inline-flex;
   justify-content: center;
   align-items: center;
-  width: 70px;
-  height: 70px;
-  border-radius: 50%;
-  background-color: #e8f0fe; /* Fondo azul muy claro */
-  margin-bottom: 15px;
+  width: 80px;
+  height: 80px;
+  border-radius: 24px;
+  background: linear-gradient(135deg, rgba(0, 28, 48, 0.05), rgba(23, 107, 135, 0.05));
+  margin-bottom: 25px;
+  transition: all 0.3s ease;
+}
+
+.feature-card:hover .icon-wrapper {
+  background: var(--primary-dark);
+  transform: rotate(10deg);
 }
 
 .feature-icon {
-  /* Estilo del ícono */
-  font-size: 36px;
-  color: #3f51b5; /* Color azul primario */
+  font-size: 38px;
+  color: var(--primary-dark);
+  transition: all 0.3s ease;
+}
+
+.feature-card:hover .feature-icon {
+  color: white;
 }
 
 .feature-title {
-  font-size: 18px;
-  font-weight: 600;
-  color: #333;
-  margin-top: 0;
-  margin-bottom: 10px;
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--primary-dark);
+  margin-bottom: 15px;
 }
 
 .feature-description {
-  font-size: 14px;
+  font-size: 15px;
   color: #666;
-  line-height: 1.4;
-  /* Limita el ancho del texto para mejor lectura */
-  max-width: 250px;
+  line-height: 1.6;
+  max-width: 280px;
   margin: 0 auto;
 }
 
@@ -100,19 +133,12 @@
   5. Diseño Responsivo
   ==========================================
 */
-@media (max-width: 992px) {
-  /* En pantallas medianas (tabletas), cambia a 2 columnas */
-  .features-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
 @media (max-width: 600px) {
-  /* En móviles, cambia a 1 columna */
-  .features-grid {
-    grid-template-columns: 1fr;
-  }
   .features-section {
-    padding: 50px 20px;
+    padding: 80px 20px;
+  }
+  
+  .section-header h1 {
+    font-size: 32px;
   }
 }

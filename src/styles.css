@@ -1,57 +1,210 @@
-/* You can add global styles to this file, and also import other style files */
+:root {
+  /* 5-Color Standard Palette */
+  --primary-dark: #001C30;   /* Color Base (Azul Logo) */
+  --accent-blue: #176B87;    /* Azul Complementario */
+  --white: #FFFFFF;          /* Blanco */
+  --black: #000000;          /* Negro */
+  --soft-bg: #F1F6F9;        /* Gris/Azul Muy Claro */
 
-html,
-body {
+  /* Surface and Glass */
+  --surface-glass: rgba(255, 255, 255, 0.7);
+  --glass-blur: blur(12px);
+  --glass-border: 1px solid rgba(255, 255, 255, 0.3);
+  --shadow-premium: 0 10px 30px rgba(0, 28, 48, 0.08);
+}
+
+html, body {
   height: 100%;
 }
+
 body {
   margin: 0;
-  font-family: Roboto, 'Helvetica Neue', sans-serif;
+  font-family: 'Outfit', sans-serif;
+  background-color: var(--soft-bg);
+  color: var(--primary-dark);
 }
 
 html {
   scroll-behavior: smooth;
 }
 
-/*
+/* Scrollbar Customization */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(0, 28, 48, 0.2);
+  border-radius: 10px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--accent-blue);
+}
+
+/* Glassmorphism Utilities */
+.glass-card {
+  background: var(--surface-glass);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: var(--glass-border);
+  box-shadow: var(--shadow-premium);
+}
+
+.premium-gradient {
+  background: linear-gradient(135deg, var(--primary-dark), var(--accent-blue));
+}
+
+/* 
   =======================================================
-  CORRECCIÓN EN EL ESTILO DE DIÁLOGO: TARGETEANDO EL CONTENEDOR INTERNO
+  MATERIAL COMPONENT OVERRIDES
   =======================================================
 */
 
-/* 1. Estilos del Panel Externo (cdk-overlay-pane, apuntado por .login-dialog-panel) */
-.login-dialog-panel {
-  /* Solo control de tamaño para que respete el maxWidth de la llamada TS */
-  width: 90vw !important;
-  max-width: 450px !important;
-  /* Aseguramos que el panel exterior sea transparente para que solo el interior se vea como tarjeta */
+/* 2. Global Card Overrides */
+.mat-mdc-card {
+  background: var(--surface-glass) !important;
+  backdrop-filter: var(--glass-blur) !important;
+  -webkit-backdrop-filter: var(--glass-blur) !important;
+  border: var(--glass-border) !important;
+  border-radius: 20px !important;
+  box-shadow: var(--shadow-premium) !important;
+  overflow: hidden !important;
+  transition: transform 0.3s ease, box-shadow 0.3s ease !important;
+}
+
+.mat-mdc-card:hover {
+  box-shadow: 0 15px 35px rgba(0, 28, 48, 0.12) !important;
+}
+
+/* 3. Global Table Overrides */
+.mat-mdc-table {
   background: transparent !important;
-  /* Quitamos el radio de borde del panel externo para que no interfiera */
-  border-radius: 0 !important;
-  box-shadow: none !important;
+  border-radius: 16px !important;
+  overflow: hidden !important;
 }
 
-/* 2. Estilos del Contenedor MatDialog (mat-mdc-dialog-container) - ESTA ES LA TARJETA BLANCA */
-.login-dialog-panel .mat-mdc-dialog-container {
-  /* **CRÍTICO:** Eliminar el padding interno que MatDialog aplica por defecto */
-  padding: 0 !important;
+.mat-mdc-header-row {
+  background: rgba(0, 28, 48, 0.04) !important;
+}
 
-  /* Aplicar la estética de tarjeta aquí */
+.mat-mdc-header-cell {
+  color: var(--primary-dark) !important;
+  font-weight: 700 !important;
+  text-transform: uppercase;
+  font-size: 11px !important;
+  letter-spacing: 1px;
+}
+
+.mat-mdc-row {
+  transition: background 0.2s;
+}
+
+.mat-mdc-row:hover {
+  background-color: rgba(23, 107, 135, 0.05) !important;
+}
+
+/* 4. Global Button Overrides */
+.mat-mdc-button, .mat-mdc-raised-button, .mat-mdc-unelevated-button {
   border-radius: 12px !important;
-  background-color: white !important; /* Asegurar fondo blanco */
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2) !important; /* Aplicar sombra de tarjeta */
+  padding: 10px 24px !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.3px !important;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
 }
 
-/* 3. Estilos del Contenido MatDialog (mat-dialog-content) */
-/* Forzar la eliminación del padding por defecto en el contenido para que el 
-   CSS del componente login pueda controlar el espacio interno de 20px. */
-.login-dialog-panel .mat-mdc-dialog-content {
-  padding: 0 !important;
+.mat-mdc-raised-button:not([disabled]) {
+  box-shadow: 0 4px 12px rgba(0, 28, 48, 0.1) !important;
 }
 
-/* Responsive para móviles: Ancho máximo en pantallas pequeñas */
+.mat-mdc-raised-button:not([disabled]):hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(0, 28, 48, 0.15) !important;
+}
+
+/* 5. Global Form Field Overrides */
+.mat-mdc-form-field {
+  --mdc-filled-field-container-shape: 12px;
+  --mdc-outlined-field-container-shape: 12px;
+  margin-bottom: 20px !important; /* Ensure enough space between fields */
+}
+
+.mat-mdc-text-field-wrapper {
+  background-color: rgba(255, 255, 255, 0.4) !important; /* Slightly more opaque background */
+  transition: background 0.3s !important;
+}
+
+/* Fix for Autocomplete and Select Transparency */
+.mat-mdc-autocomplete-panel, 
+.mat-mdc-select-panel,
+.mat-mdc-menu-panel {
+  background-color: #ffffff !important; /* Solid background for readability */
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  box-shadow: 0 10px 30px rgba(0, 28, 48, 0.15) !important;
+  border-radius: 12px !important;
+}
+
+/* Ensure labels don't crash with borders in some browsers */
+.mdc-floating-label {
+    padding: 0 4px;
+    background: transparent;
+}
+
+/* Unified Typography Overrides */
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: var(--primary-dark);
+}
+
+/* 6. Global Dialog Overrides (Premium Glassmorphism) */
+.mat-mdc-dialog-container .mat-mdc-dialog-surface {
+  background: rgba(255, 255, 255, 0.9) !important;
+  backdrop-filter: blur(16px) !important;
+  -webkit-backdrop-filter: blur(16px) !important;
+  border: 1px solid rgba(255, 255, 255, 0.4) !important;
+  border-radius: 24px !important;
+  box-shadow: 0 25px 50px rgba(0, 28, 48, 0.15) !important;
+  overflow: hidden !important;
+}
+
+.mat-mdc-dialog-title {
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+  padding: 24px 30px !important;
+  margin: 0 !important;
+  font-family: 'Outfit', sans-serif !important;
+  font-size: 22px !important;
+  font-weight: 800 !important;
+  color: var(--primary-dark) !important;
+  border-bottom: 1px solid rgba(0, 28, 48, 0.05) !important;
+  background: white !important; /* Capa sólida delgada para el título */
+}
+
+.mat-mdc-dialog-content {
+  padding: 30px !important;
+  font-family: 'Outfit', sans-serif !important;
+  font-size: 15px !important;
+  color: #555 !important;
+  line-height: 1.6 !important;
+}
+
+.mat-mdc-dialog-actions {
+  padding: 0 30px 30px 30px !important;
+  gap: 12px !important;
+  border: none !important;
+}
+
+/* Common Dialog Helper Classes */
+.premium-dialog-panel {
+  max-width: 500px !important;
+}
+
 @media (max-width: 500px) {
-  .login-dialog-panel {
+  .login-dialog-panel, .premium-dialog-panel {
     width: 95vw !important;
     max-width: 95vw !important;
   }

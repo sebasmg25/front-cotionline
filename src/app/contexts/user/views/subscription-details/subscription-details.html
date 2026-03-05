@@ -1,0 +1,80 @@
+<div class="subscription-wrapper">
+    <div class="header">
+        <div class="title-area">
+            <button mat-icon-button (click)="goBack()">
+                <mat-icon>arrow_back</mat-icon>
+            </button>
+            <h1>Mi Suscripción</h1>
+        </div>
+        <p>Gestiona tu plan actual y detalles de facturación.</p>
+    </div>
+
+    <div class="content-grid">
+        <!-- PLAN ACTUAL -->
+        <mat-card class="subscription-card premium-border">
+            <mat-card-header>
+                <div mat-card-avatar class="plan-icon">
+                    <mat-icon color="primary">workspace_premium</mat-icon>
+                </div>
+                <mat-card-title>Plan {{ subscription.planName }}</mat-card-title>
+                <mat-card-subtitle>Estado: Activo</mat-card-subtitle>
+            </mat-card-header>
+            
+            <mat-card-content>
+                <div class="plan-details">
+                    <div class="price-info">
+                        <span class="currency">$</span>
+                        <span class="amount">{{ subscription.price | number:'1.0-0' }}</span>
+                        <span class="period">/{{ subscription.billingCycle }}</span>
+                    </div>
+                    <ul class="features-list">
+                        <li><mat-icon>check_circle</mat-icon> Solicitudes ilimitadas</li>
+                        <li><mat-icon>check_circle</mat-icon> Análisis comparativo avanzado</li>
+                        <li><mat-icon>check_circle</mat-icon> Soporte prioritario 24/7</li>
+                    </ul>
+                </div>
+            </mat-card-content>
+            
+            <mat-divider></mat-divider>
+            
+            <mat-card-actions align="end">
+                <button mat-stroked-button color="primary" (click)="changePlan()">
+                    CAMBIAR MI PLAN
+                </button>
+            </mat-card-actions>
+        </mat-card>
+
+        <!-- FACTURACIÓN -->
+        <mat-card class="billing-card">
+            <mat-card-header>
+                <mat-icon mat-card-avatar>receipt_long</mat-icon>
+                <mat-card-title>Información de Facturación</mat-card-title>
+                <mat-card-subtitle>Próximo cobro: {{ subscription.nextBillingDate | date:'dd/MM/yyyy' }}</mat-card-subtitle>
+            </mat-card-header>
+            
+            <mat-card-content>
+                <div class="payment-method">
+                    <div class="method-info">
+                        <mat-icon>credit_card</mat-icon>
+                        <div class="text">
+                            <span class="method-label">Método de pago actual</span>
+                            <span class="method-value">{{ subscription.paymentMethod }}</span>
+                        </div>
+                    </div>
+                </div>
+                <p class="billing-notice">
+                    <mat-icon>info</mat-icon>
+                    Los cargos se realizan de forma automática según tu ciclo de facturación.
+                </p>
+            </mat-card-content>
+            
+            <mat-divider></mat-divider>
+            
+            <mat-card-actions align="end">
+                <button mat-button color="primary" (click)="changePaymentMethod()">
+                    CAMBIAR MÉTODO DE PAGO
+                </button>
+            </mat-card-actions>
+        </mat-card>
+    </div>
+</div>

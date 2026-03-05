@@ -1,59 +1,58 @@
+<app-toolbar></app-toolbar>
+
 <div class="register-wrapper">
   <mat-card class="register-form-card">
     <mat-card-header>
-      <mat-card-title>Registro de Negocio</mat-card-title>
-      <mat-card-subtitle>Información básica de tu empresa</mat-card-subtitle>
+      <mat-card-title>Paso 2: Registrar Negocio</mat-card-title>
+      <mat-card-subtitle>Completa los datos legales de tu empresa</mat-card-subtitle>
     </mat-card-header>
 
-    <mat-card-content>
-      <!-- 1. Campo de NIT -->
-      <mat-form-field appearance="outline" class="full-width-input">
-        <mat-label>Número de Identificación Tributaria (NIT)</mat-label>
-        <input [(ngModel)]="nit" matInput placeholder="Ej. 900.123.456-7" type="text" required />
-        <mat-icon matPrefix>badge</mat-icon>
-        <mat-hint>Introduce el NIT de tu negocio.</mat-hint>
-      </mat-form-field>
+    <form [formGroup]="businessForm" (ngSubmit)="registerBusiness()" class="register-form">
+      <mat-card-content>
+        
+        <div class="stepper-indicator">
+          <div class="step completed"><mat-icon>check_circle</mat-icon> Usuario</div>
+          <div class="divider"></div>
+          <div class="step active">2. Negocio</div>
+          <div class="divider"></div>
+          <div class="step">3. Documentos</div>
+        </div>
 
-      <!-- 2. Campo de Nombre del Negocio -->
-      <mat-form-field appearance="outline" class="full-width-input">
-        <mat-label>Nombre del Negocio</mat-label>
-        <input [(ngModel)]="name" matInput placeholder="Cotionline S.A.S" required />
-        <mat-icon matPrefix>store</mat-icon>
-        <mat-hint>Nombre comercial o razón social.</mat-hint>
-      </mat-form-field>
+        <mat-form-field appearance="outline" class="full-width-input">
+          <mat-label>Número de Identificación Tributaria (NIT)</mat-label>
+          <input matInput formControlName="nit" placeholder="Ej. 900.123.456-7" type="text" />
+          <mat-icon matPrefix>badge</mat-icon>
+          <mat-error *ngIf="businessForm.get('nit')?.hasError('required')">El NIT es requerido</mat-error>
+          <mat-hint>Introduce el NIT legal de tu negocio.</mat-hint>
+        </mat-form-field>
 
-      <!-- 3. Campo de Dirección -->
-      <mat-form-field appearance="outline" class="full-width-input">
-        <mat-label>Dirección Principal</mat-label>
-        <input [(ngModel)]="address" matInput placeholder="Carrera 10 # 20 - 30" required />
-        <mat-icon matPrefix>location_on</mat-icon>
-        <mat-hint>Dirección física de la oficina principal.</mat-hint>
-      </mat-form-field>
-    </mat-card-content>
+        <mat-form-field appearance="outline" class="full-width-input">
+          <mat-label>Nombre o Razón Social</mat-label>
+          <input matInput formControlName="name" placeholder="Ej. Cotionline S.A.S" />
+          <mat-icon matPrefix>store</mat-icon>
+          <mat-error *ngIf="businessForm.get('name')?.hasError('required')">El nombre es requerido</mat-error>
+        </mat-form-field>
 
-    <!-- 4. Campo de Descripción (Área de texto) -->
-    <mat-form-field appearance="outline" class="full-width-input">
-      <mat-label>Descripción del Negocio</mat-label>
-      <textarea
-        [(ngModel)]="description"
-        matInput
-        placeholder="Ej. Software de cotizaciones y facturación para PYMES."
-        rows="3"
-        required
-      ></textarea>
-      <mat-icon matPrefix>info</mat-icon>
-      <mat-hint>Breve resumen de la actividad de tu negocio.</mat-hint>
-    </mat-form-field>
+        <mat-form-field appearance="outline" class="full-width-input">
+          <mat-label>Dirección Principal</mat-label>
+          <input matInput formControlName="address" placeholder="Ej. Carrera 10 # 20 - 30" />
+          <mat-icon matPrefix>location_on</mat-icon>
+          <mat-error *ngIf="businessForm.get('address')?.hasError('required')">La dirección es requerida</mat-error>
+        </mat-form-field>
 
-    <mat-card-actions class="card-actions-center">
-      <button
-        (click)="registerBusiness()"
-        mat-raised-button
-        color="primary"
-        class="register-button"
-      >
-        REGISTRAR NEGOCIO
-      </button>
-    </mat-card-actions>
+        <mat-form-field appearance="outline" class="full-width-input">
+          <mat-label>Descripción de la Actividad</mat-label>
+          <textarea matInput formControlName="description" placeholder="Resumen de tu actividad comercial..." rows="3"></textarea>
+          <mat-icon matPrefix>info</mat-icon>
+          <mat-error *ngIf="businessForm.get('description')?.hasError('required')">La descripción es requerida</mat-error>
+        </mat-form-field>
+      </mat-card-content>
+
+      <mat-card-actions class="card-actions-center">
+        <button mat-raised-button color="primary" class="register-button" type="submit" [disabled]="businessForm.invalid || isSaving">
+          {{ isSaving ? 'GUARDANDO...' : 'REGISTRAR NEGOCIO' }}
+        </button>
+      </mat-card-actions>
+    </form>
   </mat-card>
 </div>

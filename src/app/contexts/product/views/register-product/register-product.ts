@@ -9,6 +9,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatFormFieldModule } from '@angular/material/form-field';
 
 import { ProductService } from '../../../../infraestructure/services/product/product.service';
+import { AlertService } from '../../../../contexts/shared/services/alert.service';
 
 @Component({
     selector: 'app-register-product',
@@ -24,7 +25,8 @@ export class RegisterProduct implements OnInit {
     constructor(
         private fb: FormBuilder,
         private router: Router,
-        private productService: ProductService
+        private productService: ProductService,
+        private alertService: AlertService
     ) { }
 
     ngOnInit(): void {
@@ -42,7 +44,7 @@ export class RegisterProduct implements OnInit {
             this.productService.save(this.productForm.value).subscribe({
                 next: (savedProduct) => {
                     console.log('Nuevo Producto:', savedProduct);
-                    alert('Producto creado exitosamente');
+                    this.alertService.showSuccess('¡Guardado!', 'Producto creado exitosamente');
                     this.isSaving = false;
                     this.router.navigate(['/dashboard/products']);
                 },

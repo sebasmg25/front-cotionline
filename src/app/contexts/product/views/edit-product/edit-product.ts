@@ -8,6 +8,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { ProductService } from '../../../../infraestructure/services/product/product.service';
+import { AlertService } from '../../../../contexts/shared/services/alert.service';
 
 @Component({
     selector: 'app-edit-product',
@@ -27,7 +28,8 @@ export class EditProduct implements OnInit {
         private fb: FormBuilder,
         private router: Router,
         private route: ActivatedRoute,
-        private productService: ProductService
+        private productService: ProductService,
+        private alertService: AlertService
     ) { }
 
     ngOnInit(): void {
@@ -72,7 +74,7 @@ export class EditProduct implements OnInit {
             this.productService.update(this.productId, this.productForm.value).subscribe({
                 next: (updatedProduct) => {
                     console.log('Producto Actualizado:', updatedProduct);
-                    alert('Producto actualizado exitosamente');
+                    this.alertService.showSuccess('¡Actualizado!', 'Producto actualizado exitosamente');
                     this.isSaving = false;
                     this.router.navigate(['/dashboard/products']);
                 },

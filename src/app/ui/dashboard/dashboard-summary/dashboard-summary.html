@@ -1,0 +1,26 @@
+<div class="summary-container">
+  <header class="summary-header">
+    <h1>¡Bienvenido de nuevo!</h1>
+    <p>¿Qué te gustaría hacer hoy en CotiOnline?</p>
+  </header>
+
+  <div class="cards-grid">
+    <mat-card *ngFor="let card of menuCards" class="nav-card" [routerLink]="card.link">
+      <div class="card-icon-wrapper" [style.background-color]="card.color + '15'">
+        <mat-icon [style.color]="card.color">{{card.icon}}</mat-icon>
+      </div>
+      <mat-card-header>
+        <mat-card-title>{{card.title}}</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <p>{{card.description}}</p>
+      </mat-card-content>
+      <mat-card-actions align="end">
+        <button mat-button color="primary">
+          IR AHORA
+          <mat-icon>chevron_right</mat-icon>
+        </button>
+      </mat-card-actions>
+    </mat-card>
+  </div>
+</div>

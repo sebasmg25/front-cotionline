@@ -25,17 +25,27 @@ import { BusinessService } from '../../../../infraestructure/services/business/b
 })
 export class RegisterBranch implements OnInit {
   businessId: string | null = null;
+  businessName: string = 'Cargando...';
 
   constructor(
     private branchService: BranchService,
     private businessService: BusinessService,
     private router: Router,
     private route: ActivatedRoute,
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.businessId = this.route.snapshot.paramMap.get('businessId');
-    console.log('ID DE NEGOCIO RECIBIDO PARA LA SEDE', this.businessId);
+    if (this.businessId) {
+      this.businessService.findById(this.businessId).subscribe({
+        next: (business) => {
+          this.businessName = business.name;
+        },
+        error: () => {
+          this.businessName = 'Negocio no encontrado';
+        }
+      });
+    }
   }
 
   name: string = '';
@@ -86,5 +96,9 @@ export class RegisterBranch implements OnInit {
         console.log('Fin');
       },
     });
+  }
+
+  goBack(): void {
+    this.router.navigate(['/dashboard/branches']);
   }
 }

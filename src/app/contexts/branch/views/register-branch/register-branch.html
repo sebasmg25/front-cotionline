@@ -1,45 +1,54 @@
 <div class="register-wrapper">
-  <mat-card class="register-form-card">
+  <mat-card class="register-card">
     <mat-card-header>
-      <mat-card-title>Registro de Sede o Sucursal</mat-card-title>
-      <mat-card-subtitle>Información de ubicación de tu nueva sucursal.</mat-card-subtitle>
+      <button mat-icon-button (click)="goBack()" class="back-button" aria-label="Volver atrás">
+        <mat-icon>arrow_back</mat-icon>
+      </button>
+      <mat-card-title>Registro de Sede</mat-card-title>
+      <mat-card-subtitle>Ingresa los detalles para habilitar un nuevo punto de atención</mat-card-subtitle>
     </mat-card-header>
 
     <mat-card-content>
-      <!-- 1. Campo de Nombre de la Sucursal -->
-      <mat-form-field appearance="outline" class="full-width-input">
-        <mat-label>Nombre de la Sede</mat-label>
-        <input
-          [(ngModel)]="name"
-          matInput
-          placeholder="Ej. Sucursal Principal / Almacén Sur"
-          required
-        />
-        <mat-icon matPrefix>apartment</mat-icon>
-        <mat-hint>Nombre de referencia para esta ubicación.</mat-hint>
-      </mat-form-field>
+      <form class="register-form">
+        <!-- Campo Empresa (Auto-rellenado y Solo Lectura) -->
+        <mat-form-field appearance="outline" class="full-width-input">
+          <mat-label>Empresa / Negocio</mat-label>
+          <input matInput [(ngModel)]="businessName" name="businessName" readonly>
+          <mat-icon matSuffix>business</mat-icon>
+          <mat-hint>Vinculado automáticamente a tu negocio principal</mat-hint>
+        </mat-form-field>
 
-      <!-- 2. Campo de Dirección -->
-      <mat-form-field appearance="outline" class="full-width-input">
-        <mat-label>Dirección</mat-label>
-        <input [(ngModel)]="address" matInput placeholder="Ej. Calle 123 # 45 - 67" required />
-        <mat-icon matPrefix>location_on</mat-icon>
-        <mat-hint>Dirección física completa de la sede.</mat-hint>
-      </mat-form-field>
+        <!-- El businessId se maneja internamente pero no se muestra -->
 
-      <!-- 3. Campo de Ciudad -->
-      <mat-form-field appearance="outline" class="full-width-input">
-        <mat-label>Ciudad</mat-label>
-        <input [(ngModel)]="city" matInput placeholder="Ej. Bogotá / Medellín" required />
-        <mat-icon matPrefix>location_city</mat-icon>
-        <mat-hint>Ciudad donde se ubica la sede.</mat-hint>
-      </mat-form-field>
+        <mat-form-field appearance="outline" class="full-width-input">
+          <mat-label>Nombre de la Sede</mat-label>
+          <input matInput [(ngModel)]="name" name="name" placeholder="Ej: Sede Norte">
+          <mat-icon matSuffix>store</mat-icon>
+        </mat-form-field>
+
+        <div class="form-row">
+          <mat-form-field appearance="outline" class="half-width-input">
+            <mat-label>Ciudad</mat-label>
+            <input matInput [(ngModel)]="city" name="city" placeholder="Ej: Bogotá">
+            <mat-icon matSuffix>location_city</mat-icon>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="half-width-input">
+            <mat-label>Dirección</mat-label>
+            <input matInput [(ngModel)]="address" name="address" placeholder="Ej: Calle 100 #15-20">
+            <mat-icon matSuffix>map</mat-icon>
+          </mat-form-field>
+        </div>
+
+        <div class="actions">
+          <button mat-raised-button color="primary" class="submit-button" (click)="registerBranch()">
+            REGISTRAR SEDE
+          </button>
+          <button mat-button type="button" class="cancel-button" (click)="resetForm()">
+            LIMPIAR
+          </button>
+        </div>
+      </form>
     </mat-card-content>
-
-    <mat-card-actions class="card-actions-center">
-      <button (click)="registerBranch()" mat-raised-button color="primary" class="register-button">
-        CREAR SEDE
-      </button>
-    </mat-card-actions>
   </mat-card>
 </div>

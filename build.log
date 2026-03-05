@@ -1,0 +1,39 @@
+
+> front-cotionline@0.0.0 build
+> ng build
+
+[1m[33m[baseline-browser-mapping] The data in this module is over two months old.  To ensure accurate Baseline data, please update: `npm i baseline-browser-mapping@latest -D`[39m[22m
+[33m❯[39m Building...
+[32m✔[39m Building...
+Application bundle generation failed. [5.841 seconds] - 2026-02-27T19:31:13.753Z
+
+[1m[33m[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mNG8113: Prices is not used within the template of LandingPage[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/ui/landingPage/landing-page/landing-page.ts:14:32:
+[37m      14 │   imports: [Toolbar, Functions, [32mPrices[37m, Contact, Register, Login, ...
+         ╵                                 [32m~~~~~~[0m
+
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mNG8113: Login is not used within the template of LandingPage[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/ui/landingPage/landing-page/landing-page.ts:14:59:
+[37m      14 │ ...s, Prices, Contact, Register, [32mLogin[37m, MatDialogModule, UpdatePlan],
+         ╵                                  [32m~~~~~[0m
+
+[39m[22m
+[1m[31m[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2339: Property 'token' does not exist on type 'LoginResponse | User'.
+  Property 'token' does not exist on type 'User'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/contexts/auth/register/register.ts:72:44:
+[37m      72 │         this.userService.saveToken(response.[32mtoken[37m);
+         ╵                                             [32m~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2339: Property 'token' does not exist on type 'LoginResponse | User'.
+  Property 'token' does not exist on type 'User'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/contexts/auth/register/register.ts:73:57:
+[37m      73 │         console.log('TOKEEEEEEEEN DE REGISTRO', response.[32mtoken[37m);
+         ╵                                                          [32m~~~~~[0m
+
+[39m[22m

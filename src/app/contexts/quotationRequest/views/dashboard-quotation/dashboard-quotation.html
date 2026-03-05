@@ -1,0 +1,70 @@
+<div class="quotation-dashboard-container">
+    <div class="header">
+        <h1>Solicitudes de Cotización</h1>
+        <p>Gestiona tus solicitudes publicadas y borradores guardados.</p>
+    </div>
+
+    <div class="dashboard-grid">
+        <!-- 1. Últimas Solicitudes Publicadas -->
+        <mat-card class="status-card published-card">
+            <mat-card-header>
+                <mat-icon mat-card-avatar color="primary">check_circle</mat-icon>
+                <mat-card-title>Últimas Publicadas</mat-card-title>
+                <mat-card-subtitle>Tus solicitudes activas más recientes</mat-card-subtitle>
+            </mat-card-header>
+            <mat-card-content>
+                <mat-list *ngIf="latestPublished$ | async as published">
+                    <ng-container *ngFor="let item of published; let last = last">
+                        <mat-list-item (click)="viewDetail(item.id)" class="clickable-item">
+                            <mat-icon matListItemIcon>description</mat-icon>
+                            <span matListItemTitle>{{ item.title }}</span>
+                            <span matListItemLine>{{ item.createdAt | date:'dd/MM/yyyy' }}</span>
+                        </mat-list-item>
+                        <mat-divider *ngIf="!last"></mat-divider>
+                    </ng-container>
+                    <div *ngIf="published.length === 0" class="empty-state">
+                        No hay solicitudes publicadas.
+                    </div>
+                </mat-list>
+            </mat-card-content>
+            <mat-card-actions align="end">
+                <button mat-button color="primary" (click)="viewAllPublished()">VER TODAS</button>
+            </mat-card-actions>
+        </mat-card>
+
+        <!-- 2. Sección de Borradores -->
+        <mat-card class="status-card draft-card">
+            <mat-card-header>
+                <mat-icon mat-card-avatar color="accent">edit_note</mat-icon>
+                <mat-card-title>Borradores</mat-card-title>
+                <mat-card-subtitle>Solicitudes en progreso</mat-card-subtitle>
+            </mat-card-header>
+            <mat-card-content>
+                <mat-list *ngIf="drafts$ | async as drafts">
+                    <ng-container *ngFor="let item of drafts; let last = last">
+                        <mat-list-item (click)="viewDetail(item.id)" class="clickable-item">
+                            <mat-icon matListItemIcon>assignment</mat-icon>
+                            <span matListItemTitle>{{ item.title }}</span>
+                            <span matListItemLine>Guardado el {{ item.createdAt | date:'dd/MM/yyyy' }}</span>
+                        </mat-list-item>
+                        <mat-divider *ngIf="!last"></mat-divider>
+                    </ng-container>
+                    <div *ngIf="drafts.length === 0" class="empty-state">
+                        No tienes borradores pendientes.
+                    </div>
+                </mat-list>
+            </mat-card-content>
+            <mat-card-actions align="end">
+                <button mat-button color="accent" (click)="viewAllDrafts()">REVISAR BORRADORES</button>
+            </mat-card-actions>
+        </mat-card>
+    </div>
+
+    <!-- 3. Botón de acción principal -->
+    <div class="fab-container">
+        <button id="btn-new-request" mat-fab extended color="primary" (click)="createNew()">
+            <mat-icon>add</mat-icon>
+            CREAR NUEVA SOLICITUD
+        </button>
+    </div>
+</div>

@@ -10,6 +10,11 @@ import { MatDialogModule } from '@angular/material/dialog'; // 👈 ¡ESTO ES LO
 import { UserService } from '../../../infraestructure/services/user/user.service';
 import { LoginResponse } from '../../user/domain/user.repository';
 import { Router } from '@angular/router';
+import { CommonModule } from '@angular/common';
+import { Toolbar } from '../../shared/toolbar/toolbar';
+import { Optional, Inject } from '@angular/core';
+import { MatDialogRef } from '@angular/material/dialog';
+import { AlertService } from '../../shared/services/alert.service';
 
 @Component({
   selector: 'app-login',
@@ -22,23 +27,37 @@ import { Router } from '@angular/router';
     MatCheckboxModule,
     MatButtonModule,
     MatDialogModule,
+    CommonModule,
+    Toolbar
   ],
   templateUrl: './login.html',
   styleUrl: './login.css',
 })
 export class Login implements OnInit {
-  constructor(private userService: UserService, private router: Router) {}
+  isDialog: boolean = false;
+  isLoading: boolean = false;
 
-  ngOnInit(): void {}
+  constructor(
+    private userService: UserService,
+    private router: Router,
+    private alertService: AlertService,
+    @Optional() private dialogRef: MatDialogRef<Login>
+  ) {
+    this.isDialog = !!this.dialogRef;
+  }
+
+  ngOnInit(): void { }
 
   email: string = '';
   password: string = '';
 
   login(): void {
     if (!this.email || !this.password) {
-      console.log('Ingrese su correo y contraseña');
+      this.alertService.showInfo('Datos incompletos', 'Por favor ingresa tu correo y contraseña.');
       return;
     }
+
+    this.isLoading = true;
     const credentials = {
       email: this.email,
       password: this.password,
@@ -46,12 +65,19 @@ export class Login implements OnInit {
 
     this.userService.login(credentials).subscribe({
       next: (response: LoginResponse) => {
-        console.log('RESULTADO', response);
         this.userService.saveToken(response.token);
+        this.isLoading = false;
+
+        if (this.isDialog) {
+          this.dialogRef.close(true);
+        }
+
         this.router.navigate(['/dashboard']);
       },
       error: (err) => {
-        console.log('Error al iniciar sesión', err);
+        this.isLoading = false;
+        this.alertService.showError('Error de acceso', 'Correo o contraseña incorrectos. Por favor intenta de nuevo.');
+        console.error('Error al iniciar sesión', err);
       },
       complete: () => {
         console.log('Flujo de login completado');

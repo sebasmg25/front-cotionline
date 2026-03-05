@@ -1,0 +1,139 @@
+<div class="dashboard-wrapper">
+    <div class="header">
+        <h1>Gestión de Cotizaciones</h1>
+        <p>Administra las propuestas enviadas, recibidas y solicitudes entrantes.</p>
+    </div>
+
+    <!-- SECCIÓN 1: SOLICITUDES RECIBIDAS (Nuevas oportunidades) -->
+    <section class="dashboard-section secondary" id="guide-incoming-requests">
+        <div class="section-header">
+            <div class="title-with-icon">
+                <mat-icon color="warn">inbox</mat-icon>
+                <h2>Solicitudes de Cotización Recibidas</h2>
+            </div>
+            <button mat-button color="primary">Ver todas</button>
+        </div>
+        
+        <div class="cards-grid">
+            <mat-card *ngFor="let request of (incomingRequests$ | async) | slice:0:5" class="incoming-card">
+                <mat-card-header>
+                    <mat-card-title>{{ request.title }}</mat-card-title>
+                    <mat-card-subtitle>Publicado: {{ request.createdAt | date:'dd/MM/yyyy' }}</mat-card-subtitle>
+                </mat-card-header>
+                <mat-card-content>
+                    <p class="truncate">{{ request.description }}</p>
+                    <div class="items-count">
+                        <mat-icon>inventory_2</mat-icon>
+                        <span>{{ request.items.length }} productos solicitados</span>
+                    </div>
+                </mat-card-content>
+                <mat-divider></mat-divider>
+                <mat-card-actions align="end">
+                    <button mat-flat-button color="primary" (click)="respondRequest(request.id)">
+                        RESPONDER AHORA
+                    </button>
+                </mat-card-actions>
+            </mat-card>
+            
+            <div class="empty-state" *ngIf="((incomingRequests$ | async)?.length || 0) === 0">
+                <mat-icon>history_edu</mat-icon>
+                <p>No hay solicitudes entrantes por el momento.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECCIÓN 2: COTIZACIONES ENVIADAS vs RECIBIDAS (Tabs) -->
+    <section class="dashboard-section">
+        <mat-tab-group animationDuration="200ms" id="guide-quotation-tabs">
+            <!-- COTIZACIONES ENVIADAS (Mis respuestas) -->
+            <mat-tab>
+                <ng-template mat-tab-label>
+                    <mat-icon class="tab-icon">outbound</mat-icon>
+                    Enviadas (Propuestas)
+                </ng-template>
+                
+                <div class="tab-content">
+                    <div class="simple-list">
+                        <div *ngFor="let q of (sentQuotations$ | async) | slice:0:5" class="list-item">
+                            <div class="item-main">
+                                <span class="item-title">{{ q.requestTitle }}</span>
+                                <span class="item-date">Expira: {{ q.expirationDate | date:'dd/MM/yyyy' }}</span>
+                            </div>
+                            <div class="item-status">
+                                <span class="status-badge" [ngClass]="q.status">{{ q.status | uppercase }}</span>
+                                <button mat-icon-button (click)="viewQuotation(q.id)">
+                                    <mat-icon>visibility</mat-icon>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <button mat-button class="full-width-btn" *ngIf="((sentQuotations$ | async)?.length || 0) > 0">
+                        Ver todas las propuestas enviadas
+                    </button>
+                    <div class="empty-state-mini" *ngIf="((sentQuotations$ | async)?.length || 0) === 0">
+                        <p>No has enviado ninguna propuesta todavía.</p>
+                    </div>
+                </div>
+            </mat-tab>
+
+            <!-- BORRADORES DE RESPUESTAS (Mis borradores) -->
+            <mat-tab>
+                <ng-template mat-tab-label>
+                    <mat-icon class="tab-icon">history_edu</mat-icon>
+                    Borradores (Respuestas)
+                </ng-template>
+
+                <div class="tab-content">
+                    <div class="simple-list">
+                        <div *ngFor="let q of (draftQuotations$ | async) | slice:0:5" class="list-item">
+                            <div class="item-main">
+                                <span class="item-title">{{ q.requestTitle }}</span>
+                                <span class="item-date">Último cambio: {{ q.createdAt | date:'dd/MM/yyyy' }}</span>
+                            </div>
+                            <div class="item-status">
+                                <span class="status-badge draft">BORRADOR</span>
+                                <button mat-icon-button (click)="editDraft(q.id)" matTooltip="Continuar editando">
+                                    <mat-icon color="primary">edit</mat-icon>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="empty-state-mini" *ngIf="((draftQuotations$ | async)?.length || 0) === 0">
+                        <p>No tienes borradores de respuestas pendientes.</p>
+                    </div>
+                </div>
+            </mat-tab>
+
+            <!-- COTIZACIONES RECIBIDAS (Respuestas de otros) -->
+            <mat-tab>
+                <ng-template mat-tab-label>
+                    <mat-icon class="tab-icon">call_received</mat-icon>
+                    Recibidas (Propuestas)
+                </ng-template>
+
+                <div class="tab-content">
+                    <div class="simple-list">
+                        <div *ngFor="let q of (receivedQuotations$ | async) | slice:0:5" class="list-item">
+                            <div class="item-main">
+                                <span class="item-title">{{ q.requestTitle }}</span>
+                                <span class="item-date">Recibida: {{ q.createdAt | date:'dd/MM/yyyy' }}</span>
+                            </div>
+                            <div class="item-status">
+                                <span class="status-badge" [ngClass]="q.status">{{ q.status | uppercase }}</span>
+                                <button mat-icon-button (click)="viewQuotation(q.id)">
+                                    <mat-icon>visibility</mat-icon>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <button mat-button class="full-width-btn" *ngIf="((receivedQuotations$ | async)?.length || 0) > 0">
+                        Ver todas las propuestas recibidas
+                    </button>
+                    <div class="empty-state-mini" *ngIf="((receivedQuotations$ | async)?.length || 0) === 0">
+                        <p>Aún no has recibido propuestas para tus solicitudes.</p>
+                    </div>
+                </div>
+            </mat-tab>
+        </mat-tab-group>
+    </section>
+</div>

@@ -25,10 +25,17 @@
 }
 
 /* 3. Estilos del Encabezado */
-.register-form-card mat-card-header {
+.register-card mat-card-header {
+  position: relative;
   text-align: center;
   display: block;
   margin-bottom: 20px;
+}
+
+.back-button {
+  position: absolute;
+  left: 0;
+  top: 0;
 }
 
 .register-form-card mat-card-title {

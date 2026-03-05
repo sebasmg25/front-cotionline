@@ -1,0 +1,108 @@
+<div class="response-wrapper">
+    <div class="header">
+        <button mat-icon-button (click)="goBack()">
+            <mat-icon>arrow_back</mat-icon>
+        </button>
+        <h1>Responder a Solicitud</h1>
+    </div>
+
+    <div class="main-grid" *ngIf="request">
+        <!-- DETALLE DE LA SOLICITUD (Solo lectura) -->
+        <mat-card class="request-summary">
+            <mat-card-header>
+                <div mat-card-avatar class="biz-avatar">
+                    <mat-icon>business</mat-icon>
+                </div>
+                <mat-card-title>{{ request.title }}</mat-card-title>
+                <mat-card-subtitle>ID: {{ request.id }} | Publicada: {{ request.createdAt | date:'shortDate' }}</mat-card-subtitle>
+            </mat-card-header>
+            <mat-card-content>
+                <p class="desc">{{ request.description }}</p>
+                
+                <div class="request-details-grid">
+                  <div class="detail-item">
+                    <span class="label">Sede:</span>
+                    <span class="val">{{ request.branchId === 'br1' ? 'Principal' : 'Sede Secundaria' }}</span>
+                  </div>
+                  <div class="detail-item">
+                    <span class="label">Expira:</span>
+                    <span class="val text-warn">{{ request.expirationDate | date:'shortDate' }}</span>
+                  </div>
+                </div>
+            </mat-card-content>
+        </mat-card>
+
+        <!-- FORMULARIO DE RESPUESTA -->
+        <mat-card class="response-form-card">
+            <h2 class="form-title">Tu Propuesta Comercial</h2>
+            <form [formGroup]="responseForm" class="form-container">
+                <div class="form-row">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Fecha de Emisión</mat-label>
+                        <input matInput [matDatepicker]="picker1" formControlName="emissionDate">
+                        <mat-datepicker-toggle matIconSuffix [for]="picker1"></mat-datepicker-toggle>
+                        <mat-datepicker #picker1></mat-datepicker>
+                        <mat-icon matPrefix>event_available</mat-icon>
+                    </mat-form-field>
+
+                    <mat-form-field appearance="outline">
+                        <mat-label>Fecha de Expiración</mat-label>
+                        <input matInput [matDatepicker]="picker2" formControlName="expirationDate">
+                        <mat-datepicker-toggle matIconSuffix [for]="picker2"></mat-datepicker-toggle>
+                        <mat-datepicker #picker2></mat-datepicker>
+                        <mat-icon matPrefix>event_busy</mat-icon>
+                        <mat-hint>Validez de la propuesta</mat-hint>
+                    </mat-form-field>
+                </div>
+
+                <div class="form-row">
+                  <mat-form-field appearance="outline">
+                    <mat-label>Tiempo de Entrega</mat-label>
+                    <input matInput formControlName="deliveryTime" placeholder="Ej. 3 días hábiles">
+                    <mat-icon matPrefix>local_shipping</mat-icon>
+                  </mat-form-field>
+
+                  <div class="total-summary-box">
+                    <span class="total-label">VALOR TOTAL</span>
+                    <span class="total-amount">{{ totalAmount | currency:'COP':'symbol-narrow':'1.0-0' }}</span>
+                  </div>
+                </div>
+
+                <div class="products-pricing-section">
+                  <h3>Valoración por Producto</h3>
+                  <div formArrayName="individualValues" class="pricing-list">
+                    <div *ngFor="let item of individualValues.controls; let i = index" [formGroupName]="i" class="pricing-row">
+                      <div class="p-info">
+                        <span class="p-name">{{ item.get('productName')?.value }}</span>
+                        <span class="p-qty">Cantidad: <b>{{ item.get('quantity')?.value }}</b></span>
+                      </div>
+                      <mat-form-field appearance="outline" class="price-input">
+                        <mat-label>Valor Unitario</mat-label>
+                        <input matInput type="number" formControlName="individualValue" placeholder="0.00">
+                        <span matPrefix>$&nbsp;</span>
+                      </mat-form-field>
+                    </div>
+                  </div>
+                </div>
+
+                <mat-form-field appearance="outline" class="full-width">
+                    <mat-label>Descripción / Observaciones</mat-label>
+                    <textarea matInput formControlName="description" rows="3" placeholder="Detalla condiciones, garantía, etc."></textarea>
+                    <mat-icon matPrefix>chat</mat-icon>
+                </mat-form-field>
+            </form>
+
+            <mat-card-actions align="end" class="form-actions">
+                <button mat-button (click)="goBack()">
+                    CANCELAR
+                </button>
+                <button mat-stroked-button color="primary" (click)="saveAsDraft()" [disabled]="isSaving">
+                    <mat-icon>save</mat-icon> GUARDAR CAMBIOS
+                </button>
+                <button mat-raised-button color="primary" (click)="sendQuotation()" [disabled]="responseForm.invalid || isSaving">
+                    <mat-icon>send</mat-icon> ACEPTAR Y ENVIAR PROPUESTA
+                </button>
+            </mat-card-actions>
+        </mat-card>
+    </div>
+</div>

@@ -1,0 +1,174 @@
+.subscription-wrapper {
+    padding: 30px;
+}
+
+.header {
+    margin-bottom: 35px;
+}
+
+.title-area {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-left: -12px;
+}
+
+.header h1 {
+    font-size: 2.2rem;
+    font-weight: 700;
+    color: var(--primary-dark);
+    margin: 0;
+}
+
+.header p {
+    color: var(--primary-dark);
+    opacity: 0.6;
+    margin-left: 48px;
+}
+
+.content-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+    gap: 30px;
+}
+
+.subscription-card, .billing-card {
+    border-radius: 24px;
+    padding: 20px;
+    background: var(--surface-glass);
+    backdrop-filter: var(--glass-blur);
+    border: var(--glass-border);
+    box-shadow: var(--shadow-premium);
+}
+
+.premium-border {
+    border-top: 4px solid var(--accent-blue);
+}
+
+.plan-icon {
+    background: rgba(23, 107, 135, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 12px;
+}
+
+.plan-details {
+    padding: 24px 0;
+}
+
+.price-info {
+    display: flex;
+    align-items: baseline;
+    margin-bottom: 24px;
+}
+
+.currency {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--accent-blue);
+}
+
+.amount {
+    font-size: 3rem;
+    font-weight: 800;
+    color: var(--primary-dark);
+    line-height: 1;
+}
+
+.period {
+    font-size: 1rem;
+    color: var(--primary-dark);
+    opacity: 0.5;
+    margin-left: 4px;
+}
+
+.features-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.features-list li {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: var(--primary-dark);
+    font-size: 0.95rem;
+}
+
+.features-list mat-icon {
+    font-size: 20px;
+    width: 20px;
+    height: 20px;
+    color: #2e7d32;
+}
+
+.payment-method {
+    padding: 25px;
+    background: rgba(0, 0, 0, 0.02);
+    border-radius: 16px;
+    margin: 20px 0;
+    border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.method-info {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.method-info mat-icon {
+    font-size: 32px;
+    width: 32px;
+    height: 32px;
+    color: var(--accent-blue);
+}
+
+.text {
+    display: flex;
+    flex-direction: column;
+}
+
+.method-label {
+    font-size: 11px;
+    text-transform: uppercase;
+    font-weight: 700;
+    color: #888;
+    letter-spacing: 0.5px;
+}
+
+.method-value {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--primary-dark);
+}
+
+.billing-notice {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 0.85rem;
+    color: #666;
+    margin-bottom: 20px;
+}
+
+.billing-notice mat-icon {
+    font-size: 18px;
+    width: 18px;
+    height: 18px;
+    opacity: 0.5;
+}
+
+mat-card-actions {
+    padding-top: 20px;
+}
+
+@media (max-width: 600px) {
+    .content-grid {
+        grid-template-columns: 1fr;
+    }
+}

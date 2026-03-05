@@ -1,1 +1,150 @@
-<app-sidenav></app-sidenav>
+<mat-sidenav-container class="sidenav-container">
+  <!-- 1. Sidenav Sidebar -->
+  <mat-sidenav #drawer 
+               [mode]="(isHandset$ | async) ? 'over' : 'side'" 
+               [opened]="(isHandset$ | async) === false" 
+               disableClose="true" 
+               class="custom-sidenav expanded">
+    <app-sidenav [isMobile]="(isHandset$ | async) || false" 
+                 (closeSidenav)="drawer.close()"></app-sidenav>
+  </mat-sidenav>
+
+  <!-- 2. Main content area -->
+  <mat-sidenav-content class="sidenav-content">
+    <!-- HEADER GLOBAL DEL DASHBOARD -->
+    <header class="dashboard-global-header">
+      <button mat-icon-button class="mobile-toggle" (click)="drawer.toggle()" *ngIf="isHandset$ | async">
+        <mat-icon>menu</mat-icon>
+      </button>
+      <div class="header-spacer"></div>
+      
+      <div class="header-actions">
+        <!-- Gatillo de Ayuda -->
+        <button id="help-button" mat-icon-button (click)="startContextGuide()" matTooltip="Ayuda Interactiva" class="help-trigger">
+          <mat-icon color="primary">help_outline</mat-icon>
+        </button>
+
+        <!-- Gatillo de Notificaciones -->
+        <button id="notif-bell" mat-icon-button [matMenuTriggerFor]="notificationMenu" matTooltip="Notificaciones" class="notif-trigger">
+          <mat-icon [matBadge]="unreadCount$ | async" 
+                    [matBadgeHidden]="(unreadCount$ | async) === 0" 
+                    matBadgeColor="accent">
+            notifications
+          </mat-icon>
+        </button>
+
+        <!-- Menú de Usuario Rápido -->
+        <div class="user-avatar-circle" matTooltip="Mi Perfil">
+          <mat-icon>account_circle</mat-icon>
+        </div>
+      </div>
+    </header>
+
+    <!-- MENÚ DE NOTIFICACIONES (TRAY) - Simplified for dashboard or keep as is -->
+    <mat-menu #notificationMenu="matMenu" class="notification-tray-menu">
+      <div class="notif-tray-container" (click)="$event.stopPropagation()">
+        <div class="tray-header">
+          <h3>Notificaciones</h3>
+          <button mat-button color="primary" class="mark-all-btn" (click)="markAllAsRead()">Marcar todas como leídas</button>
+        </div>
+        <!-- Note: Notification tabs logic remains in Sidenav for now or we can move it. 
+             Ideally the header/notif logic is a separate component. 
+             For simplicity and to fix the bug, I'm keeping the tray logic here. -->
+        <mat-tab-group class="notif-tabs" mat-stretch-tabs="false">
+          <!-- TODAS -->
+          <mat-tab label="Todas">
+            <div class="notif-list-scroll">
+              <div *ngFor="let n of allNotifications$ | async" 
+                   class="notif-item" 
+                   [class.unread]="!n.read"
+                   (click)="markAsRead(n)">
+                <div class="notif-icon-box" [ngClass]="n.type">
+                  <mat-icon>{{ getNotificationIcon(n.type) }}</mat-icon>
+                </div>
+                <div class="notif-body">
+                  <span class="notif-title">{{ n.title }}</span>
+                  <span class="notif-msg">{{ n.message }}</span>
+                  <span class="notif-date">{{ n.createdAt | date:'shortTime' }}</span>
+                </div>
+                <div class="unread-dot" *ngIf="!n.read"></div>
+              </div>
+              <div class="empty-notif" *ngIf="((allNotifications$ | async)?.length || 0) === 0">
+                <mat-icon>notifications_off</mat-icon>
+                <p>No tienes notificaciones.</p>
+              </div>
+            </div>
+          </mat-tab>
+
+          <!-- NO LEÍDAS -->
+          <mat-tab label="No leídas">
+            <div class="notif-list-scroll">
+              <div *ngFor="let n of unreadNotifications$ | async" 
+                   class="notif-item unread" 
+                   (click)="markAsRead(n)">
+                <div class="notif-icon-box" [ngClass]="n.type">
+                  <mat-icon>{{ getNotificationIcon(n.type) }}</mat-icon>
+                </div>
+                <div class="notif-body">
+                  <span class="notif-title">{{ n.title }}</span>
+                  <span class="notif-msg">{{ n.message }}</span>
+                  <span class="notif-date">{{ n.createdAt | date:'shortTime' }}</span>
+                </div>
+                <div class="unread-dot"></div>
+              </div>
+              <div class="empty-notif" *ngIf="((unreadNotifications$ | async)?.length || 0) === 0">
+                <mat-icon>done_all</mat-icon>
+                <p>Estás al día por ahora.</p>
+              </div>
+            </div>
+          </mat-tab>
+
+          <!-- LEÍDAS -->
+          <mat-tab label="Leídas">
+            <div class="notif-list-scroll">
+              <div *ngFor="let n of readNotifications$ | async" 
+                   class="notif-item" 
+                   (click)="markAsRead(n)">
+                <div class="notif-icon-box" [ngClass]="n.type">
+                  <mat-icon>{{ getNotificationIcon(n.type) }}</mat-icon>
+                </div>
+                <div class="notif-body">
+                  <span class="notif-title">{{ n.title }}</span>
+                  <span class="notif-msg">{{ n.message }}</span>
+                  <span class="notif-date">{{ n.createdAt | date:'shortTime' }}</span>
+                </div>
+              </div>
+              <div class="empty-notif" *ngIf="((readNotifications$ | async)?.length || 0) === 0">
+                <mat-icon>history</mat-icon>
+                <p>No hay notificaciones anteriores.</p>
+              </div>
+            </div>
+          </mat-tab>
+        </mat-tab-group>
+        <div class="tray-footer">
+          <button mat-button color="primary" class="view-all-btn" routerLink="/dashboard/notifications">
+            VER TODAS LAS NOTIFICACIONES
+          </button>
+        </div>
+      </div>
+    </mat-menu>
+
+    <!-- ÁREA DE CONTENIDO DINÁMICO -->
+    <div class="main-content-wrapper">
+      <router-outlet></router-outlet>
+    </div>
+
+    <!-- PIE DE PÁGINA (Footer) -->
+    <footer class="dashboard-footer">
+      <div class="footer-content">
+        <p>&copy; 2026 CotiOnline. Todos los derechos reservados.</p>
+        <div class="footer-links">
+          <span>Soporte</span>
+          <span>Privacidad</span>
+          <span>Términos</span>
+        </div>
+      </div>
+    </footer>
+  </mat-sidenav-content>
+</mat-sidenav-container>
+
+<app-tutorial-step></app-tutorial-step>

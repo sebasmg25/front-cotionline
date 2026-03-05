@@ -13,5 +13,10 @@ export interface LoginResponse {
 
 export interface UserRepository {
   save(user: User): Observable<LoginResponse>;
+  create(user: User): Observable<User>;
   login(loginCredentials: LoginCredentials): Observable<LoginResponse>;
+  findAll(): Observable<User[]>;
+  findById(id: string): Observable<User>;
+  update(id: string, user: User): Observable<User>;
+  delete(id: string): Observable<void>;
 }

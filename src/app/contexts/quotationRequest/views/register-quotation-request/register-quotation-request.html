@@ -1,61 +1,180 @@
 <div class="register-wrapper">
+  <div class="page-header">
+    <button mat-icon-button (click)="goBack()">
+      <mat-icon>arrow_back</mat-icon>
+    </button>
+    <div class="header-titles">
+      <h1>{{ isEditMode ? 'Detalle de Solicitud' : 'Nueva Solicitud de Cotización' }}</h1>
+      <span class="status-badge" [ngClass]="currentStatus">
+        {{ currentStatus === 'published' ? 'Publicada' : 'Borrador' }}
+      </span>
+    </div>
+  </div>
+
   <mat-card class="register-form-card">
     <mat-card-header>
-      <mat-card-title>Registro de Solicitud de Cotización</mat-card-title>
+      <mat-card-title>Información de la Solicitud</mat-card-title>
       <mat-card-subtitle>
-        Crea una nueva solicitud para iniciar el proceso de cotización.
+        Completa los campos requeridos para el proceso de cotización.
       </mat-card-subtitle>
     </mat-card-header>
 
     <mat-card-content>
-      <!-- 1. Campo de Sede (branch) -->
-      <mat-form-field appearance="outline" class="full-width-input">
-        <mat-label>Sede Asociada</mat-label>
-        <!-- Usa matInput para que sea un MatFormFieldControl -->
-        <input [(ngModel)]="branch" matInput placeholder="ID o Nombre de la Sede" required />
-        <mat-icon matPrefix>apartment</mat-icon>
-        <mat-hint>Sede responsable de gestionar la cotización.</mat-hint>
-      </mat-form-field>
+      <form [formGroup]="quotationForm" class="quotation-form">
+        <!-- Título -->
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Título de la Solicitud</mat-label>
+          <input matInput formControlName="title" placeholder="Ej. Suministro de Office" required />
+          <mat-icon matPrefix>title</mat-icon>
+          <mat-error *ngIf="quotationForm.get('title')?.hasError('required')">El título es obligatorio</mat-error>
+          <mat-error *ngIf="quotationForm.get('title')?.hasError('minlength')">Mínimo 5 caracteres</mat-error>
+        </mat-form-field>
 
-      <!-- 2. Campo de Tiempo de Respuesta (responseDeadline) -->
-      <mat-form-field appearance="outline" class="full-width-input">
-        <mat-label>Tiempo de Respuesta (Días)</mat-label>
-        <!-- Usa matInput para que sea un MatFormFieldControl -->
-        <input
-          [(ngModel)]="responseDeadline"
-          matInput
-          placeholder="Ej. 3"
-          type="number"
-          min="1"
-          required
-        />
-        <mat-icon matPrefix>schedule</mat-icon>
-        <mat-hint>Días estimados para completar la cotización.</mat-hint>
-      </mat-form-field>
+        <!-- Descripción -->
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Descripción / Justificación</mat-label>
+          <textarea matInput formControlName="description" rows="4" placeholder="Describe lo que necesitas con detalle..."></textarea>
+          <mat-icon matPrefix>description</mat-icon>
+        </mat-form-field>
 
-      <!-- 3. Campo de Estado (status) - ¡CORRECCIÓN CLAVE: USAMOS <mat-select>! -->
-      <mat-form-field appearance="outline" class="full-width-input">
-        <mat-label>Estado de la Solicitud</mat-label>
-        <!-- ESTO ES UN MatFormFieldControl VÁLIDO -->
-        <mat-select [(ngModel)]="status" required>
-          <mat-option value="Pendiente">Pendiente</mat-option>
-          <mat-option value="En Proceso">En Proceso</mat-option>
-          <mat-option value="Cerrada">Cerrada</mat-option>
-        </mat-select>
-        <mat-icon matPrefix>info</mat-icon>
-        <mat-hint>Estado actual de la solicitud.</mat-hint>
-      </mat-form-field>
+        <div class="form-row">
+          <!-- Sede -->
+          <mat-form-field appearance="outline">
+            <mat-label>Sede Responsable</mat-label>
+            <mat-select formControlName="branchId">
+              <mat-option *ngFor="let branch of branches" [value]="branch.id">
+                {{ branch.name }} - {{ branch.city }}
+              </mat-option>
+            </mat-select>
+            <mat-icon matPrefix>apartment</mat-icon>
+            <mat-error *ngIf="quotationForm.get('branchId')?.hasError('required')">La sede es obligatoria</mat-error>
+          </mat-form-field>
+
+          <!-- Fecha de Expiración -->
+          <mat-form-field appearance="outline">
+            <mat-label>Fecha de Expiración</mat-label>
+            <input matInput [matDatepicker]="picker" formControlName="expirationDate" placeholder="Selecciona una fecha" required>
+            <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+            <mat-icon matPrefix>event_busy</mat-icon>
+            <mat-hint>Fecha límite para recibir cotizaciones.</mat-hint>
+            <mat-error *ngIf="quotationForm.get('expirationDate')?.hasError('required')">La fecha es obligatoria</mat-error>
+          </mat-form-field>
+        </div>
+
+        <div class="form-row" *ngIf="isEditMode">
+          <!-- Fecha de Registro (solo lectura en edit) -->
+          <mat-form-field appearance="outline">
+            <mat-label>Fecha de Registro</mat-label>
+            <input matInput [value]="'Hoy' | date:'dd/MM/yyyy'" readonly />
+            <mat-icon matPrefix>calendar_today</mat-icon>
+          </mat-form-field>
+        </div>
+      </form>
+
+      <mat-divider></mat-divider>
+      
+      <!-- GESTIÓN DE PRODUCTOS -->
+      <div class="products-section">
+        <h3>Productos en la Solicitud</h3>
+        
+        <!-- Buscador de Productos (Solo si no es publicada) -->
+        <mat-form-field appearance="outline" class="full-width" *ngIf="currentStatus !== 'published'">
+          <mat-label>Buscar Producto</mat-label>
+          <input type="text"
+                 placeholder="Escribe el nombre de un producto..."
+                 aria-label="Producto"
+                 matInput
+                 [formControl]="productSearchControl"
+                 [matAutocomplete]="auto">
+          <mat-icon matPrefix>search</mat-icon>
+          <mat-autocomplete #auto="matAutocomplete" (optionSelected)="addProduct($event.option.value)">
+            <mat-option *ngFor="let product of filteredProducts$ | async" [value]="product">
+              {{product.name}}
+            </mat-option>
+          </mat-autocomplete>
+        </mat-form-field>
+
+        <!-- Opción rápida de creación si no hay resultados -->
+        <div *ngIf="showNoResults && currentStatus !== 'published'" class="no-results-hint">
+          <p>No se encontró el producto "{{ productSearchControl.value }}".</p>
+          <button mat-button color="primary" (click)="openProductDialog()">
+            <mat-icon>add</mat-icon> CREAR PRODUCTO "{{ productSearchControl.value }}"
+          </button>
+        </div>
+
+        <!-- LISTA DE PRODUCTOS SELECCIONADOS -->
+        <div class="selected-products-list" *ngIf="selectedProducts.length > 0">
+          <div class="list-header">
+            <span>Productos agregados ({{ selectedProducts.length }})</span>
+          </div>
+          
+          <div *ngFor="let item of selectedProducts; let i = index" class="product-item-row">
+            <div class="item-info">
+              <span class="item-name">{{ item.name }}</span>
+              <span class="item-desc">{{ item.description }}</span>
+            </div>
+            <div class="item-actions">
+              <mat-form-field appearance="outline" class="qty-field">
+                <mat-label>Cant.</mat-label>
+                <input matInput type="number" [(ngModel)]="item.quantity" min="1" [ngModelOptions]="{standalone: true}" [disabled]="currentStatus === 'published'">
+              </mat-form-field>
+              
+              <ng-container *ngIf="currentStatus !== 'published'">
+                <button mat-icon-button color="primary" (click)="editProduct(item)" matTooltip="Editar producto">
+                  <mat-icon>edit</mat-icon>
+                </button>
+                <button mat-icon-button color="warn" (click)="removeProduct(i)" matTooltip="Quitar de la lista">
+                  <mat-icon>delete_outline</mat-icon>
+                </button>
+              </ng-container>
+            </div>
+          </div>
+        </div>
+
+        <div class="empty-products-state" *ngIf="selectedProducts.length === 0 && currentStatus !== 'published'">
+          <mat-icon>inventory_2</mat-icon>
+          <p>Aún no has agregado productos a esta solicitud.</p>
+          <button mat-stroked-button color="primary" (click)="openProductDialog('')">
+            <mat-icon>add</mat-icon> CREAR PRIMER PRODUCTO
+          </button>
+        </div>
+      </div>
     </mat-card-content>
 
-    <mat-card-actions class="card-actions-center">
-      <button
-        (click)="createQuotationRequest()"
-        mat-raised-button
-        color="primary"
-        class="register-button"
-      >
-        GENERAR SOLICITUD
-      </button>
+    <mat-card-actions class="action-footer">
+      <!-- CONTEXTUAL BUTTONS -->
+      
+      <!-- Case 1: NEW REQUEST -->
+      <ng-container *ngIf="!isEditMode">
+        <button mat-button color="warn" (click)="goBack()">CANCELAR</button>
+        <div class="spacer"></div>
+        <button mat-stroked-button color="accent" (click)="saveAsDraft()" [disabled]="quotationForm.invalid || isSaving">
+          <mat-icon>save</mat-icon> GUARDAR BORRADOR
+        </button>
+        <button mat-raised-button color="primary" (click)="publish()" [disabled]="quotationForm.invalid || isSaving">
+          <mat-icon>send</mat-icon> PUBLICAR
+        </button>
+      </ng-container>
+
+      <!-- Case 2: EDITING DRAFT -->
+      <ng-container *ngIf="isEditMode && currentStatus === 'draft'">
+        <button mat-button color="warn" (click)="delete()">ELIMINAR BORRADOR</button>
+        <div class="spacer"></div>
+        <button mat-raised-button color="primary" (click)="processSave('draft', 'Cambios guardados')" [disabled]="quotationForm.invalid || isSaving">
+          GUARDAR CAMBIOS
+        </button>
+        <button mat-raised-button color="accent" (click)="publish()" [disabled]="quotationForm.invalid || isSaving">
+          <mat-icon>publish</mat-icon> PUBLICAR AHORA
+        </button>
+      </ng-container>
+
+      <!-- Case 3: VIEWING PUBLISHED -->
+      <ng-container *ngIf="isEditMode && currentStatus === 'published'">
+        <button mat-button color="warn" (click)="delete()">ELIMINAR PUBLICACIÓN</button>
+        <div class="spacer"></div>
+        <!-- Duplicar eliminado por solicitud del usuario -->
+      </ng-container>
     </mat-card-actions>
   </mat-card>
 </div>

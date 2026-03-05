@@ -1,95 +1,178 @@
-/* 1. Contenedores y Sidenav Principal */
-.sidenav-container {
-  height: 100vh;
-  width: 100%;
-}
-
-.custom-sidenav {
-  /* FONDO AZUL CLARO/BLANCO ROTO para alto contraste */
-  background-color: #f7f9fc !important;
-  color: #333; /* Color de texto base oscuro */
-
-  transition: width 0.3s ease;
-  overflow-x: hidden;
-  box-shadow: 4px 0 10px rgba(0, 0, 0, 0.1); /* Sombra más sutil */
-}
-
-/* Ancho del menú expandido (estático) */
-.expanded {
-  width: 250px;
-}
 
 /* 2. Cabecera (Logo y Toggle) */
 .sidenav-header {
-  height: 64px;
+  height: 80px;
   display: flex;
   align-items: center;
-  padding: 0 10px;
-  /* El borde inferior es de un gris más claro */
-  border-bottom: 1px solid #e0e0e0;
+  padding: 0 20px;
+  margin-bottom: 20px;
 }
 
 .logo-area {
   flex-grow: 1;
-  padding-left: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center; /* Center the logo image */
 }
 
-.logo-text {
-  font-size: 18px;
-  font-weight: 700;
-  /* Usamos el azul primario de la app para el logo */
-  color: #3f51b5;
-  white-space: nowrap;
+.logo-image {
+  max-width: 250px;
+  max-height: 250px; /* Adjust height as needed */
+  object-fit: contain;
 }
 
 .toggle-button {
-  /* Botón de cierre 'X' en gris oscuro */
-  color: #666;
+  color: var(--accent-blue);
+  background: rgba(23, 107, 135, 0.05);
+  border-radius: 10px;
 }
 
 /* 3. Lista de Navegación */
 .nav-list {
-  padding-top: 10px;
+  padding: 0 14px;
 }
 
-/* Estilos base de cada ítem de navegación */
 .nav-item {
   cursor: pointer;
-  height: 48px;
-  border-radius: 8px; /* Bordes redondeados */
-  margin: 4px 10px;
-  /* Color de íconos y texto inactivo (gris oscuro) */
-  color: #555;
+  height: 52px;
+  border-radius: 14px;
+  margin: 6px 0;
+  color: var(--primary-dark);
+  opacity: 0.7;
+  transition: all 0.3s ease;
+  font-weight: 400;
 }
 
-/* Estilo al pasar el ratón */
 .nav-item:hover {
-  /* Al hacer hover, usamos el azul primario más un fondo muy suave */
-  background-color: #e8eaf6;
-  color: #3f51b5; /* Texto se vuelve azul */
+  background-color: rgba(23, 107, 135, 0.08);
+  opacity: 1;
 }
 
-/* Estilo del Ítem Activo (Products) */
+.nav-label {
+  white-space: normal !important;
+  line-height: 1.2;
+  flex: 1;
+}
+
 .nav-item.active-item {
-  /* Fondo azul primario */
-  background-color: #3f51b5 !important;
-  color: white !important; /* Texto blanco en el fondo azul */
+  background: linear-gradient(135deg, var(--primary-dark), var(--accent-blue)) !important;
+  color: white !important;
+  opacity: 1;
   font-weight: 600;
-  /* Asegura los bordes redondeados */
-  border-radius: 8px;
+  box-shadow: 0 8px 20px rgba(0, 28, 48, 0.15);
 }
 
-/* Asegurar que el ícono también cambie de color en el estado activo */
 .nav-item.active-item .mat-icon {
   color: white !important;
 }
 
-/* 4. Contenido Principal (para centrar y dar espaciado) */
-.sidenav-content {
-  padding: 0;
-  overflow-x: auto;
+.nav-item .mat-icon {
+  margin-right: 16px;
+  font-size: 24px;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.main-content-wrapper {
-  padding: 30px;
+/* 4. Submenu & Expansion Panel */
+.settings-accordion {
+  margin: 8px 14px;
 }
+
+.custom-expansion-panel {
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+.custom-expansion-panel mat-expansion-panel-header {
+  padding: 0 16px;
+  height: 52px !important;
+  border-radius: 14px;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+}
+
+.custom-expansion-panel mat-expansion-panel-header mat-panel-title {
+  display: flex;
+  align-items: center;
+  margin-right: 0;
+}
+
+.custom-expansion-panel mat-expansion-panel-header:hover {
+  background-color: rgba(23, 107, 135, 0.08);
+}
+
+.nested-expansion-panel {
+  box-shadow: none !important;
+  background: transparent !important;
+  border-left: 1px solid rgba(0, 28, 48, 0.1);
+  margin-left: 24px !important;
+}
+
+.nested-expansion-panel mat-expansion-panel-header {
+  height: 44px !important;
+}
+
+.panel-icon {
+  margin-right: 16px;
+  color: var(--primary-dark);
+  opacity: 0.7;
+  font-size: 24px;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.submenu-list {
+  padding: 4px 0 4px 10px !important;
+}
+
+.submenu-item {
+  height: auto !important;
+  min-height: 40px !important;
+  padding: 8px 12px !important;
+  font-size: 13px !important;
+  margin: 4px 0 !important;
+  border-radius: 10px !important;
+  color: var(--primary-dark) !important;
+  opacity: 0.8;
+  transition: all 0.2s;
+}
+
+.submenu-item .mat-icon {
+  margin-right: 12px;
+  font-size: 20px;
+  width: 20px;
+  height: 20px;
+}
+
+.submenu-item:hover {
+  background-color: rgba(23, 107, 135, 0.05) !important;
+  opacity: 1;
+  color: var(--accent-blue) !important;
+}
+
+.logout-item {
+  color: #ff4d4d !important;
+}
+
+.delete-item {
+  color: #d32f2f !important;
+  font-weight: 600;
+}
+
+/* 5. Mobile Adjustments */
+.close-mobile-btn {
+  color: var(--primary-dark);
+  opacity: 0.6;
+}
+
+.mobile-header {
+  justify-content: space-between;
+}
+

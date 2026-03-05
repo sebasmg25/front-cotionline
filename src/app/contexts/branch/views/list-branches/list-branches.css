@@ -1,0 +1,66 @@
+.list-wrapper {
+  padding: 24px;
+  display: flex;
+  justify-content: center;
+}
+
+.list-card {
+  width: 100%;
+  max-width: 1000px;
+  border-radius: 12px;
+}
+
+.header-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+.create-btn {
+  border-radius: 8px;
+}
+
+.table-container {
+  overflow-x: auto;
+  border-radius: 8px;
+  border: 1px solid #e0e0e0;
+}
+
+.full-width-table {
+  width: 100%;
+}
+
+.primary-text {
+  font-weight: 500;
+  color: #333;
+}
+
+.secondary-text {
+  font-size: 0.85em;
+  color: #666;
+}
+
+.actions-header {
+  text-align: right;
+  padding-right: 24px !important;
+}
+
+.actions-cell {
+  text-align: right;
+  padding-right: 8px !important;
+}
+
+.empty-cell {
+  text-align: center;
+  padding: 30px !important;
+  color: #777;
+  font-style: italic;
+}
+
+th.mat-header-cell {
+  font-weight: 600;
+  color: #555;
+  background-color: #f9f9f9;
+}

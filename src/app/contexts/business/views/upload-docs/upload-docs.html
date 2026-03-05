@@ -1,0 +1,55 @@
+<app-toolbar></app-toolbar>
+
+<div class="register-wrapper">
+    <mat-card class="register-form-card">
+        <mat-card-header>
+            <mat-card-title>Paso 3: Carga de Documentación</mat-card-title>
+            <mat-card-subtitle>Carga los documentos legales para activar tu negocio</mat-card-subtitle>
+        </mat-card-header>
+
+        <mat-card-content>
+            <div class="stepper-indicator">
+                <div class="step completed"><mat-icon>check_circle</mat-icon> Usuario</div>
+                <div class="divider"></div>
+                <div class="step completed"><mat-icon>check_circle</mat-icon> Negocio</div>
+                <div class="divider"></div>
+                <div class="step active">3. Documentos</div>
+            </div>
+
+            <p class="instruction">Para operar legalmente en la plataforma, necesitamos los siguientes documentos escaneados en formato PDF o imagen legible.</p>
+
+            <mat-list class="doc-list">
+                <mat-list-item *ngFor="let doc of docs" class="doc-item">
+                    <mat-icon matListItemIcon [color]="doc.status === 'uploaded' ? 'accent' : 'primary'">
+                        {{ doc.status === 'uploaded' ? 'check_circle' : 'description' }}
+                    </mat-icon>
+                    <div matListItemTitle class="doc-name">{{ doc.name }}</div>
+                    <div matListItemLine class="doc-desc">{{ doc.description }}</div>
+                    
+                    <div matListItemMeta>
+                        <input type="file" #fileInput hidden (change)="onFileSelected($event, doc)" accept=".pdf,image/*">
+                        <button mat-stroked-button color="primary" (click)="fileInput.click()" *ngIf="doc.status === 'pending'">
+                            SUBIR ARCHIVO
+                        </button>
+                        <button mat-icon-button color="accent" *ngIf="doc.status === 'uploaded'" (click)="fileInput.click()">
+                            <mat-icon>refresh</mat-icon>
+                        </button>
+                    </div>
+                </mat-list-item>
+            </mat-list>
+
+            <div class="notice">
+                <mat-icon>info</mat-icon>
+                <span>Estos documentos serán verificados por nuestro equipo administrativo en un plazo de 24-48 horas.</span>
+            </div>
+        </mat-card-content>
+
+        <mat-card-actions class="card-actions-center">
+            <button mat-raised-button color="primary" class="register-button"
+                    [disabled]="!allDocsUploaded() || isUploading" 
+                    (click)="finishRegistration()">
+                {{ isUploading ? 'PROCESANDO...' : 'FINALIZAR REGISTRO' }}
+            </button>
+        </mat-card-actions>
+    </mat-card>
+</div>

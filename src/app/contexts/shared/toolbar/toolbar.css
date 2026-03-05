@@ -4,39 +4,36 @@
   ==========================================
 */
 .main-toolbar {
-  background: white;
-  display: flex;
-  justify-content: center; /* Centra el contenido horizontalmente (el div.toolbar-content) */
-  align-items: center;
-  height: 64px;
-  padding: 0; /* Quitamos el padding lateral para que el div interno lo controle */
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05); /* Sombra sutil, recomendada para toolbars */
-
-  /* --- CAMBIOS AÑADIDOS PARA POSICIONAMIENTO FIJO --- */
+  background: rgba(255, 255, 255, 0.8) !important;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
-  z-index: 1000; /* Asegura que la barra esté por encima de todo el contenido */
-  /* ------------------------------------------------ */
+  z-index: 1000;
+  height: 70px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.03);
 }
 
-/* 1.1. Contenedor de Contenido (Nuevo) */
+/* 1.1. Contenedor de Contenido */
 .toolbar-content {
-  /* Limita el ancho del contenido interno, forzando que no se expanda al 100% */
-  max-width: 1200px;
+  max-width: 1300px;
   width: 100%;
-  padding: 0 30px; /* Agrega el espaciado lateral dentro del contenedor limitado */
+  padding: 0 40px;
   display: flex;
   align-items: center;
-  justify-content: space-between; /* Distribuye espacio entre logo, nav y botón */
+  justify-content: space-between;
 }
 
-/* 2. Empujador de Espacio (toolbar-spacer) */
-/* Esto empuja los enlaces hacia el centro/derecha */
+/* 2. Empujador de Espacio */
 .toolbar-spacer {
-  flex: 1 1 auto; /* Mantiene la función de empuje */
-  max-width: 150px; /* Limita el espacio máximo que puede tomar el separador, acercando los elementos */
+  flex: 1 1 auto;
 }
 
 /*
@@ -47,14 +44,13 @@
 .logo-container {
   display: flex;
   align-items: center;
+  gap: 10px;
 }
 
-.app-title {
-  font-weight: 700;
-  font-size: 24px;
-  color: #3f51b5;
-  margin-left: 0;
-  white-space: nowrap; /* Evita que el logo se rompa en varias líneas */
+.logo-landing {
+  max-height: 250px;
+  max-width: 250px;
+  object-fit: contain;
 }
 
 /*
@@ -62,61 +58,62 @@
   4. Estilos de los Enlaces de Navegación
   ==========================================
 */
-
-/* Contenedor de los enlaces */
 .nav-links {
   display: flex;
   align-items: center;
-  margin-right: 15px;
+  gap: 8px;
+  margin-right: 20px;
 }
 
-/* Estilos de los botones (mat-button) */
 .nav-button {
-  font-size: 14px;
-  font-weight: 500;
-  color: #333;
-  margin: 0 10px; /* Aumenté el margen para dar un poco más de aire */
+  font-size: 13px !important;
+  font-weight: 600 !important;
+  color: var(--primary-dark) !important;
+  opacity: 0.7;
+  letter-spacing: 0.5px;
   text-transform: uppercase;
-  transition: color 0.2s ease;
+  transition: all 0.3s ease !important;
 }
 
 .nav-button:hover {
-  color: #3f51b5;
+  opacity: 1;
+  background-color: rgba(23, 107, 135, 0.08) !important;
+  transform: translateY(-1px);
 }
 
 /*
   ==========================================
-  5. Botón de Llamada a la Acción (CTA) - CORREGIDO
+  5. Botón de Llamada a la Acción (CTA)
   ==========================================
 */
 .cta-button {
-  height: 40px;
-  font-weight: 600;
-  font-size: 14px;
-  padding: 0 20px;
-  border-radius: 20px; /* Borde más redondeado */
+  height: 44px !important;
+  font-weight: 700 !important;
+  font-size: 14px !important;
+  padding: 0 24px !important;
+  border-radius: 14px !important;
+  background: var(--primary-dark) !important;
+  color: white !important;
+  box-shadow: 0 4px 15px rgba(0, 28, 48, 0.2) !important;
+  border: none !important;
+}
 
-  /* CORRECCIÓN DE COLOR (Fondo blanco, borde sutil, texto azul) */
-  background-color: white !important;
-  color: #3f51b5 !important; /* Texto de color primario (azul) */
-  border: 2px solid #3f51b5; /* Borde azul para destacarlo */
-  box-shadow: none !important; /* Quitar cualquier sombra para un look más limpio */
+.cta-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(0, 28, 48, 0.3) !important;
 }
 
 /* ==========================================
   6. Responsive Design
   ==========================================
 */
-@media (max-width: 900px) {
-  /* En pantallas más pequeñas, ocultamos los enlaces y el botón CTA, 
-     asumiendo que aparecería un menú hamburguesa */
+@media (max-width: 950px) {
   .nav-links,
   .cta-button {
     display: none;
   }
 
   .toolbar-content {
-    /* Asegura que el logo se centre si no hay más elementos */
     justify-content: center;
   }
 }

@@ -1,0 +1,229 @@
+/* 1. Contenedores y Sidenav Principal */
+.sidenav-container {
+  height: 100vh;
+  width: 100%;
+  background-color: var(--soft-bg);
+}
+
+.custom-sidenav {
+  background: var(--surface-glass) !important;
+  backdrop-filter: var(--glass-blur) !important;
+  -webkit-backdrop-filter: var(--glass-blur) !important;
+  border-right: var(--glass-border) !important;
+  color: var(--primary-dark);
+  transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow-x: hidden;
+  box-shadow: var(--shadow-premium);
+}
+
+.expanded {
+  width: 300px;
+}
+
+/* 2. Global Header (Floating Glass) */
+.dashboard-global-header {
+  margin: 20px 30px;
+  height: 70px;
+  background: var(--surface-glass);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: var(--glass-border);
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  padding: 0 25px;
+  box-shadow: var(--shadow-premium);
+  position: sticky;
+  top: 20px;
+  z-index: 1000;
+}
+
+.header-spacer {
+  flex-grow: 1;
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.notif-trigger {
+  color: var(--primary-dark);
+  opacity: 0.7;
+  background: rgba(0, 28, 48, 0.03);
+  border-radius: 12px;
+  transition: all 0.3s;
+}
+
+.notif-trigger:hover {
+  opacity: 1;
+  background: rgba(0, 28, 48, 0.08);
+}
+
+.user-avatar-circle {
+  width: 44px;
+  height: 44px;
+  background: var(--primary-dark);
+  color: white;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  box-shadow: 0 4px 10px rgba(0, 28, 48, 0.2);
+}
+
+.user-avatar-circle:hover {
+  transform: scale(1.05) rotate(5deg);
+  background: var(--accent-blue);
+}
+
+/* 3. Notification Tray (Glassmorphism) */
+.notification-tray-menu {
+  margin-top: 15px !important;
+}
+
+::ng-deep .mat-mdc-menu-panel.notification-tray-menu {
+  background: var(--surface-glass) !important;
+  backdrop-filter: var(--glass-blur) !important;
+  -webkit-backdrop-filter: var(--glass-blur) !important;
+  border: var(--glass-border) !important;
+  border-radius: 24px !important;
+  box-shadow: var(--shadow-premium) !important;
+  padding: 0 !important;
+}
+
+.notif-tray-container {
+  width: 400px;
+  max-height: 550px;
+}
+
+.tray-header {
+  padding: 20px 25px;
+  border-bottom: 1px solid rgba(0, 28, 48, 0.05);
+}
+
+.tray-header h3 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--primary-dark);
+}
+
+.mark-all-btn {
+  font-weight: 600 !important;
+  color: var(--accent-blue) !important;
+}
+
+.notif-item {
+  padding: 18px 25px;
+  border-bottom: 1px solid rgba(0, 28, 48, 0.03);
+  transition: all 0.2s;
+}
+
+.notif-item:hover {
+  background-color: rgba(23, 107, 135, 0.05);
+}
+
+.notif-item.unread {
+  background-color: rgba(23, 107, 135, 0.03);
+}
+
+.unread-dot {
+  background-color: #ff4d4d;
+  box-shadow: 0 0 8px rgba(255, 77, 77, 0.4);
+}
+
+/* 4. Content Wrapper */
+.main-content-wrapper {
+  padding: 40px 30px;
+  min-height: calc(100vh - 180px); /* Adjust to leave space for header/footer */
+  animation: fadeIn 0.6s ease-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* 5. Footer */
+.dashboard-footer {
+  padding: 30px;
+  background: rgba(0, 28, 48, 0.02);
+  border-top: 1px solid rgba(0, 28, 48, 0.05);
+  color: var(--primary-dark);
+  opacity: 0.6;
+}
+
+.footer-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.footer-links {
+  display: flex;
+  gap: 20px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.footer-links span {
+  cursor: pointer;
+}
+
+.footer-links span:hover {
+  color: var(--accent-blue);
+}
+
+@media (max-width: 1100px) {
+  .expanded {
+    width: 280px;
+  }
+}
+
+@media (max-width: 900px) {
+  .main-content-wrapper {
+    padding: 30px 20px;
+    margin-left: 0 !important;
+  }
+  
+  .dashboard-global-header {
+    margin: 15px 20px;
+    width: auto;
+  }
+
+  /* Force vertical behavior for dual columns in settings */
+  ::ng-deep .dual-view-container {
+      flex-direction: column !important;
+      align-items: center !important;
+  }
+  
+  ::ng-deep .info-display-card, 
+  ::ng-deep .edit-form-card {
+      max-width: 100% !important;
+      width: 100% !important;
+  }
+}
+
+@media (max-width: 600px) {
+  .dashboard-global-header {
+    margin: 10px;
+    padding: 0 15px;
+    height: 60px;
+  }
+  
+  .main-content-wrapper {
+    padding: 20px 15px;
+  }
+
+  .footer-content {
+    flex-direction: column;
+    gap: 15px;
+    text-align: center;
+  }
+}

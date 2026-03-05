@@ -13,7 +13,13 @@ export class ProductService implements ProductRepository {
     private url = environment.apiUrl;
 
     // Temporal state to simulate DB modifications
-    private products: Product[] = [];
+    private products: Product[] = [
+        new Product('Papel Bond A4', 'Resma de papel bond tamaño A4 para oficina', 'Resma', 50, 'p1'),
+        new Product('Tinta HP 664', 'Cartucho de tinta negra HP 664 original', 'Unidad', 20, 'p2'),
+        new Product('Marcadores Borrables', 'Set de 4 marcadores borrables colores variados', 'Set', 15, 'p3'),
+        new Product('Folder Az', 'Folder tipo AZ lomo ancho color azul', 'Unidad', 100, 'p4'),
+        new Product('Cinta Pegante', 'Cinta pegante transparente 24mm x 40m', 'Unidad', 30, 'p5'),
+    ];
 
     constructor(private http: HttpClient) { }
 

@@ -1,78 +1,134 @@
-<mat-sidenav-container class="sidenav-container">
-  <!-- 1. Sidenav (El menú lateral oscuro) -->
-  <!-- Usamos la clase 'expanded' por defecto para que se vea ancho, ya que no hay lógica de colapso. -->
-  <mat-sidenav mode="side" opened="true" disableClose="true" class="custom-sidenav expanded">
-    <!-- Cabecera del Sidenav: Logo y Botón de Cierre -->
-    <div class="sidenav-header">
-      <!-- Logo visible por defecto -->
-      <div class="logo-area">
-        <!-- El 'A' y el texto "Angular" de la imagen -->
-        <span class="logo-text">Inicio</span>
-      </div>
-
-      <!-- Botón de Cierre (la 'X' o 'close' de la imagen) -->
-      <button mat-icon-button class="toggle-button">
-        <mat-icon>close</mat-icon>
-      </button>
+<div class="sidenav-menu-wrapper">
+  <!-- Cabecera del Sidenav: Logo -->
+  <div class="sidenav-header" [class.mobile-header]="isMobile">
+    <div class="logo-area">
+      <img src="assets/img/logo-cotionline.svg" alt="Cotionline Logo" class="logo-image">
     </div>
+    
+    <!-- Close button for mobile -->
+    <button mat-icon-button class="close-mobile-btn" (click)="closeSidenav.emit()" *ngIf="isMobile">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
 
-    <!-- Lista de Navegación -->
-    <mat-nav-list class="nav-list">
-      <!-- Item 1: Dashboard (Inactivo) -->
-      <mat-list-item class="nav-item">
-        <mat-icon matListItemIcon>home</mat-icon>
-        <span class="nav-label">Dashboard</span>
-      </mat-list-item>
+  <!-- Lista de Navegación -->
+  <mat-nav-list class="nav-list">
+    <mat-list-item id="sidenav-inicio" class="nav-item" routerLink="/dashboard" routerLinkActive="active-item" [routerLinkActiveOptions]="{exact: true}">
+      <mat-icon matListItemIcon>home</mat-icon>
+      <span class="nav-label">Inicio</span>
+    </mat-list-item>
 
-      <!-- Item 3: Statistics (Inactivo) -->
-      <mat-list-item class="nav-item" (click)="businessDashboard()">
-        <mat-icon matListItemIcon>business</mat-icon>
-        <span class="nav-label">Negocio</span>
-      </mat-list-item>
+    <mat-divider></mat-divider>
 
-      <!-- Item 4: Coupens (Inactivo) -->
-      <mat-list-item class="nav-item" (click)="branchDashboard()">
-        <mat-icon matListItemIcon>sell</mat-icon>
-        <span class="nav-label">Sucursales</span>
-      </mat-list-item>
+    <mat-list-item class="nav-item" *ngIf="hasBusiness$ | async" routerLink="/dashboard/branches" routerLinkActive="active-item">
+      <mat-icon matListItemIcon>store</mat-icon>
+      <span class="nav-label">Sedes</span>
+    </mat-list-item>
 
-      <!-- Item 5: Pages (Inactivo) -->
-      <mat-list-item class="nav-item" (click)="quotationRequestDashboard()">
-        <mat-icon matListItemIcon>description</mat-icon>
-        <span class="nav-label">Solicitudes de cotización</span>
-      </mat-list-item>
+    <mat-list-item class="nav-item" routerLink="/dashboard/quotations" routerLinkActive="active-item">
+      <mat-icon matListItemIcon>request_quote</mat-icon>
+      <span class="nav-label">Solicitudes</span>
+    </mat-list-item>
 
-      <!-- Item 6: Media (Inactivo) -->
-      <mat-list-item class="nav-item">
-        <mat-icon matListItemIcon>camera_alt</mat-icon>
-        <span class="nav-label">Cotizaciones</span>
-      </mat-list-item>
+    <mat-list-item class="nav-item" routerLink="/dashboard/quotation-management" routerLinkActive="active-item">
+      <mat-icon matListItemIcon>local_offer</mat-icon>
+      <span class="nav-label">Cotizaciones</span>
+    </mat-list-item>
 
-      <!-- Item 7: Settings (Inactivo) -->
-      <mat-list-item class="nav-item" (click)="updatePlanDashboard()">
-        <mat-icon matListItemIcon>workspace_premium</mat-icon>
-        <span class="nav-label">Actualizar plan</span>
-      </mat-list-item>
+    <mat-list-item class="nav-item" routerLink="/dashboard/quotation-management/comparison" routerLinkActive="active-item">
+      <mat-icon matListItemIcon>analytics</mat-icon>
+      <span class="nav-label">Comparación</span>
+    </mat-list-item>
 
-      <mat-list-item class="nav-item">
-        <mat-icon matListItemIcon>group</mat-icon>
-        <span class="nav-label">Colaboradores</span>
-      </mat-list-item>
+    <mat-list-item class="nav-item" (click)="updatePlanDashboard()">
+      <mat-icon matListItemIcon>workspace_premium</mat-icon>
+      <span class="nav-label">Actualizar plan</span>
+    </mat-list-item>
 
-      <mat-list-item class="nav-item">
-        <mat-icon matListItemIcon>settings</mat-icon>
-        <span class="nav-label">Settings</span>
-      </mat-list-item>
-    </mat-nav-list>
+    <mat-list-item class="nav-item" routerLink="/dashboard/collaborators" routerLinkActive="active-item">
+      <mat-icon matListItemIcon>group</mat-icon>
+      <span class="nav-label">Colaboradores</span>
+    </mat-list-item>
 
-    <!-- Puedes añadir aquí un Pie de página estático si lo deseas, pero la imagen no lo muestra explícitamente -->
-  </mat-sidenav>
+    <mat-list-item class="nav-item" routerLink="/dashboard/notifications" routerLinkActive="active-item">
+      <mat-icon matListItemIcon>notifications</mat-icon>
+      <span class="nav-label">Notificaciones</span>
+    </mat-list-item>
 
-  <!-- 2. Contenido Principal de la Aplicación (Placeholder) -->
-  <mat-sidenav-content class="sidenav-content">
-    <div class="main-content-wrapper">
-      <h1 class="text-3xl font-bold text-gray-800 mb-6">Contenido Principal</h1>
-      <p class="text-gray-600">Esta es el área donde se cargará el contenido de la aplicación.</p>
-    </div>
-  </mat-sidenav-content>
-</mat-sidenav-container>
+    <mat-list-item class="nav-item" routerLink="/dashboard/guides" routerLinkActive="active-item">
+      <mat-icon matListItemIcon>school</mat-icon>
+      <span class="nav-label">Ayuda</span>
+    </mat-list-item>
+
+    <!-- Settings Submenu -->
+    <mat-accordion class="settings-accordion">
+      <mat-expansion-panel [hideToggle]="false" class="custom-expansion-panel">
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            <mat-icon class="panel-icon">settings</mat-icon>
+            <span class="nav-label">Ajustes</span>
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+
+        <!-- Nested Sub-category: Usuario -->
+        <mat-expansion-panel class="nested-expansion-panel">
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              <mat-icon class="panel-icon">person</mat-icon>
+              <span class="nav-label">Usuario</span>
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+          
+          <mat-nav-list class="submenu-list">
+            <mat-list-item routerLink="/dashboard/profile" class="submenu-item">
+              <mat-icon matListItemIcon>manage_accounts</mat-icon>
+              <span class="nav-label">Tus Datos</span>
+            </mat-list-item>
+            <mat-list-item routerLink="/dashboard/profile/change-password" class="submenu-item">
+              <mat-icon matListItemIcon>lock</mat-icon>
+              <span class="nav-label">Seguridad</span>
+            </mat-list-item>
+            <mat-list-item routerLink="/dashboard/profile/subscription" class="submenu-item">
+              <mat-icon matListItemIcon>workspace_premium</mat-icon>
+              <span class="nav-label">Suscripción</span>
+            </mat-list-item>
+            <mat-list-item (click)="logout()" class="submenu-item logout-item">
+              <mat-icon matListItemIcon>logout</mat-icon>
+              <span class="nav-label">Salir</span>
+            </mat-list-item>
+            <mat-list-item (click)="deleteAccount()" class="submenu-item delete-item">
+              <mat-icon matListItemIcon>delete_forever</mat-icon>
+              <span class="nav-label">Eliminar cuenta</span>
+            </mat-list-item>
+          </mat-nav-list>
+        </mat-expansion-panel>
+
+        <!-- Nested Sub-category: Negocio -->
+        <mat-expansion-panel class="nested-expansion-panel">
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              <mat-icon class="panel-icon">business</mat-icon>
+              <span class="nav-label">Negocio</span>
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+          
+          <mat-nav-list class="submenu-list">
+            <mat-list-item routerLink="/dashboard/business/profile" class="submenu-item">
+              <mat-icon matListItemIcon>edit_note</mat-icon>
+              <span class="nav-label">Datos</span>
+            </mat-list-item>
+            <mat-list-item routerLink="/dashboard/business/docs" class="submenu-item">
+              <mat-icon matListItemIcon>folder_shared</mat-icon>
+              <span class="nav-label">Documentación</span>
+            </mat-list-item>
+            <mat-list-item (click)="deleteBusiness()" class="submenu-item delete-item">
+              <mat-icon matListItemIcon>domain_disabled</mat-icon>
+              <span class="nav-label">Eliminar</span>
+            </mat-list-item>
+          </mat-nav-list>
+        </mat-expansion-panel>
+
+      </mat-expansion-panel>
+    </mat-accordion>
+  </mat-nav-list>
+</div>

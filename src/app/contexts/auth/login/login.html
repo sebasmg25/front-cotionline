@@ -1,45 +1,59 @@
-<h2 mat-dialog-title class="dialog-title-container">
-  Ingresa a cotionline!
-  <!-- Botón estándar de cierre de diálogo de Angular Material -->
-  <button mat-icon-button [mat-dialog-close]="true" class="close-button">
-    <mat-icon>close</mat-icon>
-  </button>
-</h2>
+<app-toolbar *ngIf="!isDialog"></app-toolbar>
 
-<mat-dialog-content>
-  <div class="form-container">
-    <h3 class="welcome-text">Bienvenido</h3>
+<!-- Unificador de estilo para cuando sea página completa -->
+<div [class.login-page-wrapper]="!isDialog">
+  <mat-card [class.login-standalone-card]="!isDialog">
+    
+    <h2 mat-dialog-title class="dialog-title-container" [class.standalone-title]="!isDialog">
+      <span class="title-text">¡Ingresa a Cotionline!</span>
+      <!-- Botón de cierre solo en Diálogo -->
+      <button mat-icon-button [mat-dialog-close]="true" class="close-button" *ngIf="isDialog">
+        <mat-icon>close</mat-icon>
+      </button>
+    </h2>
 
-    <form>
-      <mat-form-field appearance="outline" class="full-width-input">
-        <mat-label>Correo electrónico *</mat-label>
-        <input
-          [(ngModel)]="email"
-          matInput
-          placeholder="Correo electrónico"
-          type="email"
-          name="email"
-        />
-        <mat-icon matPrefix>mail</mat-icon>
-      </mat-form-field>
+    <mat-dialog-content [class.standalone-dialog-content]="!isDialog">
+      <div class="form-container">
+        <h3 class="welcome-text">Bienvenido</h3>
 
-      <mat-form-field appearance="outline" class="full-width-input">
-        <mat-label>Contraseña *</mat-label>
-        <input
-          [(ngModel)]="password"
-          matInput
-          type="password"
-          placeholder="Contraseña"
-          name="password"
-        />
-        <mat-icon matPrefix>key</mat-icon>
-      </mat-form-field>
+        <form>
+          <div class="centered-form-fields">
+            <mat-form-field appearance="outline" class="login-input">
+              <mat-label>Correo electrónico *</mat-label>
+              <input
+                [(ngModel)]="email"
+                matInput
+                placeholder="ejemplo@dominio.com"
+                type="email"
+                name="email"
+              />
+              <mat-icon matPrefix>mail</mat-icon>
+            </mat-form-field>
 
-      <mat-checkbox color="primary" class="remember-checkbox"> Recordar </mat-checkbox>
-    </form>
-  </div>
-</mat-dialog-content>
+            <mat-form-field appearance="outline" class="login-input">
+              <mat-label>Contraseña *</mat-label>
+              <input
+                [(ngModel)]="password"
+                matInput
+                type="password"
+                placeholder="Tu contraseña"
+                name="password"
+              />
+              <mat-icon matPrefix>lock</mat-icon>
+            </mat-form-field>
 
-<mat-dialog-actions class="action-buttons-center">
-  <button (click)="login()" mat-raised-button color="primary" class="access-button">Acceder</button>
-</mat-dialog-actions>
+            <div class="checkbox-container">
+              <mat-checkbox color="primary" class="remember-checkbox">Recordar sesión</mat-checkbox>
+            </div>
+          </div>
+        </form>
+      </div>
+    </mat-dialog-content>
+
+    <mat-dialog-actions class="action-buttons-center">
+      <button (click)="login()" mat-raised-button color="primary" class="access-button" [disabled]="isLoading">
+        {{ isLoading ? 'ENTRANDO...' : 'ACCEDER' }}
+      </button>
+    </mat-dialog-actions>
+  </mat-card>
+</div>
