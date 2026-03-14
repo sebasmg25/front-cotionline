@@ -8,10 +8,7 @@
   </header>
 
   <div class="pricing-switcher-wrapper">
-    <div class="pricing-switcher">
-      <span class="switcher-option active">Mensual</span>
-      <span class="switcher-option annual">Anual <span class="badge">-15%</span></span>
-    </div>
+    <!-- Removido el selector anual por requerimiento del usuario -->
   </div>
 
   <div class="plans-grid">
@@ -43,14 +40,14 @@
         </ul>
       </mat-card-content>
       <mat-card-actions class="card-actions-bottom">
-        <button mat-flat-button color="primary" class="plan-button">Empezar</button>
+        <button mat-flat-button color="primary" class="plan-button" (click)="selectPlan('gratis')">Empezar</button>
       </mat-card-actions>
     </mat-card>
 
     <mat-card class="plan-card">
       <mat-card-content>
-        <h2 class="plan-title">PROFESIONAL ANUAL</h2>
-        <p class="plan-price">$280<span class="price-period">/mes</span></p>
+        <h2 class="plan-title">PROFESIONAL</h2>
+        <p class="plan-price">$20.000<span class="price-period">/mes</span></p>
 
         <ul class="plan-features">
           <li class="feature-item"><mat-icon class="check-icon">check</mat-icon> 1 Usuario</li>
@@ -75,14 +72,14 @@
         </ul>
       </mat-card-content>
       <mat-card-actions class="card-actions-bottom">
-        <button mat-flat-button color="primary" class="plan-button">Empezar</button>
+        <button mat-flat-button color="primary" class="plan-button" (click)="selectPlan('basico')">Empezar</button>
       </mat-card-actions>
     </mat-card>
 
     <mat-card class="plan-card">
       <mat-card-content>
-        <h2 class="plan-title">PYME ANUAL</h2>
-        <p class="plan-price">$415<span class="price-period">/mes</span></p>
+        <h2 class="plan-title">PYME</h2>
+        <p class="plan-price">$20.000<span class="price-period">/mes</span></p>
 
         <ul class="plan-features">
           <li class="feature-item"><mat-icon class="check-icon">check</mat-icon> 2 Usuario</li>
@@ -110,15 +107,15 @@
         </ul>
       </mat-card-content>
       <mat-card-actions class="card-actions-bottom">
-        <button mat-flat-button color="primary" class="plan-button">Empezar</button>
+        <button mat-flat-button color="primary" class="plan-button" (click)="selectPlan('basico')">Empezar</button>
       </mat-card-actions>
     </mat-card>
 
     <mat-card class="plan-card best-seller">
       <div class="best-ribbon">BEST</div>
       <mat-card-content>
-        <h2 class="plan-title">EMPRESA ANUAL</h2>
-        <p class="plan-price">$550<span class="price-period">/mes</span></p>
+        <h2 class="plan-title">EMPRESA</h2>
+        <p class="plan-price">$35.000<span class="price-period">/mes</span></p>
 
         <ul class="plan-features">
           <li class="feature-item"><mat-icon class="check-icon">check</mat-icon> 3 Usuarios</li>
@@ -146,7 +143,7 @@
         </ul>
       </mat-card-content>
       <mat-card-actions class="card-actions-bottom">
-        <button mat-flat-button color="primary" class="plan-button">Empezar</button>
+        <button mat-flat-button color="primary" class="plan-button" (click)="selectPlan('premium')">Empezar</button>
       </mat-card-actions>
     </mat-card>
   </div>

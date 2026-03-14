@@ -6,6 +6,10 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatDividerModule } from '@angular/material/divider';
 import { Router, RouterModule } from '@angular/router';
 import { AlertService } from '../../../../contexts/shared/services/alert.service';
+import { AuthService } from '../../../../infraestructure/services/auth/auth.service';
+import { SubscriptionService } from '../../../../infraestructure/services/subscription/subscription.service';
+import { Plan, PlanName } from '../../../../infraestructure/services/subscription/plan.model';
+import { forkJoin } from 'rxjs';
 
 interface SubscriptionInfo {
     planName: string;
@@ -30,37 +34,41 @@ interface SubscriptionInfo {
     styleUrl: './subscription-details.css'
 })
 export class SubscriptionDetails implements OnInit {
-    subscription: SubscriptionInfo = {
-        planName: 'Premium',
-        price: 35000,
-        billingCycle: 'mensual',
-        nextBillingDate: new Date(Date.now() + 86400000 * 15), // 15 days from now
-        paymentMethod: 'Visa termina en 4242'
-    };
+    currentPlan: Plan | null = null;
+    isLoading = true;
 
     constructor(
         private router: Router,
-        private alertService: AlertService
+        private alertService: AlertService,
+        private authService: AuthService,
+        private subscriptionService: SubscriptionService
     ) { }
 
-    ngOnInit(): void { }
+    ngOnInit(): void {
+        this.loadSubscriptionData();
+    }
+
+    public loadSubscriptionData(): void {
+        this.isLoading = true;
+        
+        forkJoin({
+            session: this.authService.getUserSession(),
+            plans: this.subscriptionService.getPlans()
+        }).subscribe({
+            next: ({ session, plans }) => {
+                const userPlanId = session.user?.planId;
+                this.currentPlan = plans.find(p => p.id === userPlanId) || plans.find(p => p.name === PlanName.FREE) || null;
+                this.isLoading = false;
+            },
+            error: (err) => {
+                this.alertService.showError('Error', 'No se pudo cargar la información de tu suscripción.');
+                this.isLoading = false;
+            }
+        });
+    }
 
     changePlan(): void {
         this.router.navigate(['/dashboard/updatePlan']);
-    }
-
-    changePaymentMethod(): void {
-        this.alertService.confirmAction(
-            'Cambiar Método de Pago',
-            'Serás redirigido a nuestra pasarela de pagos segura para actualizar tus datos bancarios.',
-            'IR A PAGOS',
-            'Cancelar'
-        ).then(confirmed => {
-            if (confirmed) {
-                this.alertService.showInfo('Redirigiendo...', 'Conectando con la pasarela de pagos...');
-                // Simulate redirect or modal
-            }
-        });
     }
 
     goBack(): void {

@@ -9,36 +9,60 @@
     </mat-card-header>
 
     <mat-card-content *ngIf="!productNotFound; else notFoundTemplate">
+      <div *ngIf="isLoading" class="loading-overlay">
+        <p>Cargando producto...</p>
+      </div>
+
       <form [formGroup]="productForm" (ngSubmit)="onSubmit()" class="product-form">
-        
         <mat-form-field appearance="outline" class="full-width-input">
           <mat-label>Nombre del Producto</mat-label>
-          <input matInput formControlName="name" placeholder="Ej: Monitor 27 pulgadas">
-          <mat-error *ngIf="productForm.get('name')?.hasError('required')">El nombre es requerido</mat-error>
-          <mat-error *ngIf="productForm.get('name')?.hasError('minlength')">El nombre debe tener al menos 3 caracteres</mat-error>
+          <input matInput formControlName="name" placeholder="Ej: Monitor 27 pulgadas" />
+          <mat-error *ngIf="productForm.get('name')?.hasError('required')"
+            >El nombre es requerido</mat-error
+          >
+          <mat-error *ngIf="productForm.get('name')?.hasError('minlength')"
+            >El nombre debe tener al menos 3 caracteres</mat-error
+          >
         </mat-form-field>
 
         <mat-form-field appearance="outline" class="full-width-input">
           <mat-label>Descripción</mat-label>
-          <textarea matInput formControlName="description" rows="3" placeholder="Detalles del producto..."></textarea>
-          <mat-error *ngIf="productForm.get('description')?.hasError('required')">La descripción es requerida</mat-error>
+          <textarea
+            matInput
+            formControlName="description"
+            rows="3"
+            placeholder="Detalles del producto..."
+          ></textarea>
+          <mat-error *ngIf="productForm.get('description')?.hasError('required')"
+            >La descripción es requerida</mat-error
+          >
         </mat-form-field>
 
         <div class="form-row">
           <mat-form-field appearance="outline" class="half-width-input">
             <mat-label>Unidad de medida</mat-label>
-            <input matInput type="string" formControlName="measure_unit" placeholder="Ej: 1500.00" min="0" step="0.01">
-            <mat-error *ngIf="productForm.get('measure_unit')?.hasError('required')">La unidad de medida es requerida</mat-error>
+            <input
+              matInput
+              type="text"
+              formControlName="unitOfMeasurement"
+              placeholder="Ej: Unidad, Metro, Litro"
+            />
+            <mat-error *ngIf="productForm.get('unitOfMeasurement')?.hasError('required')"
+              >La unidad de medida es requerida</mat-error
+            >
           </mat-form-field>
 
           <mat-form-field appearance="outline" class="half-width-input">
-            <mat-label>Stock</mat-label>
-            <input matInput type="number" formControlName="stock" placeholder="Ej: 10" min="0" step="1">
-            <mat-error *ngIf="productForm.get('stock')?.hasError('required')">El stock es requerido</mat-error>
-            <mat-error *ngIf="productForm.get('stock')?.hasError('min')">El stock no puede ser negativo</mat-error>
+            <mat-label>Cantidad (Amount)</mat-label>
+            <input matInput type="number" formControlName="amount" placeholder="Ej: 10" min="0" />
+            <mat-error *ngIf="productForm.get('amount')?.hasError('required')"
+              >La cantidad es requerida</mat-error
+            >
+            <mat-error *ngIf="productForm.get('amount')?.hasError('min')"
+              >La cantidad no puede ser negativa</mat-error
+            >
           </mat-form-field>
         </div>
-
       </form>
     </mat-card-content>
 
@@ -50,7 +74,13 @@
     </ng-template>
 
     <mat-card-actions class="card-actions-center" *ngIf="!productNotFound">
-      <button mat-raised-button color="primary" class="submit-button" [disabled]="productForm.invalid || isSaving || isLoading" (click)="onSubmit()">
+      <button
+        mat-raised-button
+        color="primary"
+        class="submit-button"
+        [disabled]="productForm.invalid || isSaving || isLoading"
+        (click)="onSubmit()"
+      >
         {{ isSaving ? 'Actualizando...' : 'Actualizar Producto' }}
       </button>
     </mat-card-actions>

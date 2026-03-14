@@ -1,0 +1,31 @@
+<div class="invitation-container">
+    <div class="invitation-card">
+        <!-- Loader -->
+        <ng-container *ngIf="loading">
+            <mat-spinner diameter="50"></mat-spinner>
+            <h2 class="mat-h2">Procesando tu respuesta...</h2>
+            <p class="mat-body-1 text-muted">Estamos actualizando el estado de la invitación, por favor espera un
+                momento.</p>
+        </ng-container>
+
+        <!-- Success Rejection -->
+        <ng-container *ngIf="!loading && success">
+            <div class="status-icon success">
+                <mat-icon>do_not_disturb_on</mat-icon>
+            </div>
+            <h2 class="title">Invitación Rechazada</h2>
+            <p class="subtitle text-muted">Has rechazado la invitación para unirte al equipo.</p>
+            <p class="mat-body-2" style="margin-top: 20px;">Ya puedes cerrar esta pestaña.</p>
+        </ng-container>
+
+        <!-- Error -->
+        <ng-container *ngIf="!loading && error">
+            <div class="status-icon error">
+                <mat-icon>error_outline</mat-icon>
+            </div>
+            <h2 class="title error-text">Ocurrió un Incidente</h2>
+            <p class="subtitle text-muted">{{ errorMessage }}</p>
+            <p class="mat-body-2" style="margin-top: 20px;">Es posible que la invitación ya haya sido respondida o cancelada.</p>
+        </ng-container>
+    </div>
+</div>

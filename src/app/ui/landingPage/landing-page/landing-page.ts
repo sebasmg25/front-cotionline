@@ -11,7 +11,7 @@ import { UpdatePlan } from '../../../contexts/updatePlan/update-plan/update-plan
 
 @Component({
   selector: 'app-landing-page',
-  imports: [Toolbar, Functions, Prices, Contact, Register, Login, MatDialogModule, UpdatePlan],
+  imports: [Toolbar, Functions, Contact, Register, MatDialogModule, UpdatePlan],
   templateUrl: './landing-page.html',
   styleUrl: './landing-page.css',
 })

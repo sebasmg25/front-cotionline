@@ -1,3 +1,8 @@
+export enum UserRole {
+  OWNER = 'OWNER',
+  COLLABORATOR = 'COLLABORATOR',
+}
+
 export class User {
   public identification: string;
   public name: string;
@@ -7,6 +12,10 @@ export class User {
   public city: string;
   public department: string; // New field
   public id?: string;
+  public planId?: string;
+  public planStartDate?: Date;
+  public role: UserRole = UserRole.OWNER;
+  public ownerId?: string;
 
   constructor(
     identification: string,
@@ -16,7 +25,11 @@ export class User {
     password: string,
     city: string,
     department: string,
-    id?: string
+    id?: string,
+    planId?: string,
+    planStartDate?: Date,
+    role: UserRole = UserRole.OWNER,
+    ownerId?: string,
   ) {
     this.identification = identification;
     this.name = name;
@@ -26,39 +39,9 @@ export class User {
     this.city = city;
     this.department = department;
     this.id = id;
+    this.planId = planId;
+    this.planStartDate = planStartDate;
+    this.role = role;
+    this.ownerId = ownerId;
   }
 }
-
-// Temporary mock data for UI development
-export const MOCK_USERS: User[] = [
-  new User(
-    '1010101010',
-    'Juan',
-    'Pérez',
-    'juan.perez@example.com',
-    '',
-    'Bogotá',
-    'Cundinamarca',
-    'u1'
-  ),
-  new User(
-    '2020202020',
-    'María',
-    'Gómez',
-    'maria.gomez@example.com',
-    '',
-    'Medellín',
-    'Antioquia',
-    'u2'
-  ),
-  new User(
-    '3030303030',
-    'Carlos',
-    'Ramírez',
-    'carlos.ramirez@example.com',
-    '',
-    'Cali',
-    'Valle del Cauca',
-    'u3'
-  )
-];

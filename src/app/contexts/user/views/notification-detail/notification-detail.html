@@ -1,0 +1,69 @@
+<div class="detail-wrapper">
+
+    <!-- Header -->
+    <div class="detail-header">
+        <button mat-icon-button (click)="goBack()" class="back-btn">
+            <mat-icon>arrow_back</mat-icon>
+        </button>
+        <div class="header-text">
+            <h1>Detalle de Notificación</h1>
+            <p>Consulta el contenido completo del aviso.</p>
+        </div>
+    </div>
+
+    <!-- Loading -->
+    <div class="loading-state" *ngIf="loading">
+        <mat-icon class="spin-icon">sync</mat-icon>
+        <p>Cargando...</p>
+    </div>
+
+    <!-- Not Found -->
+    <div class="not-found-state" *ngIf="!loading && notFound">
+        <mat-icon>notifications_off</mat-icon>
+        <h2>Notificación no encontrada</h2>
+        <p>Es posible que haya sido eliminada o no tengas acceso.</p>
+        <button mat-flat-button color="primary" (click)="goBack()">
+            <mat-icon>arrow_back</mat-icon> Volver al Buzón
+        </button>
+    </div>
+
+    <!-- Notification Card -->
+    <mat-card class="detail-card" *ngIf="!loading && notification">
+        <mat-card-content>
+
+            <!-- Top row: type badge + date -->
+            <div class="detail-meta">
+                <div class="type-chip" [ngClass]="notification.type.toLowerCase()">
+                    <mat-icon>{{ getTypeIcon(notification.type) }}</mat-icon>
+                    <span>{{ getTypeLabel(notification.type) }}</span>
+                </div>
+                <div class="status-row">
+                    <span class="read-badge" [class.unread]="!notification.isRead">
+                        {{ notification.isRead ? 'Leída' : 'No leída' }}
+                    </span>
+                    <span class="date-chip">
+                        <mat-icon>schedule</mat-icon>
+                        {{ notification.createdAt | date:'dd MMM yyyy, h:mm a' }}
+                    </span>
+                </div>
+            </div>
+
+            <mat-divider class="divider"></mat-divider>
+
+            <!-- Title -->
+            <h2 class="detail-title">{{ notification.title }}</h2>
+
+            <!-- Message -->
+            <p class="detail-message">{{ notification.message }}</p>
+
+            <!-- Action button if there's a link -->
+            <div class="detail-actions" *ngIf="notification.link">
+                <button mat-flat-button color="primary" (click)="navigateToLink()">
+                    <mat-icon>open_in_new</mat-icon> Ir a la sección
+                </button>
+            </div>
+
+        </mat-card-content>
+    </mat-card>
+
+</div>

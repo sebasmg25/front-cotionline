@@ -1,0 +1,76 @@
+<div class="marketplace-wrapper">
+  <div class="page-header">
+    <button mat-icon-button (click)="goBack()" matTooltip="Volver" type="button">
+      <mat-icon>arrow_back</mat-icon>
+    </button>
+    <div class="header-titles">
+      <h1>Marketplace de Solicitudes</h1>
+      <p>Explora todas las solicitudes publicadas por otras empresas y envía tus cotizaciones.</p>
+    </div>
+  </div>
+  <div class="filters-container" [formGroup]="filterForm">
+    <div class="filters-header">
+      <mat-icon>filter_list</mat-icon>
+      <span>Filtrar por Ubicación:</span>
+    </div>
+    
+    <div class="filters-fields">
+      <mat-form-field appearance="outline" class="filter-field">
+        <mat-label>Departamento</mat-label>
+        <mat-select formControlName="department">
+          <mat-option value="">Todos los departamentos</mat-option>
+          <mat-option *ngFor="let dept of departments" [value]="dept">
+            {{ dept }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="filter-field" [class.disabled]="!filterForm.get('department')?.value">
+        <mat-label>Ciudad / Municipio</mat-label>
+        <mat-select formControlName="city">
+          <mat-option value="">Todas las ciudades</mat-option>
+          <mat-option *ngFor="let city of cities" [value]="city">
+            {{ city }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+  </div>
+
+  <div class="loading-overlay" *ngIf="isLoading">
+    <mat-spinner diameter="40"></mat-spinner>
+    <p>Buscando solicitudes...</p>
+  </div>
+
+  <div class="cards-grid" *ngIf="!isLoading">
+    <mat-card
+      *ngFor="let request of incomingRequests"
+      class="incoming-card"
+    >
+      <mat-card-header>
+        <mat-card-title>{{ request.title }}</mat-card-title>
+        <mat-card-subtitle
+          >Publicado: {{ request.createdAt | date: 'dd/MM/yyyy' }}</mat-card-subtitle
+        >
+      </mat-card-header>
+      <mat-card-content>
+        <p class="truncate">{{ request.description }}</p>
+        <div class="items-count">
+          <mat-icon>inventory_2</mat-icon>
+          <span>{{ request.items.length || 0 }} productos solicitados</span>
+        </div>
+      </mat-card-content>
+      <mat-divider></mat-divider>
+      <mat-card-actions align="end">
+        <button mat-flat-button color="primary" (click)="respondRequest(request.id)">
+          RESPONDER AHORA
+        </button>
+      </mat-card-actions>
+    </mat-card>
+
+    <div class="empty-state" *ngIf="incomingRequests.length === 0">
+      <mat-icon>search_off</mat-icon>
+      <p>No hay solicitudes disponibles en el mercado en este momento.</p>
+    </div>
+  </div>
+</div>

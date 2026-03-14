@@ -1,7 +1,7 @@
 <div class="edit-wrapper">
   <mat-card class="edit-form-card">
     <mat-card-header>
-      <button mat-icon-button (click)="goBack()" class="back-button" aria-label="Volver atrás">
+      <button mat-icon-button (click)="goBack()" class="back-button">
         <mat-icon>arrow_back</mat-icon>
       </button>
       <mat-card-title>Editar Sede</mat-card-title>
@@ -9,28 +9,51 @@
     </mat-card-header>
 
     <mat-card-content *ngIf="!branchNotFound; else notFoundTemplate">
-      <form [formGroup]="branchForm" (ngSubmit)="onSubmit()" class="branch-form">
-        
+      <div *ngIf="isLoading" class="loading-overlay">
+        <mat-spinner diameter="40"></mat-spinner>
+      </div>
+
+      <form [formGroup]="branchForm" class="branch-form">
         <mat-form-field appearance="outline" class="full-width-input">
           <mat-label>Nombre de la Sede</mat-label>
-          <input matInput formControlName="name" placeholder="Ej: Sede Principal">
-          <mat-error *ngIf="branchForm.get('name')?.hasError('required')">El nombre es requerido</mat-error>
+          <input matInput formControlName="name" />
+          <mat-error *ngIf="branchForm.get('name')?.hasError('required')"
+            >El nombre es requerido</mat-error
+          >
         </mat-form-field>
 
         <div class="form-row">
           <mat-form-field appearance="outline" class="half-width-input">
-            <mat-label>Ciudad</mat-label>
-            <input matInput formControlName="city" placeholder="Ej: Bogotá">
-            <mat-error *ngIf="branchForm.get('city')?.hasError('required')">La ciudad es requerida</mat-error>
+            <mat-label>Departamento</mat-label>
+            <input type="text" matInput formControlName="department" [matAutocomplete]="autoDept" />
+            <mat-autocomplete #autoDept="matAutocomplete">
+              <mat-option *ngFor="let dept of filteredDepartments$ | async" [value]="dept">
+                {{ dept }}
+              </mat-option>
+            </mat-autocomplete>
           </mat-form-field>
 
           <mat-form-field appearance="outline" class="half-width-input">
-            <mat-label>Dirección</mat-label>
-            <input matInput formControlName="address" placeholder="Ej: Calle 123 #45-67">
-            <mat-error *ngIf="branchForm.get('address')?.hasError('required')">La dirección es requerida</mat-error>
+            <mat-label>Ciudad</mat-label>
+            <input type="text" matInput formControlName="city" [matAutocomplete]="autoCity" />
+            <mat-autocomplete #autoCity="matAutocomplete">
+              <mat-option *ngFor="let city of filteredCities$ | async" [value]="city">
+                {{ city }}
+              </mat-option>
+            </mat-autocomplete>
+            <mat-error *ngIf="branchForm.get('city')?.hasError('required')"
+              >La ciudad es requerida</mat-error
+            >
           </mat-form-field>
         </div>
 
+        <mat-form-field appearance="outline" class="full-width-input">
+          <mat-label>Dirección</mat-label>
+          <input matInput formControlName="address" />
+          <mat-error *ngIf="branchForm.get('address')?.hasError('required')"
+            >La dirección es requerida</mat-error
+          >
+        </mat-form-field>
       </form>
     </mat-card-content>
 
@@ -38,11 +61,18 @@
       <div class="not-found-message">
         <mat-icon color="warn">location_off</mat-icon>
         <p>La sucursal solicitada no fue encontrada.</p>
+        <button mat-button color="primary" (click)="goBack()">Volver a la lista</button>
       </div>
     </ng-template>
 
     <mat-card-actions class="card-actions-center" *ngIf="!branchNotFound">
-      <button mat-raised-button color="primary" class="submit-button" [disabled]="branchForm.invalid || isSaving || isLoading" (click)="onSubmit()">
+      <button
+        mat-raised-button
+        color="primary"
+        class="submit-button"
+        [disabled]="branchForm.invalid || isSaving || isLoading || !hasChanges"
+        (click)="onSubmit()"
+      >
         {{ isSaving ? 'Actualizando...' : 'Actualizar Sucursal' }}
       </button>
     </mat-card-actions>

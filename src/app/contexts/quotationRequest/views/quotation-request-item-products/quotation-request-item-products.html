@@ -1,0 +1,107 @@
+<div class="products-inline-container">
+  <div *ngIf="isLoading" class="loading-state">
+    <mat-icon class="spin">sync</mat-icon>
+    <span>Cargando productos de la solicitud...</span>
+  </div>
+
+  <ng-container *ngIf="!isLoading">
+    <div class="table-header">
+      <div class="col-id">#</div>
+      <div class="col-name">Producto *</div>
+      <div class="col-qty">Cantidad *</div>
+      <div class="col-unit">Unidad *</div>
+      <div class="col-desc">Descripción</div>
+      <div class="col-actions" *ngIf="mode === 'EDIT'">Acciones</div>
+    </div>
+
+    <div class="table-body">
+      <div *ngIf="items.length === 0 && mode === 'VIEW'" class="empty-view-state">
+        No hay productos registrados en esta solicitud.
+      </div>
+      <div
+        class="product-item-row"
+        *ngFor="let item of items"
+        [class.row-invalid]="
+          mode === 'EDIT' && (!item.name || item.quantity <= 0 || !asAny(item).unitOfMeasurement)
+        "
+      >
+        <div class="col-id">{{ item.refIndex }}</div>
+        <div class="col-name">
+          <input
+            type="text"
+            [(ngModel)]="item.name"
+            (ngModelChange)="notifyChange()"
+            placeholder="Nombre del producto..."
+            [disabled]="mode === 'VIEW'"
+            class="custom-inline-input"
+          />
+        </div>
+
+        <div class="col-qty">
+          <input
+            type="number"
+            [(ngModel)]="item.quantity"
+            (ngModelChange)="notifyChange()"
+            min="1"
+            [disabled]="mode === 'VIEW'"
+            class="custom-inline-input text-center"
+          />
+        </div>
+
+        <div class="col-unit">
+          <input
+            type="text"
+            [(ngModel)]="asAny(item).unitOfMeasurement"
+            (ngModelChange)="notifyChange()"
+            placeholder="Ej: Kg, Und..."
+            [disabled]="mode === 'VIEW'"
+            class="custom-inline-input"
+          />
+        </div>
+
+        <div class="col-desc">
+          <input
+            type="text"
+            [(ngModel)]="item.description"
+            (ngModelChange)="notifyChange()"
+            placeholder="Opcional..."
+            [disabled]="mode === 'VIEW'"
+            class="custom-inline-input"
+          />
+        </div>
+
+        <div class="col-actions" *ngIf="mode === 'EDIT'">
+          <button
+            mat-icon-button
+            (click)="cloneRow(item)"
+            matTooltip="Clonar"
+            type="button"
+            color="primary"
+          >
+            <mat-icon>content_copy</mat-icon>
+          </button>
+          <button
+            mat-icon-button
+            (click)="removeRow(getRealIndex(item))"
+            matTooltip="Eliminar"
+            type="button"
+            color="warn"
+          >
+            <mat-icon>delete_outline</mat-icon>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="table-footer" *ngIf="mode === 'EDIT'">
+      <button mat-button (click)="addNewRow()" color="primary" class="add-btn" type="button">
+        <mat-icon>add</mat-icon> AGREGAR OTRO PRODUCTO
+      </button>
+
+      <span class="validation-error-text" *ngIf="!isListValid()">
+        <mat-icon>error_outline</mat-icon>
+        Faltan campos obligatorios en la lista.
+      </span>
+    </div>
+  </ng-container>
+</div>

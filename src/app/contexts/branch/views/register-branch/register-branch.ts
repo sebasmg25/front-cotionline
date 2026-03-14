@@ -1,101 +1,171 @@
 import { Component, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
-import { FormsModule } from '@angular/forms';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { Router } from '@angular/router';
+import { Observable, of } from 'rxjs';
+import { startWith, map, take, catchError } from 'rxjs/operators';
+
 import { BranchService } from '../../../../infraestructure/services/branch/branch.service';
-import { ActivatedRoute, Router } from '@angular/router';
-import { Branch } from '../../domain/models/branch.model';
 import { BusinessService } from '../../../../infraestructure/services/business/business.service';
+import { UserService } from '../../../../infraestructure/services/user/user.service';
+import { AlertService } from '../../../shared/services/alert.service';
+import { Branch } from '../../domain/models/branch.model';
+import { DEPARTMENTS, COLOMBIAN_DATA } from '../../../shared/data/cities.data';
 
 @Component({
   selector: 'app-register-branch',
+  standalone: true,
   imports: [
+    CommonModule,
+    ReactiveFormsModule,
     MatCardModule,
     MatFormFieldModule,
     MatInputModule,
     MatIconModule,
     MatButtonModule,
-    FormsModule,
+    MatAutocompleteModule,
   ],
   templateUrl: './register-branch.html',
   styleUrl: './register-branch.css',
 })
 export class RegisterBranch implements OnInit {
-  businessId: string | null = null;
-  businessName: string = 'Cargando...';
+  branchForm: FormGroup;
+  businessId: string = '';
+
+  departments: string[] = DEPARTMENTS;
+  filteredDepartments$!: Observable<string[]>;
+  filteredCities$!: Observable<string[]>;
 
   constructor(
+    private fb: FormBuilder,
     private branchService: BranchService,
     private businessService: BusinessService,
+    private userService: UserService,
+    private alertService: AlertService,
     private router: Router,
-    private route: ActivatedRoute,
-  ) { }
+  ) {
+    this.branchForm = this.fb.group({
+      businessName: [{ value: 'Cargando...', disabled: true }],
+      name: ['', [Validators.required, Validators.minLength(3)]],
+      department: ['', [Validators.required]],
+      city: [{ value: '', disabled: true }, [Validators.required]],
+      address: ['', [Validators.required]],
+    });
+  }
 
   ngOnInit(): void {
-    this.businessId = this.route.snapshot.paramMap.get('businessId');
-    if (this.businessId) {
-      this.businessService.findById(this.businessId).subscribe({
+    this.setupGeographyFilters();
+    this.loadInitialData();
+  }
+
+  private setupGeographyFilters(): void {
+    // Filtro de Departamentos
+    this.filteredDepartments$ = this.branchForm.get('department')!.valueChanges.pipe(
+      startWith(''),
+      map((value) => this._filter(value || '', this.departments)),
+    );
+
+    // Escuchar cambios en Departamento para habilitar/actualizar Ciudades
+    this.branchForm.get('department')!.valueChanges.subscribe((dept) => {
+      this.updateCityState(dept);
+    });
+  }
+
+  private updateCityState(dept: string): void {
+    const cityControl = this.branchForm.get('city')!;
+    if (this.departments.includes(dept)) {
+      cityControl.enable();
+      const availableCities = COLOMBIAN_DATA[dept] || [];
+      this.filteredCities$ = cityControl.valueChanges.pipe(
+        startWith(''),
+        map((value) => this._filter(value || '', availableCities)),
+      );
+    } else {
+      cityControl.disable();
+      cityControl.setValue('');
+    }
+  }
+
+  private _filter(value: string, options: string[]): string[] {
+    const filterValue = value.toLowerCase();
+    return options.filter((option) => option.toLowerCase().includes(filterValue));
+  }
+
+  private loadInitialData(): void {
+    // 1. Cargamos el negocio primero (Esencial para el businessId)
+    this.businessService
+      .findByUser()
+      .pipe(take(1))
+      .subscribe({
         next: (business) => {
-          this.businessName = business.name;
+          if (business && business.id) {
+            this.businessId = business.id;
+            this.branchForm.patchValue({ businessName: business.name });
+
+            // 2. Intentamos cargar el perfil del usuario para ubicación predeterminada
+            // Lo hacemos por separado para que si falla el usuario, el negocio siga cargado
+            this.userService
+              .getProfile()
+              .pipe(
+                take(1),
+                catchError(() => of(null)), // Si falla el perfil, devolvemos null y no rompemos el flujo
+              )
+              .subscribe((user) => {
+                if (user) {
+                  this.branchForm.patchValue({
+                    department: user.department || '',
+                    city: user.city || '',
+                  });
+                  // Forzamos la actualización de ciudades si ya viene un departamento
+                  if (user.department) {
+                    this.updateCityState(user.department);
+                  }
+                }
+              });
+          }
         },
-        error: () => {
-          this.businessName = 'Negocio no encontrado';
-        }
+        error: (err) => {
+          console.error('Error loading business:', err);
+          this.alertService.showError('Error', 'No se pudo cargar la información de tu negocio.');
+        },
       });
-    }
   }
 
-  name: string = '';
-  city: string = '';
-  address: string = '';
-
-  resetForm(): void {
-    this.name = '';
-    this.city = '';
-    this.address = '';
-  }
-
-  validateFields() {
-    if (!this.name || !this.city || !this.address) {
-      console.log('Debe llenar todos los campos');
-      return;
-    }
-  }
-
-  registerBranch() {
-    console.log('ENTRO SEDE');
-    this.validateFields();
-
-    if (!this.businessId) {
-      console.log('No se puede registrar la sede, falta el id del negocio');
+  registerBranch(): void {
+    if (this.branchForm.invalid || !this.businessId) {
+      this.branchForm.markAllAsTouched();
       return;
     }
 
-    const branch: Branch = {
-      name: this.name,
-      address: this.address,
-      city: this.city,
-      businessId: this.businessId,
-    };
+    // Usamos getRawValue() para obtener los datos incluso de campos deshabilitados (como businessName si se necesitara)
+    const { name, address, city, department } = this.branchForm.getRawValue();
 
-    this.branchService.save(branch).subscribe({
-      next: (result) => {
-        console.log('RESULTADO SEDEEEE', result);
+    // El modelo Branch espera (name, address, city, businessId)
+    const newBranch = new Branch(name, address, city, this.businessId);
+
+    this.branchService.save(newBranch).subscribe({
+      next: () => {
+        this.alertService.showSuccess('Sede Registrada', 'La sede ha sido creada exitosamente.');
+        this.router.navigate(['/dashboard/branches']);
       },
-      error(err) {
-        if (err) {
-          console.log('Error', err.error);
-        } else {
-          console.log('Error del servidor', err);
-        }
-      },
-      complete() {
-        console.log('Fin');
+      error: (err) => {
+        const msg = err.error?.message || 'No se pudo registrar la sede.';
+        this.alertService.showError('Error de Registro', msg);
       },
     });
+  }
+
+  resetForm(): void {
+    const currentBizName = this.branchForm.get('businessName')?.value;
+    this.branchForm.reset();
+    this.branchForm.patchValue({ businessName: currentBizName });
+    this.branchForm.get('city')?.disable();
   }
 
   goBack(): void {

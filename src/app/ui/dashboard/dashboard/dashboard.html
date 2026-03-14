@@ -40,86 +40,40 @@
       </div>
     </header>
 
-    <!-- MENÚ DE NOTIFICACIONES (TRAY) - Simplified for dashboard or keep as is -->
+    <!-- MENÚ DE NOTIFICACIONES (TRAY) -->
     <mat-menu #notificationMenu="matMenu" class="notification-tray-menu">
       <div class="notif-tray-container" (click)="$event.stopPropagation()">
         <div class="tray-header">
           <h3>Notificaciones</h3>
           <button mat-button color="primary" class="mark-all-btn" (click)="markAllAsRead()">Marcar todas como leídas</button>
         </div>
-        <!-- Note: Notification tabs logic remains in Sidenav for now or we can move it. 
-             Ideally the header/notif logic is a separate component. 
-             For simplicity and to fix the bug, I'm keeping the tray logic here. -->
-        <mat-tab-group class="notif-tabs" mat-stretch-tabs="false">
-          <!-- TODAS -->
-          <mat-tab label="Todas">
-            <div class="notif-list-scroll">
-              <div *ngFor="let n of allNotifications$ | async" 
-                   class="notif-item" 
-                   [class.unread]="!n.read"
-                   (click)="markAsRead(n)">
-                <div class="notif-icon-box" [ngClass]="n.type">
-                  <mat-icon>{{ getNotificationIcon(n.type) }}</mat-icon>
-                </div>
-                <div class="notif-body">
-                  <span class="notif-title">{{ n.title }}</span>
-                  <span class="notif-msg">{{ n.message }}</span>
-                  <span class="notif-date">{{ n.createdAt | date:'shortTime' }}</span>
-                </div>
-                <div class="unread-dot" *ngIf="!n.read"></div>
-              </div>
-              <div class="empty-notif" *ngIf="((allNotifications$ | async)?.length || 0) === 0">
-                <mat-icon>notifications_off</mat-icon>
-                <p>No tienes notificaciones.</p>
-              </div>
-            </div>
-          </mat-tab>
 
-          <!-- NO LEÍDAS -->
-          <mat-tab label="No leídas">
-            <div class="notif-list-scroll">
-              <div *ngFor="let n of unreadNotifications$ | async" 
-                   class="notif-item unread" 
-                   (click)="markAsRead(n)">
-                <div class="notif-icon-box" [ngClass]="n.type">
-                  <mat-icon>{{ getNotificationIcon(n.type) }}</mat-icon>
-                </div>
-                <div class="notif-body">
-                  <span class="notif-title">{{ n.title }}</span>
-                  <span class="notif-msg">{{ n.message }}</span>
-                  <span class="notif-date">{{ n.createdAt | date:'shortTime' }}</span>
-                </div>
-                <div class="unread-dot"></div>
+        <ng-container *ngIf="(allNotifications$ | async) as allNotifs">
+          <!-- Lista: últimas 3 notificaciones -->
+          <div class="notif-list">
+            <div *ngFor="let n of (allNotifs | slice:0:3)"
+                 class="notif-item"
+                 [class.unread]="!n.isRead"
+                 (click)="openNotification(n)">
+              <div class="notif-icon-box" [ngClass]="n.type.toLowerCase()">
+                <mat-icon>{{ getNotificationIcon(n.type) }}</mat-icon>
               </div>
-              <div class="empty-notif" *ngIf="((unreadNotifications$ | async)?.length || 0) === 0">
-                <mat-icon>done_all</mat-icon>
-                <p>Estás al día por ahora.</p>
+              <div class="notif-body">
+                <span class="notif-title">{{ n.title }}</span>
+                <span class="notif-msg">{{ n.message }}</span>
+                <span class="notif-date">{{ n.createdAt | date:'dd MMM, h:mm a' }}</span>
               </div>
+              <div class="unread-dot" *ngIf="!n.isRead"></div>
             </div>
-          </mat-tab>
 
-          <!-- LEÍDAS -->
-          <mat-tab label="Leídas">
-            <div class="notif-list-scroll">
-              <div *ngFor="let n of readNotifications$ | async" 
-                   class="notif-item" 
-                   (click)="markAsRead(n)">
-                <div class="notif-icon-box" [ngClass]="n.type">
-                  <mat-icon>{{ getNotificationIcon(n.type) }}</mat-icon>
-                </div>
-                <div class="notif-body">
-                  <span class="notif-title">{{ n.title }}</span>
-                  <span class="notif-msg">{{ n.message }}</span>
-                  <span class="notif-date">{{ n.createdAt | date:'shortTime' }}</span>
-                </div>
-              </div>
-              <div class="empty-notif" *ngIf="((readNotifications$ | async)?.length || 0) === 0">
-                <mat-icon>history</mat-icon>
-                <p>No hay notificaciones anteriores.</p>
-              </div>
+            <!-- Empty state -->
+            <div class="empty-notif" *ngIf="allNotifs.length === 0">
+              <mat-icon>notifications_off</mat-icon>
+              <p>No tienes notificaciones.</p>
             </div>
-          </mat-tab>
-        </mat-tab-group>
+          </div>
+        </ng-container>
+
         <div class="tray-footer">
           <button mat-button color="primary" class="view-all-btn" routerLink="/dashboard/notifications">
             VER TODAS LAS NOTIFICACIONES

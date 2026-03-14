@@ -1,66 +1,116 @@
 <div class="sidenav-menu-wrapper">
-  <!-- Cabecera del Sidenav: Logo -->
   <div class="sidenav-header" [class.mobile-header]="isMobile">
     <div class="logo-area">
-      <img src="assets/img/logo-cotionline.svg" alt="Cotionline Logo" class="logo-image">
+      <img src="assets/img/logo-cotionline.svg" alt="Cotionline Logo" class="logo-image" />
     </div>
-    
-    <!-- Close button for mobile -->
     <button mat-icon-button class="close-mobile-btn" (click)="closeSidenav.emit()" *ngIf="isMobile">
       <mat-icon>close</mat-icon>
     </button>
   </div>
 
-  <!-- Lista de Navegación -->
-  <mat-nav-list class="nav-list">
-    <mat-list-item id="sidenav-inicio" class="nav-item" routerLink="/dashboard" routerLinkActive="active-item" [routerLinkActiveOptions]="{exact: true}">
+  <mat-nav-list
+    class="nav-list"
+    *ngIf="{
+      verified: (isVerified$ | async),
+      hasBiz: (hasBusiness$ | async),
+      isCollab: (isCollaborator$ | async)
+    } as state"
+  >
+    <mat-list-item
+      class="nav-item"
+      routerLink="/dashboard"
+      routerLinkActive="active-item"
+      [routerLinkActiveOptions]="{ exact: true }"
+    >
       <mat-icon matListItemIcon>home</mat-icon>
       <span class="nav-label">Inicio</span>
     </mat-list-item>
 
     <mat-divider></mat-divider>
 
-    <mat-list-item class="nav-item" *ngIf="hasBusiness$ | async" routerLink="/dashboard/branches" routerLinkActive="active-item">
+    <mat-list-item
+      class="nav-item"
+      *ngIf="state.hasBiz && !state.isCollab"
+      [class.disabled-link]="!state.verified"
+      [routerLink]="state.verified ? '/dashboard/branches' : null"
+      routerLinkActive="active-item"
+    >
       <mat-icon matListItemIcon>store</mat-icon>
       <span class="nav-label">Sedes</span>
     </mat-list-item>
 
-    <mat-list-item class="nav-item" routerLink="/dashboard/quotations" routerLinkActive="active-item">
+    <mat-list-item
+      class="nav-item"
+      [class.disabled-link]="!state.verified"
+      [routerLink]="state.verified ? '/dashboard/quotations' : null"
+      routerLinkActive="active-item"
+    >
       <mat-icon matListItemIcon>request_quote</mat-icon>
       <span class="nav-label">Solicitudes</span>
     </mat-list-item>
 
-    <mat-list-item class="nav-item" routerLink="/dashboard/quotation-management" routerLinkActive="active-item">
+    <mat-list-item
+      class="nav-item"
+      [class.disabled-link]="!state.verified"
+      [routerLink]="state.verified ? '/dashboard/quotation-management' : null"
+      routerLinkActive="active-item"
+    >
       <mat-icon matListItemIcon>local_offer</mat-icon>
       <span class="nav-label">Cotizaciones</span>
     </mat-list-item>
 
-    <mat-list-item class="nav-item" routerLink="/dashboard/quotation-management/comparison" routerLinkActive="active-item">
+    <mat-list-item
+      class="nav-item"
+      [class.disabled-link]="!state.verified"
+      [routerLink]="state.verified ? '/dashboard/quotation-management/comparison' : null"
+      routerLinkActive="active-item"
+    >
       <mat-icon matListItemIcon>analytics</mat-icon>
       <span class="nav-label">Comparación</span>
     </mat-list-item>
 
-    <mat-list-item class="nav-item" (click)="updatePlanDashboard()">
+    <mat-list-item
+      class="nav-item"
+      *ngIf="!state.isCollab"
+      [class.disabled-link]="!state.verified"
+      [routerLink]="state.verified ? '/dashboard/updatePlan' : null"
+      routerLinkActive="active-item"
+    >
       <mat-icon matListItemIcon>workspace_premium</mat-icon>
       <span class="nav-label">Actualizar plan</span>
     </mat-list-item>
 
-    <mat-list-item class="nav-item" routerLink="/dashboard/collaborators" routerLinkActive="active-item">
+    <mat-list-item
+      class="nav-item"
+      *ngIf="!state.isCollab"
+      [class.disabled-link]="!state.verified"
+      [routerLink]="state.verified ? '/dashboard/collaborators' : null"
+      routerLinkActive="active-item"
+    >
       <mat-icon matListItemIcon>group</mat-icon>
       <span class="nav-label">Colaboradores</span>
     </mat-list-item>
 
-    <mat-list-item class="nav-item" routerLink="/dashboard/notifications" routerLinkActive="active-item">
+    <mat-list-item
+      class="nav-item"
+      [class.disabled-link]="!state.verified"
+      [routerLink]="state.verified ? '/dashboard/notifications' : null"
+      routerLinkActive="active-item"
+    >
       <mat-icon matListItemIcon>notifications</mat-icon>
       <span class="nav-label">Notificaciones</span>
     </mat-list-item>
 
-    <mat-list-item class="nav-item" routerLink="/dashboard/guides" routerLinkActive="active-item">
+    <mat-list-item
+      class="nav-item"
+      [class.disabled-link]="!state.verified"
+      [routerLink]="state.verified ? '/dashboard/guides' : null"
+      routerLinkActive="active-item"
+    >
       <mat-icon matListItemIcon>school</mat-icon>
       <span class="nav-label">Ayuda</span>
     </mat-list-item>
 
-    <!-- Settings Submenu -->
     <mat-accordion class="settings-accordion">
       <mat-expansion-panel [hideToggle]="false" class="custom-expansion-panel">
         <mat-expansion-panel-header>
@@ -70,7 +120,6 @@
           </mat-panel-title>
         </mat-expansion-panel-header>
 
-        <!-- Nested Sub-category: Usuario -->
         <mat-expansion-panel class="nested-expansion-panel">
           <mat-expansion-panel-header>
             <mat-panel-title>
@@ -78,40 +127,29 @@
               <span class="nav-label">Usuario</span>
             </mat-panel-title>
           </mat-expansion-panel-header>
-          
           <mat-nav-list class="submenu-list">
             <mat-list-item routerLink="/dashboard/profile" class="submenu-item">
               <mat-icon matListItemIcon>manage_accounts</mat-icon>
               <span class="nav-label">Tus Datos</span>
-            </mat-list-item>
-            <mat-list-item routerLink="/dashboard/profile/change-password" class="submenu-item">
-              <mat-icon matListItemIcon>lock</mat-icon>
-              <span class="nav-label">Seguridad</span>
-            </mat-list-item>
-            <mat-list-item routerLink="/dashboard/profile/subscription" class="submenu-item">
-              <mat-icon matListItemIcon>workspace_premium</mat-icon>
-              <span class="nav-label">Suscripción</span>
             </mat-list-item>
             <mat-list-item (click)="logout()" class="submenu-item logout-item">
               <mat-icon matListItemIcon>logout</mat-icon>
               <span class="nav-label">Salir</span>
             </mat-list-item>
             <mat-list-item (click)="deleteAccount()" class="submenu-item delete-item">
-              <mat-icon matListItemIcon>delete_forever</mat-icon>
+              <mat-icon matListItemIcon>person_remove</mat-icon>
               <span class="nav-label">Eliminar cuenta</span>
             </mat-list-item>
           </mat-nav-list>
         </mat-expansion-panel>
 
-        <!-- Nested Sub-category: Negocio -->
-        <mat-expansion-panel class="nested-expansion-panel">
+        <mat-expansion-panel class="nested-expansion-panel" *ngIf="!state.isCollab">
           <mat-expansion-panel-header>
             <mat-panel-title>
               <mat-icon class="panel-icon">business</mat-icon>
               <span class="nav-label">Negocio</span>
             </mat-panel-title>
           </mat-expansion-panel-header>
-          
           <mat-nav-list class="submenu-list">
             <mat-list-item routerLink="/dashboard/business/profile" class="submenu-item">
               <mat-icon matListItemIcon>edit_note</mat-icon>
@@ -127,7 +165,6 @@
             </mat-list-item>
           </mat-nav-list>
         </mat-expansion-panel>
-
       </mat-expansion-panel>
     </mat-accordion>
   </mat-nav-list>

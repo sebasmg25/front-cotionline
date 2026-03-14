@@ -1,48 +1,59 @@
-.subscription-wrapper {
-    padding: 30px;
+.content-container {
+    padding: 24px;
+    max-width: 1000px;
+    margin: 0 auto;
 }
 
-.header {
-    margin-bottom: 35px;
-}
-
-.title-area {
+.loading-container, .error-container {
     display: flex;
+    flex-direction: column;
     align-items: center;
-    gap: 10px;
-    margin-left: -12px;
+    justify-content: center;
+    min-height: 300px;
+    gap: 16px;
+    background: var(--surface-glass);
+    backdrop-filter: var(--glass-blur);
+    border: var(--glass-border);
+    border-radius: 24px;
+    color: var(--primary-dark);
 }
 
-.header h1 {
-    font-size: 2.2rem;
-    font-weight: 700;
-    color: var(--primary-dark);
-    margin: 0;
+.spinning {
+    animation: rotate 2s linear infinite;
+    font-size: 40px;
+    width: 40px;
+    height: 40px;
 }
 
-.header p {
-    color: var(--primary-dark);
-    opacity: 0.6;
-    margin-left: 48px;
+@keyframes rotate {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
 }
 
 .content-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
-    gap: 30px;
+    display: flex;
+    justify-content: center;
 }
 
-.subscription-card, .billing-card {
+.subscription-card {
     border-radius: 24px;
-    padding: 20px;
+    padding: 24px;
     background: var(--surface-glass);
     backdrop-filter: var(--glass-blur);
     border: var(--glass-border);
     box-shadow: var(--shadow-premium);
+    width: 100%;
+    max-width: 450px;
+    transition: transform 0.3s ease;
+}
+
+.subscription-card:hover {
+    transform: translateY(-5px);
 }
 
 .premium-border {
-    border-top: 4px solid var(--accent-blue);
+    border: 2px solid var(--accent-blue) !important;
+    background: linear-gradient(to bottom, rgba(23, 107, 135, 0.05), white);
 }
 
 .plan-icon {
@@ -61,6 +72,7 @@
     display: flex;
     align-items: baseline;
     margin-bottom: 24px;
+    justify-content: center;
 }
 
 .currency {
@@ -70,7 +82,7 @@
 }
 
 .amount {
-    font-size: 3rem;
+    font-size: 3.5rem;
     font-weight: 800;
     color: var(--primary-dark);
     line-height: 1;
@@ -89,7 +101,7 @@
     margin: 0;
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 16px;
 }
 
 .features-list li {
@@ -97,78 +109,30 @@
     align-items: center;
     gap: 12px;
     color: var(--primary-dark);
-    font-size: 0.95rem;
+    font-size: 1rem;
 }
 
 .features-list mat-icon {
-    font-size: 20px;
-    width: 20px;
-    height: 20px;
+    font-size: 22px;
+    width: 22px;
+    height: 22px;
     color: #2e7d32;
 }
 
-.payment-method {
-    padding: 25px;
-    background: rgba(0, 0, 0, 0.02);
-    border-radius: 16px;
-    margin: 20px 0;
-    border: 1px solid rgba(0, 0, 0, 0.05);
+mat-card-actions {
+    padding-top: 24px;
 }
 
-.method-info {
-    display: flex;
-    align-items: center;
-    gap: 20px;
-}
-
-.method-info mat-icon {
-    font-size: 32px;
-    width: 32px;
-    height: 32px;
-    color: var(--accent-blue);
-}
-
-.text {
-    display: flex;
-    flex-direction: column;
-}
-
-.method-label {
-    font-size: 11px;
-    text-transform: uppercase;
+mat-card-actions button {
+    width: 100%;
+    border-radius: 12px;
+    padding: 12px 0;
     font-weight: 700;
-    color: #888;
     letter-spacing: 0.5px;
 }
 
-.method-value {
-    font-size: 1rem;
-    font-weight: 600;
-    color: var(--primary-dark);
-}
-
-.billing-notice {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    font-size: 0.85rem;
-    color: #666;
-    margin-bottom: 20px;
-}
-
-.billing-notice mat-icon {
-    font-size: 18px;
-    width: 18px;
-    height: 18px;
-    opacity: 0.5;
-}
-
-mat-card-actions {
-    padding-top: 20px;
-}
-
 @media (max-width: 600px) {
-    .content-grid {
-        grid-template-columns: 1fr;
+    .content-container {
+        padding: 16px;
     }
 }

@@ -8,50 +8,81 @@ import { MatDividerModule } from '@angular/material/divider';
 import { Router, RouterModule } from '@angular/router';
 import { QuotationRequestService } from '../../../../infraestructure/services/quotation-request/quotation-request.service';
 import { QuotationRequest } from '../../domain/models/quotation-request.model';
-import { Observable } from 'rxjs';
+import { Observable, shareReplay } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 @Component({
-    selector: 'app-dashboard-quotation',
-    standalone: true,
-    imports: [
-        CommonModule,
-        MatCardModule,
-        MatButtonModule,
-        MatIconModule,
-        MatListModule,
-        MatDividerModule,
-        RouterModule
-    ],
-    templateUrl: './dashboard-quotation.html',
-    styleUrl: './dashboard-quotation.css'
+  selector: 'app-dashboard-quotation',
+  standalone: true,
+  imports: [
+    CommonModule,
+    MatCardModule,
+    MatButtonModule,
+    MatIconModule,
+    MatListModule,
+    MatDividerModule,
+    RouterModule,
+  ],
+  templateUrl: './dashboard-quotation.html',
+  styleUrl: './dashboard-quotation.css',
 })
 export class DashboardQuotation implements OnInit {
-    latestPublished$: Observable<QuotationRequest[]>;
-    drafts$: Observable<QuotationRequest[]>;
+  latestPublished$: Observable<QuotationRequest[]>;
+  drafts$: Observable<QuotationRequest[]>;
 
-    constructor(
-        private quotationService: QuotationRequestService,
-        private router: Router
-    ) {
-        this.latestPublished$ = this.quotationService.findLatestPublished(5);
-        this.drafts$ = this.quotationService.findDrafts();
+  constructor(
+    private quotationRequestService: QuotationRequestService,
+    private router: Router,
+  ) {
+    const history$ = this.quotationRequestService.getMyHistory().pipe(shareReplay(1));
+
+    this.latestPublished$ = history$.pipe(
+      map((items) =>
+        items
+          .filter(
+            (i) => i.status === 'PENDING' || i.status === 'QUOTED',
+          )
+          .sort((a, b) => {
+            const dateA = new Date(a.createdAt).getTime();
+            const dateB = new Date(b.createdAt).getTime();
+            return dateB - dateA;
+          })
+          .slice(0, 5),
+      ),
+    );
+
+    this.drafts$ = history$.pipe(map((items) => items.filter((i) => i.status === 'DRAFT')));
+  }
+
+  ngOnInit(): void {}
+
+  viewDetail(item: QuotationRequest): void {
+    if (!item.id) return;
+
+    // Usamos rutas absolutas para evitar que el router se pierda
+    if (item.status === 'DRAFT') {
+      this.router.navigate(['/dashboard/quotations/edit', item.id], {
+        queryParams: { origin: 'dashboard' },
+      });
+    } else {
+      this.router.navigate(['/dashboard/quotations/detail', item.id], {
+        queryParams: { origin: 'dashboard' },
+      });
     }
+  }
 
-    ngOnInit(): void { }
+  createNew(): void {
+    this.router.navigate(['/dashboard/quotations/new']);
+  }
 
-    viewDetail(id: string): void {
-        this.router.navigate(['/dashboard/quotations/detail', id]);
-    }
+  viewAllPublished(): void {
+    // Apuntamos a la ruta de historial que ya tienes (list-quotation-requests)
+    this.router.navigate(['/dashboard/quotations/published']);
+  }
 
-    createNew(): void {
-        this.router.navigate(['/dashboard/quotations/new']);
-    }
-
-    viewAllPublished(): void {
-        this.router.navigate(['/dashboard/quotations/published']);
-    }
-
-    viewAllDrafts(): void {
-        this.router.navigate(['/dashboard/quotations/drafts']);
-    }
+  viewAllDrafts(): void {
+    // Si no tienes una vista de lista de borradores separada,
+    // podrías usar la misma de 'published' pero pasando el queryParam DRAFT
+    this.router.navigate(['/dashboard/quotations/drafts']);
+  }
 }

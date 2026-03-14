@@ -20,6 +20,73 @@
   opacity: 0.6;
 }
 
+/* --- NUEVAS CLASES PARA EL BANNER DE ESTADO --- */
+.status-banner-card {
+  margin-bottom: 40px;
+  border-radius: 24px;
+  background: white;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  box-shadow: var(--shadow-premium);
+  overflow: hidden;
+}
+
+.banner-content {
+  display: flex;
+  align-items: center;
+  gap: 25px;
+  padding: 25px !important;
+}
+
+.banner-icon-wrapper {
+  width: 60px;
+  height: 60px;
+  border-radius: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.banner-icon-wrapper.pending {
+  background: #fff3e0;
+  color: #ef6c00;
+}
+.banner-icon-wrapper.error {
+  background: #ffebee;
+  color: #c62828;
+}
+
+.banner-text {
+  flex: 1;
+}
+.banner-text h3 {
+  margin: 0 0 5px 0;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--primary-dark);
+}
+.banner-text p {
+  margin: 0;
+  color: var(--primary-dark);
+  opacity: 0.7;
+  font-size: 0.95rem;
+}
+
+/* --- NUEVA CLASE PARA TARJETAS BLOQUEADAS --- */
+.disabled-card {
+  opacity: 0.5;
+  filter: grayscale(0.6);
+  cursor: not-allowed !important;
+  pointer-events: none;
+  transform: none !important;
+  box-shadow: none !important;
+}
+
+.disabled-card::before {
+  display: none;
+} /* Quita la línea superior al hover */
+
+/* ------------------------------------------- */
+
 .cards-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
@@ -120,12 +187,17 @@ mat-card-actions {
   .summary-header h1 {
     font-size: 2rem;
   }
-  
+
   .cards-grid {
     grid-template-columns: 1fr;
   }
-  
+
   .nav-card {
     padding: 25px;
+  }
+
+  .banner-content {
+    flex-direction: column;
+    text-align: center;
   }
 }

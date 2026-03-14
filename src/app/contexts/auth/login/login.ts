@@ -1,23 +1,24 @@
 import { Component, OnInit } from '@angular/core';
-import { FormsModule } from '@angular/forms'; // Añadido para manejo futuro de formularios
+import { FormsModule } from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatButtonModule } from '@angular/material/button';
-import { MatDialogModule } from '@angular/material/dialog'; // 👈 ¡ESTO ES LO QUE FALTABA!
-import { UserService } from '../../../infraestructure/services/user/user.service';
+import { MatDialogModule } from '@angular/material/dialog';
+import { AuthService } from '../../../infraestructure/services/auth/auth.service'; // ✅ Cambio: Usar AuthService
 import { LoginResponse } from '../../user/domain/user.repository';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { Toolbar } from '../../shared/toolbar/toolbar';
-import { Optional, Inject } from '@angular/core';
+import { Optional } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
 import { AlertService } from '../../shared/services/alert.service';
 
 @Component({
   selector: 'app-login',
+  standalone: true, // Asegúrate de tener esto si es standalone
   imports: [
     FormsModule,
     MatCardModule,
@@ -28,7 +29,7 @@ import { AlertService } from '../../shared/services/alert.service';
     MatButtonModule,
     MatDialogModule,
     CommonModule,
-    Toolbar
+    Toolbar,
   ],
   templateUrl: './login.html',
   styleUrl: './login.css',
@@ -38,15 +39,15 @@ export class Login implements OnInit {
   isLoading: boolean = false;
 
   constructor(
-    private userService: UserService,
+    private authService: AuthService, // ✅ Inyectamos el nuevo servicio
     private router: Router,
     private alertService: AlertService,
-    @Optional() private dialogRef: MatDialogRef<Login>
+    @Optional() private dialogRef: MatDialogRef<Login>,
   ) {
     this.isDialog = !!this.dialogRef;
   }
 
-  ngOnInit(): void { }
+  ngOnInit(): void {}
 
   email: string = '';
   password: string = '';
@@ -63,20 +64,28 @@ export class Login implements OnInit {
       password: this.password,
     };
 
-    this.userService.login(credentials).subscribe({
+    // ✅ Usamos el método login de AuthService
+    this.authService.login(credentials).subscribe({
       next: (response: LoginResponse) => {
-        this.userService.saveToken(response.token);
+        // ✅ Guardamos el token en LocalStorage a través del AuthService
+        this.authService.saveToken(response.token);
         this.isLoading = false;
 
-        if (this.isDialog) {
+        if (this.isDialog && this.dialogRef) {
           this.dialogRef.close(true);
         }
 
         this.router.navigate(['/dashboard']);
       },
       error: (err) => {
+        // ✅ Tipado preventivo para TypeScript
         this.isLoading = false;
-        this.alertService.showError('Error de acceso', 'Correo o contraseña incorrectos. Por favor intenta de nuevo.');
+
+        // Intentamos extraer el mensaje real del backend (ej: "Usuario no encontrado")
+        const errorMessage =
+          err.error?.message || 'Correo o contraseña incorrectos. Por favor intenta de nuevo.';
+        this.alertService.showError('Error de acceso', errorMessage);
+
         console.error('Error al iniciar sesión', err);
       },
       complete: () => {

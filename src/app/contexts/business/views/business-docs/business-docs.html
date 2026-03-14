@@ -1,0 +1,76 @@
+<div class="docs-container">
+  <mat-card class="docs-card">
+    <mat-card-header>
+      <mat-card-title>Documentación del Negocio</mat-card-title>
+      <mat-card-subtitle>Estado de verificación legal</mat-card-subtitle>
+    </mat-card-header>
+
+    <mat-card-content>
+      <div class="loading-shade" *ngIf="isLoading">
+        <mat-spinner diameter="40"></mat-spinner>
+        <p>Cargando documentos...</p>
+      </div>
+
+      <ng-container *ngIf="!isLoading && business">
+        <div class="status-banner">
+          <span>Estado actual: </span>
+          <mat-chip
+            [class.status-pending]="business.status === 'PENDING'"
+            [class.status-verified]="business.status === 'VERIFIED'"
+            selected
+          >
+            {{ business.status === 'PENDING' ? 'EN VERIFICACIÓN' : 'VERIFICADO' }}
+          </mat-chip>
+        </div>
+
+        <mat-list>
+          <mat-list-item>
+            <mat-icon matListItemIcon color="primary">description</mat-icon>
+            <div matListItemTitle>RUT</div>
+            <div matListItemLine>Registro Único Tributario</div>
+            <div matListItemMeta>
+              <button
+                mat-icon-button
+                matTooltip="Ver documento"
+                (click)="openDoc(business?.rutUrl)"
+                [disabled]="!business?.rutUrl"
+              >
+                <mat-icon>visibility</mat-icon>
+              </button>
+            </div>
+          </mat-list-item>
+
+          <mat-divider></mat-divider>
+
+          <mat-list-item>
+            <mat-icon matListItemIcon color="primary">description</mat-icon>
+            <div matListItemTitle>Cámara de Comercio</div>
+            <div matListItemLine>Certificado de existencia y representación</div>
+            <div matListItemMeta>
+              <button
+                mat-icon-button
+                matTooltip="Ver documento"
+                (click)="openDoc(business?.chamberOfCommerceUrl)"
+                [disabled]="!business?.chamberOfCommerceUrl"
+              >
+                <mat-icon>visibility</mat-icon>
+              </button>
+            </div>
+          </mat-list-item>
+        </mat-list>
+
+        <div class="info-box" *ngIf="business?.status === 'PENDING'">
+          <mat-icon>info</mat-icon>
+          <p>
+            Tu documentación está siendo revisada por nuestro equipo legal. Este proceso suele
+            tardar entre 24 y 48 horas hábiles.
+          </p>
+        </div>
+      </ng-container>
+    </mat-card-content>
+
+    <mat-card-actions align="end">
+      <button mat-stroked-button color="primary" (click)="goBack()">VOLVER AL DASHBOARD</button>
+    </mat-card-actions>
+  </mat-card>
+</div>

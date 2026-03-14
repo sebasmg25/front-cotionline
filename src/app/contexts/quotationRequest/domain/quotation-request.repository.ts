@@ -2,12 +2,17 @@ import { Observable } from 'rxjs';
 import { QuotationRequest } from './models/quotation-request.model';
 
 export interface QuotationRequestRepository {
-    findAll(): Observable<QuotationRequest[]>;
-    findById(id: string): Observable<QuotationRequest | undefined>;
-    findLatestPublished(limit: number): Observable<QuotationRequest[]>;
-    findDrafts(): Observable<QuotationRequest[]>;
-    save(request: QuotationRequest): Observable<QuotationRequest>;
-    update(id: string, request: QuotationRequest): Observable<QuotationRequest>;
-    delete(id: string): Observable<boolean>;
-    duplicate(id: string): Observable<QuotationRequest>;
+  getMyHistory(): Observable<QuotationRequest[]>;
+  findById(id: string): Observable<QuotationRequest>;
+  getPublic(): Observable<QuotationRequest[]>;
+
+  // CAMBIO: De Observable<void> a Observable<QuotationRequest>
+  save(request: Partial<QuotationRequest>): Observable<QuotationRequest>;
+
+  // CAMBIO: De Observable<void> a Observable<QuotationRequest>
+  update(id: string, request: Partial<QuotationRequest>): Observable<QuotationRequest>;
+
+  delete(id: string): Observable<void>;
+  search(title: string): Observable<QuotationRequest[]>;
+  duplicate(id: string): Observable<QuotationRequest>;
 }

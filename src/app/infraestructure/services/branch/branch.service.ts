@@ -1,78 +1,54 @@
-import { Branch, MOCK_BRANCHES } from '../../../contexts/branch/domain/models/branch.model';
-import { BranchRepository } from '../../../contexts/branch/domain/branch.repository';
-import { environment } from '../../../../environments/environment';
-import { HttpClient } from '@angular/common/http';
-import { Observable, of } from 'rxjs';
-import { delay } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable, map, of } from 'rxjs';
+import { environment } from '../../../../environments/environment';
+import { Branch } from '../../../contexts/branch/domain/models/branch.model';
+import { BranchRepository } from '../../../contexts/branch/domain/branch.repository';
 
 @Injectable({
   providedIn: 'root',
 })
 export class BranchService implements BranchRepository {
-  private url = environment.apiUrl;
+  private readonly endpoint = `${environment.apiUrl}/branches`;
 
-  // Temporal state to simulate DB modifications
-  private branches: Branch[] = [...MOCK_BRANCHES];
+  constructor(private http: HttpClient) {}
 
-  constructor(private http: HttpClient) { }
+  /**
+   * RECORRECIÓN: findAll() ahora llama a la ruta correcta del backend.
+   * Si no tienes el businessId global, lo ideal es obtenerlo del perfil del usuario.
+   */
+  findAll(): Observable<Branch[]> {
+    const businessId = localStorage.getItem('businessId');
+    if (!businessId) return of([]);
 
-  save(branch: Branch): Observable<Branch> {
-    // --- Future Backend Implementation ---
-    // return this.http.post<Branch>(`${this.url}/branches/register`, branch);
-
-    // Simulated Backend Response
-    const newBranch = new Branch(
-      branch.name,
-      branch.address,
-      branch.city,
-      branch.businessId,
-      `br${Date.now()}`
-    );
-    this.branches.push(newBranch);
-    return of(newBranch).pipe(delay(800));
+    return this.findAllByBusiness(businessId);
   }
 
-  findAll(): Observable<Branch[]> {
-    // --- Future Backend Implementation ---
-    // return this.http.get<Branch[]>(`${this.url}/branches`);
-
-    // Simulated Backend Response
-    return of([...this.branches]).pipe(delay(500));
+  findAllByBusiness(businessId: string): Observable<Branch[]> {
+    return this.http
+      .get<{ message: string; data: Branch[] }>(`${this.endpoint}/business/${businessId}`)
+      .pipe(map((response) => response.data));
   }
 
   findById(id: string): Observable<Branch> {
-    // --- Future Backend Implementation ---
-    // return this.http.get<Branch>(`${this.url}/branches/${id}`);
-
-    // Simulated Backend Response
-    const branch = this.branches.find(b => b.id === id);
-    if (!branch) {
-      throw new Error(`Branch with ID ${id} not found`);
-    }
-    return of({ ...branch } as Branch).pipe(delay(300));
+    return this.http
+      .get<{ message: string; data: Branch }>(`${this.endpoint}/${id}`)
+      .pipe(map((response) => response.data));
   }
 
-  update(id: string, updatedBranch: Branch): Observable<Branch> {
-    // --- Future Backend Implementation ---
-    // return this.http.put<Branch>(`${this.url}/branches/${id}`, updatedBranch);
+  save(branch: Branch): Observable<Branch> {
+    return this.http
+      .post<{ message: string; data: Branch }>(`${this.endpoint}/register`, branch)
+      .pipe(map((response) => response.data));
+  }
 
-    // Simulated Backend Response
-    const index = this.branches.findIndex(b => b.id === id);
-    if (index === -1) {
-      throw new Error(`Branch with ID ${id} not found`);
-    }
-    updatedBranch.id = id;
-    this.branches[index] = updatedBranch;
-    return of(updatedBranch).pipe(delay(800));
+  update(id: string, branch: Partial<Branch>): Observable<Branch> {
+    return this.http
+      .patch<{ message: string; data: Branch }>(`${this.endpoint}/${id}`, branch)
+      .pipe(map((response) => response.data));
   }
 
   delete(id: string): Observable<void> {
-    // --- Future Backend Implementation ---
-    // return this.http.delete<void>(`${this.url}/branches/${id}`);
-
-    // Simulated Backend Response
-    this.branches = this.branches.filter(b => b.id !== id);
-    return of(undefined).pipe(delay(500));
+    return this.http.delete<void>(`${this.endpoint}/${id}`);
   }
 }

@@ -35,7 +35,9 @@ import { Observable } from 'rxjs';
 export class CollaboratorManagement implements OnInit {
     inviteForm: FormGroup;
     invitations$: Observable<CollaboratorInvitation[]>;
-    displayedColumns: string[] = ['email', 'status', 'sentAt', 'actions'];
+    activeCollaborators$: Observable<any[]>;
+    displayedInvitationsColumns: string[] = ['email', 'invitationStatus', 'createdAt', 'actions'];
+    displayedActiveColumns: string[] = ['name', 'email', 'department', 'actions'];
     isSaving: boolean = false;
 
     constructor(
@@ -47,6 +49,7 @@ export class CollaboratorManagement implements OnInit {
             email: ['', [Validators.required, Validators.email]]
         });
         this.invitations$ = this.collaboratorService.findAllInvitations();
+        this.activeCollaborators$ = this.collaboratorService.findActiveCollaborators();
     }
 
     ngOnInit(): void { }
@@ -91,5 +94,27 @@ export class CollaboratorManagement implements OnInit {
 
     private refreshList(): void {
         this.invitations$ = this.collaboratorService.findAllInvitations();
+        this.activeCollaborators$ = this.collaboratorService.findActiveCollaborators();
+    }
+
+    deleteActiveCollaborator(collab: any): void {
+        this.alertService.confirmAction(
+            '¿Revocar Acceso?',
+            `Se eliminará la cuenta de ${collab.name || collab.email} permanentemente.`,
+            'REVOCAR',
+            'Cancelar'
+        ).then((confirmed) => {
+            if (confirmed) {
+                this.collaboratorService.deleteActiveCollaborator(collab.id).subscribe({
+                    next: () => {
+                        this.alertService.showSuccess('Eliminado', 'La cuenta del colaborador ha sido eliminada.');
+                        this.refreshList();
+                    },
+                    error: (err) => {
+                        this.alertService.showError('Error', err.error?.message || 'No se pudo eliminar el colaborador.');
+                    }
+                });
+            }
+        });
     }
 }

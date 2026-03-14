@@ -1,11 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Business } from '../../domain/models/business.model';
 import { BusinessService } from '../../../../infraestructure/services/business/business.service';
-import { UserService } from '../../../../infraestructure/services/user/user.service';
 import { Router } from '@angular/router';
 import { AlertService } from '../../../shared/services/alert.service';
-import { of, delay } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -25,7 +22,7 @@ import { Toolbar } from '../../../shared/toolbar/toolbar';
     MatInputModule,
     MatIconModule,
     MatButtonModule,
-    Toolbar
+    Toolbar,
   ],
   templateUrl: './register-business.html',
   styleUrl: './register-business.css',
@@ -37,54 +34,50 @@ export class RegisterBusiness implements OnInit {
   constructor(
     private fb: FormBuilder,
     private businessService: BusinessService,
-    private userService: UserService,
     private router: Router,
-    private alertService: AlertService
-  ) { }
+    private alertService: AlertService,
+  ) {}
 
   ngOnInit(): void {
     this.businessForm = this.fb.group({
-      nit: ['', [Validators.required]],
-      name: ['', [Validators.required]],
+      nit: ['', [Validators.required, Validators.minLength(5)]], // Coherente con EditBusiness
+      name: ['', [Validators.required, Validators.minLength(3)]], // Coherente con EditBusiness
       description: ['', [Validators.required]],
-      address: ['', [Validators.required]]
+      address: ['', [Validators.required]],
     });
   }
 
-  registerBusiness() {
+  registerBusiness(): void {
     if (this.businessForm.invalid) {
-      this.alertService.showInfo('Formulario incompleto', 'Por favor completa todos los campos del negocio.');
+      this.alertService.showInfo(
+        'Formulario incompleto',
+        'Por favor completa todos los campos del negocio.',
+      );
       return;
     }
 
     this.isSaving = true;
 
-    this.userService.getUserId()?.subscribe({
-      next: (response) => {
-        const userId = response.user.id;
-
-        const newBusiness: Business = {
-          ...this.businessForm.value,
-          userId: userId,
-        };
-
-        this.businessService.save(newBusiness).subscribe({
-          next: (result: Business) => {
-            this.alertService.showSuccess('¡Paso 2 completado!', 'Negocio registrado. Procede a cargar los documentos.');
-            this.isSaving = false;
-            this.router.navigate(['/upload-docs']);
-          },
-          error: (err) => {
-            this.alertService.showError('Error', 'No se pudo registrar el negocio. Inténtalo de nuevo.');
-            this.isSaving = false;
-            console.error('Error al registrar el negocio:', err);
-          }
-        });
-      },
-      error: (err) => {
-        this.alertService.showError('Error de Sesión', 'No se pudo recuperar la información del usuario.');
+    // Enviamos un JSON simple al backend (Paso 2)
+    // El interceptor pondrá el Token automáticamente
+    this.businessService.save(this.businessForm.value).subscribe({
+      next: (savedBusiness) => {
+        this.alertService.showSuccess('¡Paso 2 completado!', 'Datos del negocio registrados.');
         this.isSaving = false;
-      }
+
+        // Guardamos el ID en localStorage para que el Paso 3 sepa a quién subirle los archivos
+        if (savedBusiness.id) {
+          localStorage.setItem('pendingBusinessId', savedBusiness.id);
+        }
+
+        this.router.navigate(['/upload-docs']);
+      },
+      error: (err: any) => {
+        this.isSaving = false;
+        const errorMsg = err.error?.message || 'No se pudo registrar el negocio.';
+        this.alertService.showError('Error', errorMsg);
+        console.error('Error al registrar el negocio:', err);
+      },
     });
   }
 }

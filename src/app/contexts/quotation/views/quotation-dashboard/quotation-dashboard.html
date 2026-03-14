@@ -1,139 +1,174 @@
 <div class="dashboard-wrapper">
-    <div class="header">
-        <h1>Gestión de Cotizaciones</h1>
-        <p>Administra las propuestas enviadas, recibidas y solicitudes entrantes.</p>
+  <div class="header">
+    <h1>Gestión de Cotizaciones</h1>
+    <p>Administra las propuestas enviadas, recibidas y solicitudes entrantes.</p>
+  </div>
+
+  <section class="dashboard-section secondary">
+    <div class="section-header">
+      <div class="title-with-icon">
+        <mat-icon color="primary">inbox</mat-icon>
+        <h2>Solicitudes de Cotización Recibidas (Marketplace)</h2>
+      </div>
+    </div>
+    <div class="filters-container" [formGroup]="filterForm">
+      <div class="filters-header">
+        <mat-icon>filter_list</mat-icon>
+        <span>Filtrar por Ubicación:</span>
+      </div>
+      
+      <div class="filters-fields">
+        <mat-form-field appearance="outline" class="filter-field">
+          <mat-label>Departamento</mat-label>
+          <mat-select formControlName="department">
+            <mat-option value="">Todos los departamentos</mat-option>
+            <mat-option *ngFor="let dept of departments" [value]="dept">
+              {{ dept }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="filter-field" [class.disabled]="!filterForm.get('department')?.value">
+          <mat-label>Ciudad / Municipio</mat-label>
+          <mat-select formControlName="city">
+            <mat-option value="">Todas las ciudades</mat-option>
+            <mat-option *ngFor="let city of cities" [value]="city">
+              {{ city }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
     </div>
 
-    <!-- SECCIÓN 1: SOLICITUDES RECIBIDAS (Nuevas oportunidades) -->
-    <section class="dashboard-section secondary" id="guide-incoming-requests">
-        <div class="section-header">
-            <div class="title-with-icon">
-                <mat-icon color="warn">inbox</mat-icon>
-                <h2>Solicitudes de Cotización Recibidas</h2>
+    <div class="loading-overlay" *ngIf="isMarketplaceLoading">
+      <mat-spinner diameter="40"></mat-spinner>
+      <p>Buscando solicitudes...</p>
+    </div>
+
+    <div class="cards-grid" *ngIf="!isMarketplaceLoading">
+      <mat-card
+        *ngFor="let request of incomingRequests | slice: 0 : 3"
+        class="incoming-card"
+      >
+        <mat-card-header>
+          <mat-card-title>{{ request.title }}</mat-card-title>
+          <mat-card-subtitle
+            >Publicado: {{ request.createdAt | date: 'dd/MM/yyyy' }}</mat-card-subtitle
+          >
+        </mat-card-header>
+        <mat-card-content>
+          <p class="truncate">{{ request.description }}</p>
+          <div class="items-count">
+            <mat-icon>inventory_2</mat-icon>
+            <span>{{ request.items.length || 0 }} productos solicitados</span>
+          </div>
+        </mat-card-content>
+        <mat-divider></mat-divider>
+        <mat-card-actions align="end">
+          <button mat-flat-button color="primary" (click)="respondRequest(request.id)">
+            RESPONDER AHORA
+          </button>
+        </mat-card-actions>
+      </mat-card>
+
+      <div class="empty-state" *ngIf="incomingRequests.length === 0">
+        <mat-icon>search_off</mat-icon>
+        <p>No hay nuevas solicitudes en el mercado por ahora.</p>
+      </div>
+    </div>
+    <div class="view-all-container" *ngIf="incomingRequests.length > 0">
+      <button mat-flat-button color="warn" (click)="viewAllMarketplace()">
+        VER TODAS LAS SOLICITUDES
+      </button>
+    </div>
+  </section>
+
+  <section class="dashboard-section">
+    <mat-tab-group animationDuration="200ms">
+      <mat-tab>
+        <ng-template mat-tab-label>
+          <mat-icon class="tab-icon">send</mat-icon> Enviadas
+        </ng-template>
+        <div class="tab-content">
+          <div class="simple-list">
+            <div *ngFor="let q of sentQuotations$ | async" class="list-item">
+              <div class="item-main">
+                <span class="item-title">{{ q.requestTitle }}</span>
+                <span class="item-date">Expira: {{ q.responseDeadline | date: 'shortDate' }}</span>
+              </div>
+              <div class="item-status">
+                <span class="status-badge" [ngClass]="q.status.toLowerCase()">
+                  {{ (q.status + '') === 'PENDING' ? 'PENDIENTE' : 
+                     (q.status + '') === 'ACCEPTED' ? 'ACEPTADA' : 
+                     (q.status + '') === 'EXPIRED' || (q.status + '') === 'REJECTED' || (q.status + '') === 'CLOSED' ? 'RECHAZADA' : q.status }}
+                </span>
+                <button mat-icon-button (click)="viewQuotation(q.id)">
+                  <mat-icon>visibility</mat-icon>
+                </button>
+              </div>
             </div>
-            <button mat-button color="primary">Ver todas</button>
+          </div>
+          <div class="empty-state-mini" *ngIf="((sentQuotations$ | async)?.length || 0) === 0">
+            <p>No tienes propuestas enviadas recientemente.</p>
+          </div>
         </div>
-        
-        <div class="cards-grid">
-            <mat-card *ngFor="let request of (incomingRequests$ | async) | slice:0:5" class="incoming-card">
-                <mat-card-header>
-                    <mat-card-title>{{ request.title }}</mat-card-title>
-                    <mat-card-subtitle>Publicado: {{ request.createdAt | date:'dd/MM/yyyy' }}</mat-card-subtitle>
-                </mat-card-header>
-                <mat-card-content>
-                    <p class="truncate">{{ request.description }}</p>
-                    <div class="items-count">
-                        <mat-icon>inventory_2</mat-icon>
-                        <span>{{ request.items.length }} productos solicitados</span>
-                    </div>
-                </mat-card-content>
-                <mat-divider></mat-divider>
-                <mat-card-actions align="end">
-                    <button mat-flat-button color="primary" (click)="respondRequest(request.id)">
-                        RESPONDER AHORA
-                    </button>
-                </mat-card-actions>
-            </mat-card>
-            
-            <div class="empty-state" *ngIf="((incomingRequests$ | async)?.length || 0) === 0">
-                <mat-icon>history_edu</mat-icon>
-                <p>No hay solicitudes entrantes por el momento.</p>
+      </mat-tab>
+
+      <mat-tab>
+        <ng-template mat-tab-label>
+          <mat-icon class="tab-icon">drafts</mat-icon> Borradores
+        </ng-template>
+        <div class="tab-content">
+          <div class="simple-list">
+            <div *ngFor="let q of draftQuotations$ | async" class="list-item">
+              <div class="item-main">
+                <span class="item-title">{{ q.requestTitle }}</span>
+                <span class="item-date">Creado: {{ q.createdAt | date: 'shortDate' }}</span>
+              </div>
+              <div class="item-status">
+                <span class="status-badge draft">BORRADOR</span>
+                <button mat-icon-button color="primary" (click)="editDraft(q.id)">
+                  <mat-icon>edit</mat-icon>
+                </button>
+              </div>
             </div>
+          </div>
+          <div class="empty-state-mini" *ngIf="((draftQuotations$ | async)?.length || 0) === 0">
+            <p>No tienes borradores pendientes.</p>
+          </div>
         </div>
-    </section>
+      </mat-tab>
 
-    <!-- SECCIÓN 2: COTIZACIONES ENVIADAS vs RECIBIDAS (Tabs) -->
-    <section class="dashboard-section">
-        <mat-tab-group animationDuration="200ms" id="guide-quotation-tabs">
-            <!-- COTIZACIONES ENVIADAS (Mis respuestas) -->
-            <mat-tab>
-                <ng-template mat-tab-label>
-                    <mat-icon class="tab-icon">outbound</mat-icon>
-                    Enviadas (Propuestas)
-                </ng-template>
-                
-                <div class="tab-content">
-                    <div class="simple-list">
-                        <div *ngFor="let q of (sentQuotations$ | async) | slice:0:5" class="list-item">
-                            <div class="item-main">
-                                <span class="item-title">{{ q.requestTitle }}</span>
-                                <span class="item-date">Expira: {{ q.expirationDate | date:'dd/MM/yyyy' }}</span>
-                            </div>
-                            <div class="item-status">
-                                <span class="status-badge" [ngClass]="q.status">{{ q.status | uppercase }}</span>
-                                <button mat-icon-button (click)="viewQuotation(q.id)">
-                                    <mat-icon>visibility</mat-icon>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                    <button mat-button class="full-width-btn" *ngIf="((sentQuotations$ | async)?.length || 0) > 0">
-                        Ver todas las propuestas enviadas
-                    </button>
-                    <div class="empty-state-mini" *ngIf="((sentQuotations$ | async)?.length || 0) === 0">
-                        <p>No has enviado ninguna propuesta todavía.</p>
-                    </div>
-                </div>
-            </mat-tab>
-
-            <!-- BORRADORES DE RESPUESTAS (Mis borradores) -->
-            <mat-tab>
-                <ng-template mat-tab-label>
-                    <mat-icon class="tab-icon">history_edu</mat-icon>
-                    Borradores (Respuestas)
-                </ng-template>
-
-                <div class="tab-content">
-                    <div class="simple-list">
-                        <div *ngFor="let q of (draftQuotations$ | async) | slice:0:5" class="list-item">
-                            <div class="item-main">
-                                <span class="item-title">{{ q.requestTitle }}</span>
-                                <span class="item-date">Último cambio: {{ q.createdAt | date:'dd/MM/yyyy' }}</span>
-                            </div>
-                            <div class="item-status">
-                                <span class="status-badge draft">BORRADOR</span>
-                                <button mat-icon-button (click)="editDraft(q.id)" matTooltip="Continuar editando">
-                                    <mat-icon color="primary">edit</mat-icon>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="empty-state-mini" *ngIf="((draftQuotations$ | async)?.length || 0) === 0">
-                        <p>No tienes borradores de respuestas pendientes.</p>
-                    </div>
-                </div>
-            </mat-tab>
-
-            <!-- COTIZACIONES RECIBIDAS (Respuestas de otros) -->
-            <mat-tab>
-                <ng-template mat-tab-label>
-                    <mat-icon class="tab-icon">call_received</mat-icon>
-                    Recibidas (Propuestas)
-                </ng-template>
-
-                <div class="tab-content">
-                    <div class="simple-list">
-                        <div *ngFor="let q of (receivedQuotations$ | async) | slice:0:5" class="list-item">
-                            <div class="item-main">
-                                <span class="item-title">{{ q.requestTitle }}</span>
-                                <span class="item-date">Recibida: {{ q.createdAt | date:'dd/MM/yyyy' }}</span>
-                            </div>
-                            <div class="item-status">
-                                <span class="status-badge" [ngClass]="q.status">{{ q.status | uppercase }}</span>
-                                <button mat-icon-button (click)="viewQuotation(q.id)">
-                                    <mat-icon>visibility</mat-icon>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                    <button mat-button class="full-width-btn" *ngIf="((receivedQuotations$ | async)?.length || 0) > 0">
-                        Ver todas las propuestas recibidas
-                    </button>
-                    <div class="empty-state-mini" *ngIf="((receivedQuotations$ | async)?.length || 0) === 0">
-                        <p>Aún no has recibido propuestas para tus solicitudes.</p>
-                    </div>
-                </div>
-            </mat-tab>
-        </mat-tab-group>
-    </section>
+      <mat-tab>
+        <ng-template mat-tab-label>
+          <mat-icon class="tab-icon">mail</mat-icon> Recibidas
+        </ng-template>
+        <div class="tab-content">
+          <div class="simple-list">
+            <div *ngFor="let q of receivedQuotations$ | async" class="list-item">
+              <div class="item-main">
+                <span class="item-title">{{ q.requestTitle }}</span>
+                <span class="item-date"
+                  >Precio: {{ q.price | currency: 'COP' : 'symbol-narrow' : '1.0-0' }}</span
+                >
+              </div>
+              <div class="item-status">
+                <span class="status-badge" [ngClass]="q.status.toLowerCase()">
+                  {{ (q.status + '') === 'PENDING' ? 'PENDIENTE' : 
+                     (q.status + '') === 'ACCEPTED' ? 'ACEPTADA' : 
+                     (q.status + '') === 'EXPIRED' || (q.status + '') === 'REJECTED' || (q.status + '') === 'CLOSED' ? 'RECHAZADA' : q.status }}
+                </span>
+                <button mat-icon-button (click)="viewQuotation(q.id)" matTooltip="Ver detalle de la oferta">
+                  <mat-icon>visibility</mat-icon>
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="empty-state-mini" *ngIf="((receivedQuotations$ | async)?.length || 0) === 0">
+            <p>No has recibido propuestas de otros proveedores aún.</p>
+          </div>
+        </div>
+      </mat-tab>
+    </mat-tab-group>
+  </section>
 </div>

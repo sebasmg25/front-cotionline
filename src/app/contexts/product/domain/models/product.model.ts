@@ -1,22 +1,24 @@
 export class Product {
-    public id?: string;
-    public name: string;
-    public description: string;
-    public measure_unit: string;
-    public stock: number;
+  public id?: string;
+  public name: string;
+  public description: string;
+  public amount: number; // Antes: stock
+  public unitOfMeasurement: string; // Antes: measure_unit
+  public quotationRequestId?: string; // Vinculación con la solicitud
 
-    constructor(
-        name: string,
-        description: string,
-        measure_unit: string,
-        stock: number,
-        id?: string
-    ) {
-        this.name = name;
-        this.description = description;
-        this.measure_unit = measure_unit;
-        this.stock = stock;
-        this.id = id;
-    }
+  constructor(
+    name: string,
+    description: string,
+    unitOfMeasurement: string,
+    amount: number,
+    id?: string,
+    quotationRequestId?: string,
+  ) {
+    this.name = name;
+    this.description = description;
+    this.unitOfMeasurement = unitOfMeasurement;
+    this.amount = amount;
+    this.id = id;
+    this.quotationRequestId = quotationRequestId;
+  }
 }
-

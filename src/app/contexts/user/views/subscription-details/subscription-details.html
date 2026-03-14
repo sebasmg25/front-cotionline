@@ -1,22 +1,19 @@
-<div class="subscription-wrapper">
-    <div class="header">
-        <div class="title-area">
-            <button mat-icon-button (click)="goBack()">
-                <mat-icon>arrow_back</mat-icon>
-            </button>
-            <h1>Mi Suscripción</h1>
-        </div>
-        <p>Gestiona tu plan actual y detalles de facturación.</p>
+<div class="content-container">
+    <div *ngIf="isLoading" class="loading-container">
+        <mat-icon class="spinning">sync</mat-icon>
+        <p>Cargando información de tu plan...</p>
     </div>
 
-    <div class="content-grid">
+    <div class="content-grid" *ngIf="!isLoading && currentPlan">
         <!-- PLAN ACTUAL -->
-        <mat-card class="subscription-card premium-border">
+        <mat-card class="subscription-card" [class.premium-border]="currentPlan.name === 'PREMIUM'">
             <mat-card-header>
                 <div mat-card-avatar class="plan-icon">
-                    <mat-icon color="primary">workspace_premium</mat-icon>
+                    <mat-icon [color]="currentPlan.name === 'GRATUITO' ? '' : 'primary'">
+                        {{ currentPlan.name === 'PREMIUM' ? 'workspace_premium' : 'stars' }}
+                    </mat-icon>
                 </div>
-                <mat-card-title>Plan {{ subscription.planName }}</mat-card-title>
+                <mat-card-title>Plan {{ currentPlan.name }}</mat-card-title>
                 <mat-card-subtitle>Estado: Activo</mat-card-subtitle>
             </mat-card-header>
             
@@ -24,13 +21,22 @@
                 <div class="plan-details">
                     <div class="price-info">
                         <span class="currency">$</span>
-                        <span class="amount">{{ subscription.price | number:'1.0-0' }}</span>
-                        <span class="period">/{{ subscription.billingCycle }}</span>
+                        <span class="amount">{{ currentPlan.price | number:'1.0-0' }}</span>
+                        <span class="period">/ mensual</span>
                     </div>
                     <ul class="features-list">
-                        <li><mat-icon>check_circle</mat-icon> Solicitudes ilimitadas</li>
-                        <li><mat-icon>check_circle</mat-icon> Análisis comparativo avanzado</li>
-                        <li><mat-icon>check_circle</mat-icon> Soporte prioritario 24/7</li>
+                        <li>
+                            <mat-icon>check_circle</mat-icon> 
+                            {{ currentPlan.requestLimit === 999999 ? 'Solicitudes ilimitadas' : currentPlan.requestLimit + ' Solicitudes al mes' }}
+                        </li>
+                        <li>
+                            <mat-icon>check_circle</mat-icon> 
+                            {{ currentPlan.quotationLimit === 999999 ? 'Cotizaciones ilimitadas' : currentPlan.quotationLimit + ' Cotizaciones al mes' }}
+                        </li>
+                        <li>
+                            <mat-icon>check_circle</mat-icon> 
+                            {{ currentPlan.collaboratorLimit === 999999 ? 'Colaboradores ilimitados' : currentPlan.collaboratorLimit + ' Colaboradores' }}
+                        </li>
                     </ul>
                 </div>
             </mat-card-content>
@@ -38,43 +44,16 @@
             <mat-divider></mat-divider>
             
             <mat-card-actions align="end">
-                <button mat-stroked-button color="primary" (click)="changePlan()">
-                    CAMBIAR MI PLAN
+                <button mat-flat-button color="primary" (click)="changePlan()">
+                    {{ currentPlan.name === 'PREMIUM' ? 'GESTIONAR MI PLAN' : 'MEJORAR MI PLAN' }}
                 </button>
             </mat-card-actions>
         </mat-card>
+    </div>
 
-        <!-- FACTURACIÓN -->
-        <mat-card class="billing-card">
-            <mat-card-header>
-                <mat-icon mat-card-avatar>receipt_long</mat-icon>
-                <mat-card-title>Información de Facturación</mat-card-title>
-                <mat-card-subtitle>Próximo cobro: {{ subscription.nextBillingDate | date:'dd/MM/yyyy' }}</mat-card-subtitle>
-            </mat-card-header>
-            
-            <mat-card-content>
-                <div class="payment-method">
-                    <div class="method-info">
-                        <mat-icon>credit_card</mat-icon>
-                        <div class="text">
-                            <span class="method-label">Método de pago actual</span>
-                            <span class="method-value">{{ subscription.paymentMethod }}</span>
-                        </div>
-                    </div>
-                </div>
-                <p class="billing-notice">
-                    <mat-icon>info</mat-icon>
-                    Los cargos se realizan de forma automática según tu ciclo de facturación.
-                </p>
-            </mat-card-content>
-            
-            <mat-divider></mat-divider>
-            
-            <mat-card-actions align="end">
-                <button mat-button color="primary" (click)="changePaymentMethod()">
-                    CAMBIAR MÉTODO DE PAGO
-                </button>
-            </mat-card-actions>
-        </mat-card>
+    <div *ngIf="!isLoading && !currentPlan" class="error-container">
+        <mat-icon color="warn">error</mat-icon>
+        <p>No se encontró información de tu suscripción.</p>
+        <button mat-stroked-button color="primary" (click)="loadSubscriptionData()">REINTENTAR</button>
     </div>
 </div>

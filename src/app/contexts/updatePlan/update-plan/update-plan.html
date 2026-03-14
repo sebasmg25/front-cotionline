@@ -9,28 +9,12 @@
 
   <!-- Selector Mensual/Anual -->
 
-  <div class="pricing-switcher-wrapper">
-    <div class="pricing-switcher">
-      <span
-        class="switcher-option"
-        [class.active]="billingCycle() === 'mensual'"
-        (click)="selectBillingCycle('mensual')"
-      >
-        Mensual
-      </span>
-      <span
-        class="switcher-option annual"
-        [class.active]="billingCycle() === 'anual'"
-        (click)="selectBillingCycle('anual')"
-      >
-        Anual <span class="badge">-15%</span>
-      </span>
-    </div>
+  <div class="pricing-switcher-wrapper" style="margin-bottom: 2rem;">
+    <!-- Facturación mensual única -->
   </div>
 
   <div class="plans-grid">
     <!-- ======================= PLAN GRATUITO (Trial) ======================= -->
-    <!-- Este plan no cambia con el selector -->
     <mat-card class="plan-card free-plan">
       <mat-card-content>
         <h2 class="plan-title">GRATUITO</h2>
@@ -47,11 +31,9 @@
             <mat-icon class="check-icon">check</mat-icon> 5 Cotizaciones Generadas
           </li>
           <li class="feature-item">
-            <!-- Nuevo: Clientes Ilimitados (Check) -->
             <mat-icon class="check-icon">check</mat-icon> Clientes Ilimitados
           </li>
           <li class="feature-item">
-            <!-- Modificado: Seguimiento de Cotizaciones (Close) -->
             <mat-icon class="close-icon">close</mat-icon> Seguimiento de Cotizaciones
           </li>
           <li class="feature-item">
@@ -63,37 +45,25 @@
         </ul>
       </mat-card-content>
       <mat-card-actions class="card-actions-bottom">
-        <button mat-flat-button color="accent" class="plan-button">Plan Actual</button>
+        <button mat-flat-button [color]="!currentUserPlanId() ? 'accent' : 'primary'" class="plan-button" [disabled]="!currentUserPlanId()">
+          {{ !currentUserPlanId() ? 'Plan Actual' : 'No disponible' }}
+        </button>
       </mat-card-actions>
     </mat-card>
 
     <!-- ======================= PLAN BÁSICO ======================= -->
-    <mat-card class="plan-card">
+    <mat-card class="plan-card" [class.current-plan]="currentUserPlanId() === 'c2c9636d-053c-4ba9-9941-51dd44271c8c'">
       <mat-card-content>
         <h2 class="plan-title">BÁSICO</h2>
-        <!-- Mensaje de ahorro solo visible en modo Anual -->
-        @if (billingCycle() === 'anual') {
-        <p class="annual-save-message">
-          ¡Ahorras 15%!
-          <span class="original-price">
-            ({{ getOriginalMonthlyPrice('basico') | currency : 'USD' : 'symbol' : '1.0-0' }} /Mes)
-          </span>
-        </p>
-        }
-        <!-- Espacio reservado para el mensaje de ahorro si no es anual -->
-        @else {
         <p class="annual-save-message empty-placeholder"></p>
-        }
         <p class="plan-price">
-          <!-- Muestra el precio actual (Mensual o Anual) -->
-          {{ getCurrentPrice('basico') | currency : 'USD' : 'symbol' : '1.0-0' }}
-          <span class="price-period"> /{{ billingCycle() === 'mensual' ? 'Mes' : 'Año' }}</span>
+          {{ getCurrentPrice('basico') | currency : 'COP' : 'symbol' : '1.0-0' }}
+          <span class="price-period"> /Mes</span>
         </p>
 
         <ul class="plan-features">
           <li class="feature-item">
-            <mat-icon class="check-icon">check</mat-icon> Vigencia:
-            {{ billingCycle() === 'mensual' ? '1 Mes' : '1 Año' }}
+            <mat-icon class="check-icon">check</mat-icon> Vigencia: 1 Mes
           </li>
           <li class="feature-item">
             <mat-icon class="check-icon">check</mat-icon> 25 Solicitudes de Cotización
@@ -102,11 +72,9 @@
             <mat-icon class="check-icon">check</mat-icon> 25 Cotizaciones Generadas
           </li>
           <li class="feature-item">
-            <!-- Nuevo: Clientes Ilimitados (Check) -->
             <mat-icon class="check-icon">check</mat-icon> Clientes Ilimitados
           </li>
           <li class="feature-item">
-            <!-- Nuevo: Seguimiento de Cotizaciones (Check) -->
             <mat-icon class="check-icon">check</mat-icon> Seguimiento de Cotizaciones
           </li>
           <li class="feature-item">
@@ -118,38 +86,26 @@
         </ul>
       </mat-card-content>
       <mat-card-actions class="card-actions-bottom">
-        <button mat-flat-button color="primary" class="plan-button">Seleccionar Básico</button>
+        <button mat-flat-button [color]="currentUserPlanId() === 'c2c9636d-053c-4ba9-9941-51dd44271c8c' ? 'accent' : 'primary'" class="plan-button" (click)="selectPlan('basico')" [disabled]="isProcessing() || currentUserPlanId() === 'c2c9636d-053c-4ba9-9941-51dd44271c8c'">
+          {{ currentUserPlanId() === 'c2c9636d-053c-4ba9-9941-51dd44271c8c' ? 'Plan Actual' : 'Seleccionar Básico' }}
+        </button>
       </mat-card-actions>
     </mat-card>
 
     <!-- ======================= PLAN PREMIUM (Destacado) ======================= -->
-    <mat-card class="plan-card best-seller">
+    <mat-card class="plan-card best-seller" [class.current-plan]="currentUserPlanId() === '37879279-47ea-49fb-8c7e-39f48e9b6dcb'">
       <div class="best-ribbon">MÁS POPULAR</div>
       <mat-card-content>
         <h2 class="plan-title">PREMIUM</h2>
-        <!-- Mensaje de ahorro solo visible en modo Anual -->
-        @if (billingCycle() === 'anual') {
-        <p class="annual-save-message">
-          ¡Ahorras 15%!
-          <span class="original-price">
-            ({{ getOriginalMonthlyPrice('premium') | currency : 'USD' : 'symbol' : '1.0-0' }} /Mes)
-          </span>
-        </p>
-        }
-        <!-- Espacio reservado para el mensaje de ahorro si no es anual -->
-        @else {
         <p class="annual-save-message empty-placeholder"></p>
-        }
         <p class="plan-price">
-          <!-- Muestra el precio actual (Mensual o Anual) -->
-          {{ getCurrentPrice('premium') | currency : 'USD' : 'symbol' : '1.0-0' }}
-          <span class="price-period"> /{{ billingCycle() === 'mensual' ? 'Mes' : 'Año' }}</span>
+          {{ getCurrentPrice('premium') | currency : 'COP' : 'symbol' : '1.0-0' }}
+          <span class="price-period"> /Mes</span>
         </p>
 
         <ul class="plan-features">
           <li class="feature-item">
-            <mat-icon class="check-icon">check</mat-icon> Vigencia:
-            {{ billingCycle() === 'mensual' ? '1 Mes' : '1 Año' }}
+            <mat-icon class="check-icon">check</mat-icon> Vigencia: 1 Mes
           </li>
           <li class="feature-item">
             <mat-icon class="check-icon">check</mat-icon> Solicitudes de Cotización Ilimitadas
@@ -158,11 +114,9 @@
             <mat-icon class="check-icon">check</mat-icon> Cotizaciones Generadas Ilimitadas
           </li>
           <li class="feature-item">
-            <!-- Nuevo: Clientes Ilimitados (Check) -->
             <mat-icon class="check-icon">check</mat-icon> Clientes Ilimitados
           </li>
           <li class="feature-item">
-            <!-- Nuevo: Seguimiento de Cotizaciones (Check) -->
             <mat-icon class="check-icon">check</mat-icon> Seguimiento de Cotizaciones
           </li>
           <li class="feature-item">
@@ -174,7 +128,9 @@
         </ul>
       </mat-card-content>
       <mat-card-actions class="card-actions-bottom">
-        <button mat-flat-button color="primary" class="plan-button">Seleccionar Premium</button>
+        <button mat-flat-button [color]="currentUserPlanId() === '37879279-47ea-49fb-8c7e-39f48e9b6dcb' ? 'accent' : 'primary'" class="plan-button" (click)="selectPlan('premium')" [disabled]="isProcessing() || currentUserPlanId() === '37879279-47ea-49fb-8c7e-39f48e9b6dcb'">
+          {{ currentUserPlanId() === '37879279-47ea-49fb-8c7e-39f48e9b6dcb' ? 'Plan Actual' : 'Seleccionar Premium' }}
+        </button>
       </mat-card-actions>
     </mat-card>
   </div>

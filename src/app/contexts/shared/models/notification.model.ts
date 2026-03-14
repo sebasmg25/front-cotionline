@@ -1,11 +1,12 @@
-export type NotificationType = 'status_change' | 'invitation' | 'reminder' | 'deadline';
+export type NotificationType = 'TRANSACTIONAL' | 'SYSTEM' | 'TEAM';
 
 export interface Notification {
     id: string;
     type: NotificationType;
     title: string;
     message: string;
-    read: boolean;
+    isRead: boolean;
     createdAt: Date;
-    link?: string; // Optional path to navigate to
+    link: string;
+    userId: string;
 }

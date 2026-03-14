@@ -1,7 +1,5 @@
 <div class="edit-wrapper">
   <div class="dual-view-container" *ngIf="!businessNotFound; else notFoundTemplate">
-    
-    <!-- COLUMNA 1: DATOS ACTUALES -->
     <mat-card class="info-display-card">
       <mat-card-header>
         <div class="header-icon">
@@ -10,7 +8,7 @@
         <mat-card-title>Datos del Negocio</mat-card-title>
         <mat-card-subtitle>Información registrada actualmente</mat-card-subtitle>
       </mat-card-header>
-      
+
       <mat-card-content class="current-info-content" *ngIf="currentBusiness">
         <div class="info-item">
           <mat-icon>badge</mat-icon>
@@ -43,6 +41,19 @@
             <span class="value">{{ currentBusiness.description }}</span>
           </div>
         </div>
+
+        <div class="docs-nav-section">
+          <mat-divider></mat-divider>
+          <button
+            mat-button
+            color="primary"
+            class="nav-docs-btn"
+            routerLink="/dashboard/business/docs"
+          >
+            <mat-icon>folder_shared</mat-icon>
+            GESTIONAR DOCUMENTACIÓN
+          </button>
+        </div>
       </mat-card-content>
 
       <mat-card-footer *ngIf="isLoading">
@@ -52,7 +63,6 @@
       </mat-card-footer>
     </mat-card>
 
-    <!-- COLUMNA 2: FORMULARIO DE EDICIÓN -->
     <mat-card class="edit-form-card">
       <mat-card-header>
         <button mat-icon-button (click)="goBack()" class="back-button" aria-label="Volver atrás">
@@ -67,12 +77,12 @@
           <div class="form-row">
             <mat-form-field appearance="outline" class="half-width-input">
               <mat-label>NIT</mat-label>
-              <input matInput formControlName="nit">
+              <input matInput formControlName="nit" />
             </mat-form-field>
 
             <mat-form-field appearance="outline" class="half-width-input">
               <mat-label>Nombre / Razón Social</mat-label>
-              <input matInput formControlName="name">
+              <input matInput formControlName="name" />
             </mat-form-field>
           </div>
 
@@ -83,13 +93,19 @@
 
           <mat-form-field appearance="outline" class="full-width-input">
             <mat-label>Dirección</mat-label>
-            <input matInput formControlName="address">
+            <input matInput formControlName="address" />
           </mat-form-field>
         </form>
       </mat-card-content>
 
       <mat-card-actions class="card-actions-center">
-        <button mat-raised-button color="primary" class="submit-button" [disabled]="businessForm.invalid || isSaving || isLoading" (click)="onSubmit()">
+        <button
+          mat-raised-button
+          color="primary"
+          class="submit-button"
+          [disabled]="businessForm.invalid || isSaving || isLoading"
+          (click)="onSubmit()"
+        >
           {{ isSaving ? 'Actualizando...' : 'Guardar Cambios' }}
         </button>
       </mat-card-actions>

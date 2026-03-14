@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Router, RouterModule } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -41,7 +42,8 @@ export class NotificationCenter implements OnInit {
 
     constructor(
         private notificationService: NotificationService,
-        private alertService: AlertService
+        private alertService: AlertService,
+        private router: Router
     ) {
         this.notifications$ = this.notificationService.getNotifications();
         this.unreadNotifications$ = this.notificationService.getUnreadNotifications();
@@ -50,12 +52,11 @@ export class NotificationCenter implements OnInit {
 
     ngOnInit(): void { }
 
-    getNotificationIcon(type: NotificationType): string {
+    getNotificationIcon(type: string): string {
         switch (type) {
-            case 'invitation': return 'person_add';
-            case 'status_change': return 'sync_alt';
-            case 'reminder': return 'notifications_active';
-            case 'deadline': return 'event_busy';
+            case 'TEAM': return 'person_add';
+            case 'TRANSACTIONAL': return 'sync_alt';
+            case 'SYSTEM': return 'notifications_active';
             default: return 'notifications';
         }
     }
@@ -72,35 +73,21 @@ export class NotificationCenter implements OnInit {
             notifications.forEach(row => this.selection.select(row));
     }
 
-    markAsRead(n: Notification): void {
-        this.notificationService.markAsRead(n.id);
+    openNotification(n: Notification): void {
+        if (!n.isRead) {
+            this.notificationService.markAsRead(n.id).subscribe();
+        }
+        this.router.navigate(['/dashboard/notifications', n.id]);
     }
 
-    deleteNotification(n: Notification): void {
-        this.notificationService.deleteNotification(n.id);
-        this.selection.deselect(n);
+    markAsRead(n: Notification): void {
+        this.notificationService.markAsRead(n.id).subscribe();
     }
 
     markSelectedAsRead(): void {
         const ids = this.selection.selected.map(n => n.id);
-        this.notificationService.markMultipleAsRead(ids);
+        ids.forEach(id => this.notificationService.markAsRead(id).subscribe());
         this.selection.clear();
         this.alertService.showSuccess('Actualizado', 'Notificaciones marcadas como leídas');
-    }
-
-    deleteSelected(): void {
-        this.alertService.confirmAction(
-            '¿Eliminar seleccionadas?',
-            `Estás por eliminar ${this.selection.selected.length} notificaciones.`,
-            'Eliminar',
-            'Cancelar'
-        ).then(confirmed => {
-            if (confirmed) {
-                const ids = this.selection.selected.map(n => n.id);
-                this.notificationService.deleteMultiple(ids);
-                this.selection.clear();
-                this.alertService.showSuccess('Eliminado', 'Notificaciones eliminadas correctamente');
-            }
-        });
     }
 }

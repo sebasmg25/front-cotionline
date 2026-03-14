@@ -138,7 +138,8 @@ html {
 /* Fix for Autocomplete and Select Transparency */
 .mat-mdc-autocomplete-panel, 
 .mat-mdc-select-panel,
-.mat-mdc-menu-panel {
+.mat-mdc-menu-panel,
+.mat-datepicker-content {
   background-color: #ffffff !important; /* Solid background for readability */
   backdrop-filter: none !important;
   -webkit-backdrop-filter: none !important;

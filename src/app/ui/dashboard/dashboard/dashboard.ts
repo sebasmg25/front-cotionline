@@ -19,6 +19,7 @@ import { Observable, map, shareReplay } from 'rxjs';
 import { NotificationService } from '../../../infraestructure/services/notification/notification.service';
 import { Notification } from '../../../contexts/shared/models/notification.model';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
+import { SlicePipe } from '@angular/common';
 
 @Component({
   selector: 'app-dashboard',
@@ -36,7 +37,8 @@ import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
     MatBadgeModule,
     MatTabsModule,
     MatTooltipModule,
-    MatDialogModule
+    MatDialogModule,
+    SlicePipe
   ],
   templateUrl: './dashboard.html',
   styleUrl: './dashboard.css',
@@ -85,8 +87,15 @@ export class Dashboard implements OnInit {
     }
   }
 
+  openNotification(notification: Notification): void {
+    if (!notification.isRead) {
+      this.notificationService.markAsRead(notification.id).subscribe();
+    }
+    this.router.navigate(['/dashboard/notifications', notification.id]);
+  }
+
   markAsRead(notification: Notification): void {
-    this.notificationService.markAsRead(notification.id);
+    this.notificationService.markAsRead(notification.id).subscribe();
     if (notification.link) {
       this.router.navigate([notification.link]);
     }
@@ -98,10 +107,9 @@ export class Dashboard implements OnInit {
 
   getNotificationIcon(type: string): string {
     switch (type) {
-      case 'invitation': return 'person_add';
-      case 'status_change': return 'sync';
-      case 'reminder': return 'notifications';
-      case 'deadline': return 'event_busy';
+      case 'TEAM': return 'person_add';
+      case 'TRANSACTIONAL': return 'sync';
+      case 'SYSTEM': return 'notifications';
       default: return 'notifications';
     }
   }

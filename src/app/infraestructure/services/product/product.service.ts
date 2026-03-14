@@ -1,78 +1,67 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, of } from 'rxjs';
-import { delay } from 'rxjs/operators';
+import { Observable, map } from 'rxjs';
 import { environment } from '../../../../environments/environment';
 import { ProductRepository } from '../../../contexts/product/domain/product.repository';
 import { Product } from '../../../contexts/product/domain/models/product.model';
 
 @Injectable({
-    providedIn: 'root'
+  providedIn: 'root',
 })
 export class ProductService implements ProductRepository {
-    private url = environment.apiUrl;
+  private readonly endpoint = `${environment.apiUrl}/products`;
 
-    // Temporal state to simulate DB modifications
-    private products: Product[] = [
-        new Product('Papel Bond A4', 'Resma de papel bond tamaño A4 para oficina', 'Resma', 50, 'p1'),
-        new Product('Tinta HP 664', 'Cartucho de tinta negra HP 664 original', 'Unidad', 20, 'p2'),
-        new Product('Marcadores Borrables', 'Set de 4 marcadores borrables colores variados', 'Set', 15, 'p3'),
-        new Product('Folder Az', 'Folder tipo AZ lomo ancho color azul', 'Unidad', 100, 'p4'),
-        new Product('Cinta Pegante', 'Cinta pegante transparente 24mm x 40m', 'Unidad', 30, 'p5'),
-    ];
+  constructor(private http: HttpClient) {}
 
-    constructor(private http: HttpClient) { }
+  /**
+   * Obtiene los productos de una solicitud.
+   * Backend: GET /products/quotation-request/:quotationRequestId (usando GetProductsByQuotationRequestIdController)
+   */
+  findAllByQuotationRequest(quotationRequestId: string): Observable<Product[]> {
+    return this.http
+      .get<any>(`${this.endpoint}/quotation-request/${quotationRequestId}`)
+      .pipe(map((response) => response.data || response));
+  }
 
-    findAll(): Observable<Product[]> {
-        // --- Future Backend Implementation ---
-        // return this.http.get<Product[]>(`${this.url}/products`);
+  /**
+   * Obtiene un producto por su ID.
+   * Backend: GET /products/:id
+   */
+  findById(id: string): Observable<Product> {
+    return this.http
+      .get<any>(`${this.endpoint}/${id}`)
+      .pipe(map((response) => response.data || response));
+  }
 
-        // Simulated Backend Response
-        return of([...this.products]).pipe(delay(500));
+  /**
+   * Registra un producto.
+   * IMPORTANTE: El backend requiere el ID de la solicitud en la URL.
+   * Backend: POST /products/quotation-request/:quotationRequestId
+   */
+  save(product: Product): Observable<Product> {
+    if (!product.quotationRequestId) {
+      throw new Error('No se puede guardar un producto sin un quotationRequestId');
     }
+    return this.http
+      .post<any>(`${this.endpoint}/quotation-request/${product.quotationRequestId}`, product)
+      .pipe(map((response) => response.data || response));
+  }
 
-    findById(id: string): Observable<Product> {
-        // --- Future Backend Implementation ---
-        // return this.http.get<Product>(`${this.url}/products/${id}`);
+  /**
+   * Actualiza un producto.
+   * Backend: PATCH /products/:id
+   */
+  update(id: string, product: Partial<Product>): Observable<Product> {
+    return this.http
+      .patch<any>(`${this.endpoint}/${id}`, product)
+      .pipe(map((response) => response.data || response));
+  }
 
-        // Simulated Backend Response
-        const product = this.products.find(p => p.id === id);
-        if (!product) {
-            throw new Error(`Product with ID ${id} not found`);
-        }
-        return of({ ...product }).pipe(delay(300));
-    }
-
-    save(product: Product): Observable<Product> {
-        // --- Future Backend Implementation ---
-        // return this.http.post<Product>(`${this.url}/products`, product);
-
-        // Simulated Backend Response
-        const newProduct = { ...product, id: `p${Date.now()}` };
-        this.products.push(newProduct);
-        return of(newProduct).pipe(delay(800));
-    }
-
-    update(id: string, product: Product): Observable<Product> {
-        // --- Future Backend Implementation ---
-        // return this.http.put<Product>(`${this.url}/products/${id}`, product);
-
-        // Simulated Backend Response
-        const index = this.products.findIndex(p => p.id === id);
-        if (index === -1) {
-            throw new Error(`Product with ID ${id} not found`);
-        }
-        const updatedProduct = { ...product, id };
-        this.products[index] = updatedProduct;
-        return of(updatedProduct).pipe(delay(800));
-    }
-
-    delete(id: string): Observable<void> {
-        // --- Future Backend Implementation ---
-        // return this.http.delete<void>(`${this.url}/products/${id}`);
-
-        // Simulated Backend Response
-        this.products = this.products.filter(p => p.id !== id);
-        return of(undefined).pipe(delay(500));
-    }
+  /**
+   * Elimina un producto.
+   * Backend: DELETE /products/:id
+   */
+  delete(id: string): Observable<void> {
+    return this.http.delete<void>(`${this.endpoint}/${id}`);
+  }
 }

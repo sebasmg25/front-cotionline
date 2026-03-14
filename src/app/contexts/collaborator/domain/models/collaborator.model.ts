@@ -1,9 +1,9 @@
-export type InvitationStatus = 'pending' | 'accepted' | 'rejected';
+export type InvitationStatus = 'PENDING' | 'ACCEPTED' | 'REJECTED';
 
 export interface CollaboratorInvitation {
     id: string;
     email: string;
-    status: InvitationStatus;
-    sentAt: Date;
-    respondedAt?: Date;
+    invitationStatus: InvitationStatus;
+    createdAt: Date;
+    userId: string;
 }

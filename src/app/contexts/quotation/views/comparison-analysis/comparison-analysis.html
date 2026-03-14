@@ -1,159 +1,197 @@
 <div class="comparison-wrapper">
-    <div class="header">
-        <h1>Comparación y Análisis</h1>
-        <p>Selecciona una solicitud para comparar las propuestas recibidas basándote en precio y tiempo.</p>
+  <div class="header">
+    <h1>Comparación y Análisis</h1>
+    <p>Evalúa las propuestas recibidas para tomar la mejor decisión de compra.</p>
+  </div>
+
+  <div class="step-container" *ngIf="!selectedRequest">
+    <div class="section-title">
+      <mat-icon>list_alt</mat-icon>
+      <h2>Mis Solicitudes Activas</h2>
     </div>
 
-    <!-- PASO 1: SELECCIÓN DE SOLICITUD -->
-    <div class="step-container" *ngIf="!selectedRequest" id="guide-analysis-requests">
-        <div class="section-title">
-            <mat-icon>list_alt</mat-icon>
-            <h2>Mis Solicitudes Enviadas</h2>
-        </div>
-        
-        <div class="requests-list">
-            <mat-card *ngFor="let request of requests$ | async" class="request-item-card" (click)="selectRequest(request)">
-                <mat-card-header>
-                    <mat-card-title>{{ request.title }}</mat-card-title>
-                    <mat-card-subtitle>Publicada: {{ request.createdAt | date:'shortDate' }}</mat-card-subtitle>
-                </mat-card-header>
-                <mat-card-content>
-                    <p class="truncate">{{ request.description }}</p>
-                    <div class="metadata">
-                        <mat-icon>inventory_2</mat-icon>
-                        <span>{{ request.items.length }} productos</span>
-                    </div>
-                </mat-card-content>
-                <mat-divider></mat-divider>
-                <mat-card-actions align="end">
-                    <button mat-button color="primary">VER PROPUESTAS</button>
-                </mat-card-actions>
-            </mat-card>
-        </div>
-
-        <div class="empty-state" *ngIf="((requests$ | async)?.length || 0) === 0">
-            <mat-icon>search_off</mat-icon>
-            <p>No tienes solicitudes activas para comparar.</p>
-        </div>
+    <div class="requests-list">
+      <mat-card
+        *ngFor="let request of requests$ | async"
+        class="request-item-card"
+        (click)="selectRequest(request)"
+      >
+        <mat-card-header>
+          <mat-card-title>{{ request.title }}</mat-card-title>
+          <mat-card-subtitle
+            >Publicada: {{ request.createdAt | date: 'dd/MM/yyyy' }}</mat-card-subtitle
+          >
+        </mat-card-header>
+        <mat-card-content>
+          <p class="truncate">{{ request.description }}</p>
+          <div class="metadata">
+            <mat-icon color="primary">inventory_2</mat-icon>
+            <span>{{ request.items.length || 0 }} productos solicitados</span>
+          </div>
+        </mat-card-content>
+        <mat-divider></mat-divider>
+        <mat-card-actions align="end">
+          <button mat-flat-button color="primary">ANALIZAR PROPUESTAS</button>
+        </mat-card-actions>
+      </mat-card>
     </div>
 
-    <!-- PASO 2: SELECCIÓN DE COTIZACIONES -->
-    <div class="step-container" *ngIf="selectedRequest">
-        <div class="breadcrumb">
-            <button mat-button (click)="deselectRequest()">
-                <mat-icon>arrow_back</mat-icon> Volver a solicitudes
-            </button>
+    <div class="empty-state" *ngIf="((requests$ | async)?.length || 0) === 0">
+      <mat-icon>history</mat-icon>
+      <p>No tienes solicitudes publicadas actualmente.</p>
+    </div>
+  </div>
+
+  <div class="step-container" *ngIf="selectedRequest">
+    <div class="breadcrumb">
+      <button mat-button (click)="deselectRequest()">
+        <mat-icon>arrow_back</mat-icon> Volver a la lista
+      </button>
+    </div>
+
+    <!-- Panel de Análisis Inteligente -->
+    <mat-card class="active-request-header mat-elevation-z3">
+      <mat-card-content class="analysis-panel">
+        <div class="request-summary">
+          <span class="label">ANALIZANDO OFERTAS PARA:</span>
+          <h3>{{ selectedRequest.title }}</h3>
         </div>
 
-        <mat-card class="active-request-header">
-            <mat-card-content>
-                <div class="request-summary">
-                    <span class="label">Comparando sobre:</span>
-                    <h3>{{ selectedRequest.title }}</h3>
-                </div>
-                
-                <div class="criteria-selection">
-                    <span class="criteria-label">Criterio de análisis:</span>
-                    <mat-button-toggle-group [value]="comparisonCriterion" (change)="setCriterion($event.value)" aria-label="Criterio de comparación">
-                      <mat-button-toggle value="value">
-                        <mat-icon>payments</mat-icon> Valor Total
-                      </mat-button-toggle>
-                      <mat-button-toggle value="delivery">
-                        <mat-icon>schedule</mat-icon> Tiempo de Entrega
-                      </mat-button-toggle>
-                    </mat-button-toggle-group>
-                </div>
+        <div class="analysis-controls" *ngIf="proposals$ | async as proposals">
+          <div class="filter-group">
+            <span class="filter-label">Priorizar por:</span>
+            <mat-button-toggle-group 
+              [(ngModel)]="analysisFilter" 
+              (change)="onFilterChange()"
+              class="premium-toggle"
+            >
+              <mat-button-toggle value="price">
+                <mat-icon>payments</mat-icon> MEJOR PRECIO
+              </mat-button-toggle>
+              <mat-button-toggle value="delivery">
+                <mat-icon>speed</mat-icon> MENOR TIEMPO
+              </mat-button-toggle>
+            </mat-button-toggle-group>
+          </div>
 
-                <button mat-raised-button color="accent" 
-                        [disabled]="selection.selected.length < 2"
-                        (click)="generateComparison()"
-                        id="guide-generate-comparison">
-                    <mat-icon>analytics</mat-icon> {{ isCompared ? 'RECALCULAR' : 'GENERAR COMPARACIÓN' }} ({{ selection.selected.length }})
-                </button>
-            </mat-card-content>
-        </mat-card>
+          <button
+            mat-raised-button
+            color="accent"
+            class="generate-btn"
+            [disabled]="selection.selected.length < 2"
+            (click)="generateComparison()"
+          >
+            <mat-icon>analytics</mat-icon>
+            {{ isCompared ? 'ACTUALIZAR ANÁLISIS' : 'GENERAR ANÁLISIS INTELIGENTE' }}
+          </button>
+        </div>
+      </mat-card-content>
+    </mat-card>
 
-        <div class="proposals-container" *ngIf="proposals$ | async as proposals">
-            <table mat-table [dataSource]="proposals" class="full-width-table">
-                
-                <!-- Checkbox Column -->
-                <ng-container matColumnDef="select">
-                  <th mat-header-cell *matHeaderCellDef>
-                    <mat-checkbox (change)="$event ? toggleAll(proposals) : null"
-                                  [checked]="selection.hasValue() && isAllSelected(proposals)"
-                                  [indeterminate]="selection.hasValue() && !isAllSelected(proposals)">
-                    </mat-checkbox>
-                  </th>
-                  <td mat-cell *matCellDef="let row">
-                    <mat-checkbox (click)="$event.stopPropagation()"
-                                  (change)="$event ? selection.toggle(row) : null"
-                                  [checked]="selection.isSelected(row)">
-                    </mat-checkbox>
-                  </td>
-                </ng-container>
+    <div class="proposals-container" *ngIf="proposals$ | async as proposals">
+      <table mat-table [dataSource]="proposals" class="full-width-table mat-elevation-z1">
+        <ng-container matColumnDef="select">
+          <th mat-header-cell *matHeaderCellDef>
+            <mat-checkbox
+              (change)="$event ? toggleAll(proposals) : null"
+              [checked]="selection.hasValue() && isAllSelected(proposals)"
+              [indeterminate]="selection.hasValue() && !isAllSelected(proposals)"
+            >
+            </mat-checkbox>
+          </th>
+          <td mat-cell *matCellDef="let row">
+            <mat-checkbox
+              (click)="$event.stopPropagation()"
+              (change)="$event ? selection.toggle(row) : null"
+              [checked]="selection.isSelected(row)"
+            >
+            </mat-checkbox>
+          </td>
+        </ng-container>
 
-                <!-- Supplier Column -->
-                <ng-container matColumnDef="supplier">
-                    <th mat-header-cell *matHeaderCellDef> Proveedor </th>
-                    <td mat-cell *matCellDef="let q"> 
-                        <div class="supplier-info">
-                            <span class="biz-name">Código Biz: {{ q.fromBusinessId }}</span>
-                            <span class="q-id">ID: {{ q.id }}</span>
-                        </div>
-                    </td>
-                </ng-container>
-
-                <!-- Value Column -->
-                <ng-container matColumnDef="value">
-                    <th mat-header-cell *matHeaderCellDef> Valor Total </th>
-                    <td mat-cell *matCellDef="let q"> 
-                        <span class="price-text" [class.highlight-best]="isCompared && bestProposal?.id === q.id && comparisonCriterion === 'value'">
-                            {{ q.totalValue | currency:'COP':'symbol-narrow':'1.0-0' }}
-                        </span>
-                    </td>
-                </ng-container>
-
-                <!-- Delivery Column -->
-                <ng-container matColumnDef="delivery">
-                    <th mat-header-cell *matHeaderCellDef> Tiempo de Entrega </th>
-                    <td mat-cell *matCellDef="let q"> 
-                        <span [class.highlight-best]="isCompared && bestProposal?.id === q.id && comparisonCriterion === 'delivery'">
-                            {{ q.deliveryTime }}
-                        </span>
-                    </td>
-                </ng-container>
-
-                <!-- Actions / Status Column -->
-                <ng-container matColumnDef="status">
-                    <th mat-header-cell *matHeaderCellDef> Estado / Acciones </th>
-                    <td mat-cell *matCellDef="let q">
-                        <div class="action-cell">
-                            <span *ngIf="isCompared && bestProposal?.id === q.id" class="best-badge">
-                                <mat-icon>stars</mat-icon> MEJOR OPCIÓN
-                            </span>
-                            <button *ngIf="isCompared && bestProposal?.id === q.id" 
-                                    mat-flat-button color="primary" class="accept-btn"
-                                    (click)="acceptProposal(q); $event.stopPropagation()">
-                                ACEPTAR PROPUESTA
-                            </button>
-                            <button *ngIf="!isCompared || bestProposal?.id !== q.id" mat-icon-button color="primary" matTooltip="Ver detalles">
-                                <mat-icon>visibility</mat-icon>
-                            </button>
-                        </div>
-                    </td>
-                </ng-container>
-
-                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-                <tr mat-row *matRowDef="let row; columns: displayedColumns;" 
-                    [class.selected-row]="selection.isSelected(row)"
-                    [class.best-row]="isCompared && bestProposal?.id === row.id"
-                    (click)="selection.toggle(row)"></tr>
-            </table>
-
-            <div class="empty-state" *ngIf="proposals.length === 0">
-                <mat-icon>history_edu</mat-icon>
-                <p>Aún no has recibido propuestas para esta solicitud.</p>
+        <ng-container matColumnDef="supplier">
+          <th mat-header-cell *matHeaderCellDef>PROVEEDOR</th>
+          <td mat-cell *matCellDef="let q">
+            <div class="supplier-info">
+              <span class="biz-name">{{ q.businessName || 'Proveedor Anónimo' }}</span>
+              <small class="q-date">Recibida el {{ q.issueDate | date: 'dd/MM/yyyy' }}</small>
             </div>
-        </div>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="value">
+          <th mat-header-cell *matHeaderCellDef>VALOR TOTAL</th>
+          <td mat-cell *matCellDef="let q">
+            <div class="cell-content">
+              <span *ngIf="isCompared && winnerId === q.id && analysisFilter === 'price'" class="best-indicator">
+                <mat-icon>star</mat-icon> MEJOR PRECIO
+              </span>
+              <span
+                class="price-text"
+                [class.highlight-text]="isCompared && winnerId === q.id && analysisFilter === 'price'"
+              >
+                {{ q.price | currency: 'COP' : 'symbol-narrow' : '1.0-0' }}
+              </span>
+            </div>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="delivery">
+          <th mat-header-cell *matHeaderCellDef>ENTREGA</th>
+          <td mat-cell *matCellDef="let q">
+            <div class="cell-content">
+              <span *ngIf="isCompared && winnerId === q.id && analysisFilter === 'delivery'" class="best-indicator">
+                <mat-icon>star</mat-icon> MEJOR TIEMPO
+              </span>
+              <span
+                class="delivery-text"
+                [class.highlight-text]="isCompared && winnerId === q.id && analysisFilter === 'delivery'"
+              >
+                {{ q.deliveryTime | date: 'dd/MM/yyyy' }}
+              </span>
+            </div>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="status">
+          <th mat-header-cell *matHeaderCellDef>ACCIONES</th>
+          <td mat-cell *matCellDef="let q">
+            <div class="action-cell">
+              <button 
+                mat-icon-button 
+                color="primary" 
+                matTooltip="Ver Detalle"
+                (click)="viewDetail(q); $event.stopPropagation()"
+              >
+                <mat-icon>visibility</mat-icon>
+              </button>
+
+              <button
+                *ngIf="(isCompared && winnerId === q.id) || (proposals.length === 1)"
+                mat-flat-button
+                class="btn-accept-winner"
+                (click)="acceptProposal(q); $event.stopPropagation()"
+              >
+                <mat-icon>check_circle</mat-icon> ACEPTAR
+              </button>
+            </div>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr
+          mat-row
+          *matRowDef="let row; columns: displayedColumns"
+          [class.selected-row]="selection.isSelected(row)"
+          [class.winner-row]="(isCompared && winnerId === row.id) || (proposals.length === 1)"
+          (click)="selection.toggle(row)"
+        ></tr>
+      </table>
+
+      <div class="empty-state" *ngIf="proposals.length === 0">
+        <mat-icon>inbox</mat-icon>
+        <p>No se han recibido propuestas para esta solicitud.</p>
+      </div>
     </div>
+  </div>
 </div>

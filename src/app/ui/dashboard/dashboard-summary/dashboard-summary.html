@@ -1,24 +1,74 @@
-<div class="summary-container">
+<div
+  class="summary-container"
+  *ngIf="{ verified: (isVerified$ | async), status: (businessStatus$ | async) } as state"
+>
   <header class="summary-header">
     <h1>¡Bienvenido de nuevo!</h1>
     <p>¿Qué te gustaría hacer hoy en CotiOnline?</p>
   </header>
 
-  <div class="cards-grid">
-    <mat-card *ngFor="let card of menuCards" class="nav-card" [routerLink]="card.link">
-      <div class="card-icon-wrapper" [style.background-color]="card.color + '15'">
-        <mat-icon [style.color]="card.color">{{card.icon}}</mat-icon>
+  <mat-card class="status-banner-card" *ngIf="!state.verified">
+    <mat-card-content class="banner-content">
+      <div
+        class="banner-icon-wrapper"
+        [class.pending]="state.status === Status.PENDING"
+        [class.error]="state.status === Status.RECHAZADO"
+      >
+        <mat-icon>{{ state.status === Status.PENDING ? 'schedule' : 'report_problem' }}</mat-icon>
       </div>
+
+      <div class="banner-text">
+        <h3 *ngIf="state.status === Status.PENDING">Verificación en curso</h3>
+        <h3 *ngIf="state.status === Status.RECHAZADO">Atención: Registro rechazado</h3>
+
+        <p *ngIf="state.status === Status.PENDING">
+          Estamos validando la información de tu empresa. Te notificaremos cuando las funciones
+          comerciales estén activas.
+        </p>
+        <p *ngIf="state.status === Status.RECHAZADO">
+          Se han encontrado inconsistencias en tu documentación. Por favor, revisa y actualiza tus
+          datos.
+        </p>
+      </div>
+
+      <button
+        mat-stroked-button
+        color="warn"
+        *ngIf="state.status === Status.RECHAZADO"
+        routerLink="/dashboard/business/profile"
+      >
+        REVISAR NEGOCIO
+      </button>
+    </mat-card-content>
+  </mat-card>
+
+  <div class="cards-grid">
+    <mat-card
+      *ngFor="let card of menuCards"
+      class="nav-card"
+      [class.disabled-card]="!state.verified"
+      [routerLink]="state.verified ? card.link : null"
+    >
+      <div class="card-icon-wrapper" [style.background-color]="card.color + '15'">
+        <mat-icon [style.color]="card.color">{{ card.icon }}</mat-icon>
+      </div>
+
       <mat-card-header>
-        <mat-card-title>{{card.title}}</mat-card-title>
+        <mat-card-title>{{ card.title }}</mat-card-title>
       </mat-card-header>
+
       <mat-card-content>
-        <p>{{card.description}}</p>
+        <p>{{ card.description }}</p>
       </mat-card-content>
+
       <mat-card-actions align="end">
-        <button mat-button color="primary">
-          IR AHORA
-          <mat-icon>chevron_right</mat-icon>
+        <button
+          mat-button
+          [color]="state.verified ? 'primary' : 'disabled'"
+          [disabled]="!state.verified"
+        >
+          {{ state.verified ? 'IR AHORA' : 'BLOQUEADO' }}
+          <mat-icon>{{ state.verified ? 'chevron_right' : 'lock' }}</mat-icon>
         </button>
       </mat-card-actions>
     </mat-card>

@@ -1,126 +1,179 @@
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
-import { delay, map } from 'rxjs/operators';
-import { Quotation, QuotationStatus } from '../../../contexts/quotation/domain/models/quotation.model';
+import { HttpClient } from '@angular/common/http';
+import { Observable, of, forkJoin } from 'rxjs';
+import { map, tap, catchError } from 'rxjs/operators';
+import { environment } from '../../../../environments/environment';
+import {
+  Quotation,
+  QuotationStatus,
+} from '../../../contexts/quotation/domain/models/quotation.model';
 import { QuotationRequestService } from '../quotation-request/quotation-request.service';
 import { QuotationRequest } from '../../../contexts/quotationRequest/domain/models/quotation-request.model';
 
 @Injectable({
-    providedIn: 'root'
+  providedIn: 'root',
 })
 export class QuotationService {
-    private quotations: Quotation[] = [
-        // Mock Sent Proposals
-        {
-            id: 'q1',
-            requestId: '1',
-            requestTitle: 'Papelería Mes de Marzo',
-            fromBusinessId: 'current-biz',
-            toBusinessId: 'other-biz',
-            status: 'sent',
-            emissionDate: new Date(),
-            expirationDate: new Date(Date.now() + 86400000 * 7),
-            description: 'Ofrecemos los mejores precios en papel bond.',
-            individualValues: [
-                { productId: 'p1', productName: 'Papel Bond', individualValue: 150000 }
-            ],
-            totalValue: 150000,
-            deliveryTime: '2 días hábiles',
-            createdAt: new Date()
-        },
-        // Mock Received Proposals (someone responded to my request #1)
-        {
-            id: 'q2',
-            requestId: '1',
-            requestTitle: 'Papelería Mes de Marzo',
-            fromBusinessId: 'other-biz',
-            toBusinessId: 'current-biz',
-            status: 'pending',
-            emissionDate: new Date(),
-            expirationDate: new Date(Date.now() + 86400000 * 5),
-            description: 'Propuesta para papelería premium.',
-            individualValues: [
-                { productId: 'p1', productName: 'Papel Bond', individualValue: 165000 }
-            ],
-            totalValue: 165000,
-            deliveryTime: '3 días hábiles',
-            createdAt: new Date()
-        },
-        {
-            id: 'q3',
-            requestId: '1',
-            requestTitle: 'Papelería Mes de Marzo',
-            fromBusinessId: 'third-biz',
-            toBusinessId: 'current-biz',
-            status: 'pending',
-            emissionDate: new Date(),
-            expirationDate: new Date(Date.now() + 86400000 * 4),
-            description: 'Entrega inmediata en todo el lote.',
-            individualValues: [
-                { productId: 'p1', productName: 'Papel Bond', individualValue: 180000 }
-            ],
-            totalValue: 180000,
-            deliveryTime: '1 día hábil',
-            createdAt: new Date()
-        }
-    ];
+  private readonly apiUrl = `${environment.apiUrl}/quotations`;
 
-    constructor(private quotationRequestService: QuotationRequestService) { }
+  constructor(
+    private http: HttpClient,
+    private quotationRequestService: QuotationRequestService,
+  ) {}
 
-    getSentQuotations(): Observable<Quotation[]> {
-        return of(this.quotations.filter(q => q.fromBusinessId === 'current-biz' && q.status === 'sent')).pipe(delay(500));
-    }
+  // --- MÉTODOS DE FILTRADO PARA DASHBOARD ---
 
-    getDraftQuotations(): Observable<Quotation[]> {
-        return of(this.quotations.filter(q => q.fromBusinessId === 'current-biz' && q.status === 'draft')).pipe(delay(500));
-    }
+  /**
+   * Obtiene todas las cotizaciones base para filtrar.
+   * Ahora consume el nuevo endpoint /my-history creado en el backend.
+   */
+  private getAllQuotations(): Observable<Quotation[]> {
+    return this.http.get<any>(`${this.apiUrl}/my-history`).pipe(
+      map((res) => {
+        const data = res.data || res;
+        return Array.isArray(data) ? data.map((item: any) => this.mapToFront(item)) : [];
+      }),
+    );
+  }
 
-    getQuotationById(id: string): Observable<Quotation | undefined> {
-        return of(this.quotations.find(q => q.id === id)).pipe(delay(400));
-    }
+  getSentQuotations(): Observable<Quotation[]> {
+    return this.getAllQuotations().pipe(
+      map((list) => {
+        const validSentStatuses = ['PENDING', 'ACCEPTED', 'REJECTED', 'QUOTED', 'CLOSED', 'EXPIRED'];
+        return list.filter((q) => validSentStatuses.includes(q.status));
+      }),
+    );
+  }
 
-    getReceivedQuotations(): Observable<Quotation[]> {
-        return of(this.quotations.filter(q => q.toBusinessId === 'current-biz')).pipe(delay(500));
-    }
+  getDraftQuotations(): Observable<Quotation[]> {
+    return this.getAllQuotations().pipe(
+      map((list) => list.filter((q) => q.status === 'DRAFT')),
+    );
+  }
 
-    getReceivedQuotationsByRequestId(requestId: string): Observable<Quotation[]> {
-        return of(this.quotations.filter(q => q.toBusinessId === 'current-biz' && q.requestId === requestId)).pipe(delay(500));
-    }
+  /**
+   * Obtiene las cotizaciones recibidas para las solicitudes del usuario actual.
+   */
+  getReceivedQuotations(): Observable<Quotation[]> {
+    return this.http.get<any>(`${this.apiUrl}/received`).pipe(
+      map((res) => {
+        const data = res.data || res;
+        return Array.isArray(data) ? data.map((item: any) => this.mapToFront(item)) : [];
+      }),
+    );
+  }
 
-    getIncomingRequests(): Observable<QuotationRequest[]> {
-        // Return requests that are NOT owned by me (simulated)
-        return this.quotationRequestService.findAll().pipe(
-            map(requests => requests.filter(r => r.status === 'published' && r.id !== '1' && r.id !== '2'))
+  getIncomingRequests(filters?: {
+    department?: string;
+    city?: string;
+  }): Observable<QuotationRequest[]> {
+    return forkJoin({
+      requests: this.quotationRequestService.getPublic(filters).pipe(
+        catchError(err => {
+          console.error('[QuotationService] Error in getPublic:', err);
+          return of([]);
+        })
+      ),
+      myQuotations: this.getAllQuotations().pipe(
+        catchError(err => {
+          console.error('[QuotationService] Error in getAllQuotations:', err);
+          return of([]);
+        })
+      ),
+    }).pipe(
+      map(({ requests, myQuotations }: { requests: QuotationRequest[], myQuotations: Quotation[] }) => {
+        // Obtenemos los IDs de las solicitudes a las que ya aplicamos (Draft o Enviadas)
+        const myQuotedRequestIds = new Set(
+          myQuotations.map((q: Quotation) => q.quotationRequestId).filter(id => !!id)
         );
+
+        return requests.filter((r: QuotationRequest) => 
+          (r.status === 'PENDING' || r.status === 'QUOTED') && 
+          r.id && !myQuotedRequestIds.has(r.id)
+        );
+      })
+    );
+  }
+
+  // --- MÉTODOS DE ACCIÓN ---
+
+  getReceivedQuotationsByRequestId(requestId: string): Observable<Quotation[]> {
+    return this.http
+      .get<{ data: any[] }>(`${this.apiUrl}/request/${requestId}`)
+      .pipe(map((res) => res.data.map((item) => this.mapToFront(item))));
+  }
+
+  getQuotationById(id: string): Observable<Quotation> {
+    return this.http
+      .get<any>(`${this.apiUrl}/${id}`)
+      .pipe(map((res) => this.mapToFront(res.data || res)));
+  }
+
+  compare(quotationRequestId: string): Observable<any> {
+    return this.http
+      .get<any>(`${this.apiUrl}/compare/${quotationRequestId}`)
+      .pipe(map((res) => res.data || res));
+  }
+
+  updateStatus(id: string, status: QuotationStatus): Observable<any> {
+    return this.http.patch(`${this.apiUrl}/${id}`, { status });
+  }
+
+  saveResponse(quotation: Partial<Quotation>): Observable<Quotation> {
+    const backendData = this.mapToBack(quotation);
+    const requestId = quotation.quotationRequestId;
+
+    if (quotation.id) {
+      return this.http
+        .patch<any>(`${this.apiUrl}/${quotation.id}`, backendData)
+        .pipe(map((res) => this.mapToFront(res.data || res)));
+    } else {
+      return this.http
+        .post<any>(`${this.apiUrl}/request/${requestId}`, backendData)
+        .pipe(map((res) => this.mapToFront(res.data || res)));
     }
+  }
 
-    notifyProvider(quotationId: string): Observable<void> {
-        // Mock notification to provider
-        return of(undefined).pipe(delay(500));
-    }
+  delete(id: string): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/${id}`);
+  }
 
-    saveResponse(quotation: Partial<Quotation>): Observable<Quotation> {
-        const isUpdate = quotation.id && this.quotations.find(q => q.id === quotation.id);
+  // --- MAPPERS ---
 
-        if (isUpdate) {
-            const index = this.quotations.findIndex(q => q.id === quotation.id);
-            this.quotations[index] = { ...this.quotations[index], ...quotation } as Quotation;
-            return of(this.quotations[index]).pipe(delay(800));
-        }
+  private mapToFront(data: any): Quotation {
+    if (!data) return null as any;
+    return {
+      id: data.id || data._id || '',
+      quotationRequestId: data.quotationRequestId || '',
+      userId: data.userId || '',
+      issueDate: this.safeParseDate(data.issueDate),
+      responseDeadline: this.safeParseDate(data.responseDeadline),
+      price: data.price || 0,
+      deliveryTime: this.safeParseDate(data.deliveryTime),
+      description: data.description || '',
+      status: (data.status as QuotationStatus) || 'PENDING',
+      businessName: data.businessName, // Might be undefined, handled in component
+      // UI Helpers
+      requestTitle: data.requestTitle || 'Solicitud de Cotización',
+      createdAt: this.safeParseDate(data.issueDate),
+      individualValues: data.individualValues || [], // Breakdown
+    };
+  }
 
-        const newQuotation: Quotation = {
-            id: `q${Date.now()}`,
-            status: quotation.status || 'sent',
-            createdAt: new Date(),
-            ...quotation
-        } as Quotation;
-        this.quotations.push(newQuotation);
-        return of(newQuotation).pipe(delay(800));
-    }
+  private safeParseDate(date: any): Date {
+    if (!date) return new Date();
+    const d = new Date(date);
+    return isNaN(d.getTime()) ? new Date() : d;
+  }
 
-    updateStatus(id: string, status: QuotationStatus): Observable<void> {
-        const q = this.quotations.find(item => item.id === id);
-        if (q) q.status = status;
-        return of(undefined).pipe(delay(300));
-    }
+  private mapToBack(q: Partial<Quotation>): any {
+    return {
+      price: q.price,
+      responseDeadline: q.responseDeadline,
+      deliveryTime: q.deliveryTime,
+      description: q.description,
+      status: q.status, // Ya viene en mayúsculas por el tipo y validaciones de UI
+      individualValues: q.individualValues, // BREAKDOWN
+    };
+  }
 }

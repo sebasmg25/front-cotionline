@@ -1,0 +1,178 @@
+/* Contenedor alineado con el estilo del Register */
+.products-inline-container {
+  margin-top: 10px;
+  border: 1px solid #eee;
+  border-radius: 12px;
+  overflow: hidden;
+  background-color: #fff;
+}
+
+/* Cabecera idéntica a .list-header del otro componente */
+.table-header {
+  display: grid;
+  grid-template-columns: 50px 2fr 100px 120px 2fr 100px;
+  background-color: #f8f9fa;
+  padding: 12px 20px;
+  font-size: 13px;
+  font-weight: 700;
+  color: #666;
+  border-bottom: 1px solid #eee;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Filas con el mismo padding y transición que .product-item-row */
+.product-item-row {
+  display: grid;
+  grid-template-columns: 50px 2fr 100px 120px 2fr 100px;
+  padding: 10px 20px;
+  border-bottom: 1px solid #f5f5f5;
+  align-items: center;
+  transition: background-color 0.2s;
+}
+
+.product-item-row:last-child {
+  border-bottom: none;
+}
+
+.product-item-row:hover {
+  background-color: #fafafa;
+}
+
+/* Inputs que heredan la tipografía del sistema */
+.custom-inline-input {
+  width: 100%;
+  border: 1px solid transparent;
+  padding: 8px 10px;
+  border-radius: 6px;
+  background: transparent;
+  font-family: inherit; /* Hereda la del Register */
+  font-size: 14px;
+  color: #333;
+  outline: none;
+  transition: all 0.2s;
+}
+
+/* Al hacer foco, se parece a un mat-input simple */
+.custom-inline-input:focus {
+  background-color: #fff;
+  border-color: #3f51b5;
+  box-shadow: 0 2px 4px rgba(63, 81, 181, 0.1);
+}
+
+.custom-inline-input:disabled {
+  color: #666;
+  cursor: default;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.col-id {
+  text-align: center;
+  font-weight: 700;
+  color: #888;
+  font-size: 13px;
+}
+
+/* Acciones compactas */
+.col-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 5px;
+}
+
+.table-actions {
+  padding: 15px 20px;
+  background-color: #fafafa;
+  border-bottom: 1px solid #eee;
+}
+
+.search-filter {
+  width: 100%;
+}
+
+.search-filter mat-icon {
+  color: #3f51b5;
+}
+
+/* Footer con el fondo #fcfcfc del Register */
+.table-footer {
+  padding: 15px 20px;
+  background-color: #fcfcfc;
+  border-top: 1px solid #eee;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.add-btn {
+  font-weight: 600 !important;
+  color: #3f51b5 !important;
+}
+
+.validation-error-text {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  color: #d32f2f;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.validation-error-text mat-icon {
+  font-size: 18px;
+  width: 18px;
+  height: 18px;
+}
+
+/* Estilo para fila inválida */
+.row-invalid {
+  background-color: #fff8f8;
+}
+
+/* Responsividad */
+@media (max-width: 800px) {
+  .table-header {
+    display: none;
+  }
+  .product-item-row {
+    grid-template-columns: 1fr;
+    gap: 10px;
+    padding: 20px;
+  }
+}
+
+/* Estado de carga */
+.loading-state {
+  padding: 30px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  color: #3f51b5;
+  font-weight: 500;
+  font-size: 14px;
+}
+
+.empty-view-state {
+  padding: 20px;
+  text-align: center;
+  color: #888;
+  font-style: italic;
+}
+
+/* Animación de rotación para el icono */
+.spin {
+  animation: rotation 2s infinite linear;
+}
+
+@keyframes rotation {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(359deg);
+  }
+}

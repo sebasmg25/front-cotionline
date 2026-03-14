@@ -154,69 +154,121 @@ td.mat-cell {
     margin-bottom: 15px;
 }
 
-/* Comparison specific styles */
-.criteria-selection {
+/* Premium Analysis Panel */
+.analysis-panel {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 30px !important;
+    background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+}
+
+.analysis-controls {
+    display: flex;
+    align-items: center;
+    gap: 30px;
+}
+
+.filter-group {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.filter-label {
+    font-size: 13px;
+    font-weight: 600;
+    color: #555;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.premium-toggle {
+    border: none !important;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+.premium-toggle mat-button-toggle {
+    border: 1px solid #e0e0e0 !important;
+    color: #666;
+}
+
+.premium-toggle .mat-button-toggle-checked {
+    background-color: #3f51b5 !important;
+    color: white !important;
+}
+
+.generate-btn {
+    height: 48px;
+    padding: 0 25px !important;
+    font-weight: 600 !important;
+    letter-spacing: 0.5px;
+}
+
+/* Winner Highlighting */
+.winner-row {
+    background-color: rgba(63, 81, 181, 0.08) !important;
+    transition: background-color 0.3s ease;
+}
+
+.winner-row:hover {
+    background-color: rgba(63, 81, 181, 0.12) !important;
+}
+
+.highlight-text {
+    color: #3f51b5 !important;
+    font-weight: 800 !important;
+    font-size: 1.1em;
+}
+
+.cell-content {
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    align-items: flex-start;
+    gap: 4px;
 }
 
-.criteria-label {
-    font-size: 11px;
-    font-weight: 700;
-    color: #888;
-    text-transform: uppercase;
-}
-
-.highlight-best {
-    color: #2e7d32 !important;
-    font-weight: 900 !important;
-    text-shadow: 0 0 10px rgba(46, 125, 50, 0.2);
-}
-
-.best-row {
-    background-color: rgba(255, 235, 59, 0.05);
-}
-
-.best-badge {
+.best-indicator {
     display: flex;
     align-items: center;
     gap: 4px;
-    background: #ffd700;
-    color: #000;
-    font-size: 10px;
+    background: #3f51b5;
+    color: white;
+    font-size: 9px;
     font-weight: 800;
-    padding: 2px 8px;
+    padding: 2px 6px;
     border-radius: 4px;
-    margin-bottom: 5px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
 }
 
-.best-badge mat-icon {
-    font-size: 14px;
-    width: 14px;
-    height: 14px;
+.best-indicator mat-icon {
+    font-size: 12px;
+    width: 12px;
+    height: 12px;
+}
+
+/* Exclusive Accept Button */
+.btn-accept-winner {
+    background-color: #3f51b5 !important;
+    color: white !important;
+    font-weight: 700 !important;
+    padding: 0 20px !important;
+    height: 36px !important;
+    line-height: 36px !important;
+    border-radius: 18px !important;
+    box-shadow: 0 4px 12px rgba(63, 81, 181, 0.3) !important;
+    animation: pulse-blue 2s infinite;
+}
+
+@keyframes pulse-blue {
+    0% { box-shadow: 0 0 0 0 rgba(63, 81, 181, 0.4); }
+    70% { box-shadow: 0 0 0 10px rgba(63, 81, 181, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(63, 81, 181, 0); }
 }
 
 .action-cell {
     display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-}
-
-.accept-btn {
-    font-weight: 700 !important;
-    background-color: #3f51b5 !important;
-}
-
-.selected-row {
-    background-color: rgba(63, 81, 181, 0.03);
-}
-
-mat-button-toggle-group {
-    border-radius: 20px !important;
-    overflow: hidden;
-}
-
-mat-button-toggle {
-    background-color: #fff;
+    align-items: center;
+    gap: 12px;
 }

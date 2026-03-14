@@ -1,0 +1,86 @@
+<div class="view-wrapper" *ngIf="!isLoading; else loadingTemplate">
+  <div class="page-header">
+    <button mat-icon-button (click)="goBack()" matTooltip="Volver" type="button">
+      <mat-icon>arrow_back</mat-icon>
+    </button>
+    <div class="header-titles">
+      <h1>Detalle de Solicitud de Cotización</h1>
+      <span class="status-badge" [ngClass]="quotation?.status?.toLowerCase()">
+        {{
+          quotation?.status === 'PENDING'
+            ? 'Publicada'
+            : quotation?.status === 'QUOTED'
+              ? 'Cotizada'
+              : quotation?.status === 'DRAFT'
+                ? 'Borrador'
+                : quotation?.status === 'CLOSED'
+                  ? 'Cerrada'
+                  : quotation?.status === 'EXPIRED'
+                    ? 'Vencida'
+                    : quotation?.status
+        }}
+      </span>
+    </div>
+  </div>
+
+  <mat-card class="detail-card">
+    <mat-card-header>
+      <mat-icon mat-card-avatar color="primary">assignment</mat-icon>
+      <mat-card-title>{{ quotation?.title }}</mat-card-title>
+      <mat-card-subtitle>
+        Publicado el {{ quotation?.createdAt | date: 'dd/MM/yyyy' }}
+      </mat-card-subtitle>
+    </mat-card-header>
+
+    <mat-card-content>
+      <div class="info-grid">
+        <div class="info-item full-width">
+          <label>Descripción / Justificación</label>
+          <p>{{ quotation?.description }}</p>
+        </div>
+
+        <div class="info-item">
+          <label><mat-icon>apartment</mat-icon> Sede Responsable</label>
+          <p>{{ getBranchName() }}</p>
+        </div>
+
+        <div class="info-item">
+          <label><mat-icon>event_busy</mat-icon> Fecha Límite de Respuesta</label>
+          <p class="deadline">{{ quotation?.responseDeadline | date: 'fullDate' }}</p>
+        </div>
+      </div>
+
+      <mat-divider class="section-divider"></mat-divider>
+
+      <div class="products-section">
+        <div class="section-header-inline">
+          <h3><mat-icon>inventory_2</mat-icon> Productos Solicitados</h3>
+        </div>
+
+        <app-quotation-request-item-products
+          [items]="quotation?.items || []"
+          [quotationId]="quotationId"
+          mode="VIEW"
+        >
+        </app-quotation-request-item-products>
+      </div>
+    </mat-card-content>
+
+    <mat-card-actions class="action-footer">
+      <button mat-button color="warn" (click)="deleteQuotation()" type="button">
+        <mat-icon>delete</mat-icon> ELIMINAR PUBLICACIÓN
+      </button>
+      <span class="spacer"></span>
+      <button mat-raised-button color="primary" (click)="goBack()" type="button">
+        CERRAR VISTA
+      </button>
+    </mat-card-actions>
+  </mat-card>
+</div>
+
+<ng-template #loadingTemplate>
+  <div class="loading-container">
+    <mat-spinner diameter="50"></mat-spinner>
+    <p>Cargando información de la solicitud...</p>
+  </div>
+</ng-template>

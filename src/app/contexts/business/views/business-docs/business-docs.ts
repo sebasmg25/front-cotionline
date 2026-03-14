@@ -1,32 +1,98 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { MatCardModule } from '@angular/material/card';
-import { MatButtonModule } from '@angular/material/button';
 import { Router } from '@angular/router';
 
+// Material Imports
+import { MatCardModule } from '@angular/material/card';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { MatListModule } from '@angular/material/list';
+import { MatChipsModule } from '@angular/material/chips';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatDividerModule } from '@angular/material/divider';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+
+import { BusinessService } from '../../../../infraestructure/services/business/business.service';
+
 @Component({
-    selector: 'app-business-docs',
-    standalone: true,
-    imports: [CommonModule, MatCardModule, MatButtonModule],
-    template: `
-    <mat-card class="placeholder-card">
-      <mat-card-header>
-        <mat-card-title>Documentación del Negocio</mat-card-title>
-      </mat-card-header>
-      <mat-card-content>
-        <p>Aquí se listarán los documentos cargados (RUT, Cámara de Comercio, etc.).</p>
-        <p>Funcionalidad de carga disponible próximamente.</p>
-      </mat-card-content>
-      <mat-card-actions>
-        <button mat-flat-button color="primary" (click)="goBack()">Volver</button>
-      </mat-card-actions>
-    </mat-card>
-  `,
-    styles: [`
-    .placeholder-card { max-width: 600px; margin: 20px auto; text-align: center; padding: 20px; }
-  `]
+  selector: 'app-business-docs',
+  standalone: true,
+  imports: [
+    CommonModule,
+    MatCardModule,
+    MatButtonModule,
+    MatIconModule,
+    MatListModule,
+    MatChipsModule,
+    MatTooltipModule,
+    MatDividerModule,
+    MatProgressSpinnerModule,
+  ],
+  templateUrl: './business-docs.html',
+  styleUrls: ['./business-docs.css'],
 })
-export class BusinessDocs {
-    constructor(private router: Router) { }
-    goBack() { this.router.navigate(['/dashboard']); }
+export class BusinessDocs implements OnInit {
+  business: any;
+  isLoading: boolean = true;
+
+  constructor(
+    private router: Router,
+    private businessService: BusinessService,
+  ) {}
+
+  ngOnInit(): void {
+    this.loadBusiness();
+  }
+
+  loadBusiness(): void {
+    this.isLoading = true;
+
+    // INTENTO 1: Buscar por el token de sesión (Usuario ya logueado)
+    this.businessService.findByUser().subscribe({
+      next: (data) => {
+        if (data) {
+          this.business = data;
+          this.isLoading = false;
+        } else {
+          // INTENTO 2: Si no devuelve nada, buscar el ID de registro pendiente
+          this.checkPendingId();
+        }
+      },
+      error: () => this.checkPendingId(),
+    });
+  }
+
+  private checkPendingId(): void {
+    const businessId = localStorage.getItem('pendingBusinessId');
+    if (businessId) {
+      this.businessService.findById(businessId).subscribe({
+        next: (data) => {
+          this.business = data;
+          this.isLoading = false;
+        },
+        error: () => this.handleError(),
+      });
+    } else {
+      this.handleError();
+    }
+  }
+
+  private handleError(): void {
+    this.isLoading = false;
+    // Solo redirigimos si realmente no hay forma de encontrar un negocio
+    this.router.navigate(['/dashboard']);
+  }
+
+  openDoc(path: string | undefined): void {
+    if (path) {
+      // Ajustamos el path para que sea una URL válida para el navegador
+      const baseUrl = 'http://localhost:3000/';
+      const cleanPath = path.replace(/\\/g, '/');
+      window.open(`${baseUrl}${cleanPath}`, '_blank');
+    }
+  }
+
+  goBack(): void {
+    this.router.navigate(['/dashboard']);
+  }
 }

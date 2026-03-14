@@ -4,44 +4,97 @@
       <button mat-icon-button (click)="goBack()" class="back-button" aria-label="Volver atrás">
         <mat-icon>arrow_back</mat-icon>
       </button>
-      <mat-card-title>Registro de Sede</mat-card-title>
-      <mat-card-subtitle>Ingresa los detalles para habilitar un nuevo punto de atención</mat-card-subtitle>
+      <div class="title-container">
+        <mat-card-title>Registro de Sede</mat-card-title>
+        <mat-card-subtitle
+          >Ingresa los detalles para habilitar un nuevo punto de atención</mat-card-subtitle
+        >
+      </div>
     </mat-card-header>
 
     <mat-card-content>
-      <form class="register-form">
-        <!-- Campo Empresa (Auto-rellenado y Solo Lectura) -->
+      <form [formGroup]="branchForm" (ngSubmit)="registerBranch()" class="register-form">
         <mat-form-field appearance="outline" class="full-width-input">
           <mat-label>Empresa / Negocio</mat-label>
-          <input matInput [(ngModel)]="businessName" name="businessName" readonly>
+          <input matInput formControlName="businessName" />
           <mat-icon matSuffix>business</mat-icon>
           <mat-hint>Vinculado automáticamente a tu negocio principal</mat-hint>
         </mat-form-field>
 
-        <!-- El businessId se maneja internamente pero no se muestra -->
-
         <mat-form-field appearance="outline" class="full-width-input">
           <mat-label>Nombre de la Sede</mat-label>
-          <input matInput [(ngModel)]="name" name="name" placeholder="Ej: Sede Norte">
+          <input matInput formControlName="name" placeholder="Ej: Sucursal Norte" />
           <mat-icon matSuffix>store</mat-icon>
+          <mat-error *ngIf="branchForm.get('name')?.hasError('required')">
+            El nombre es obligatorio
+          </mat-error>
+          <mat-error *ngIf="branchForm.get('name')?.hasError('minlength')">
+            Debe tener al menos 3 caracteres
+          </mat-error>
         </mat-form-field>
 
         <div class="form-row">
           <mat-form-field appearance="outline" class="half-width-input">
-            <mat-label>Ciudad</mat-label>
-            <input matInput [(ngModel)]="city" name="city" placeholder="Ej: Bogotá">
-            <mat-icon matSuffix>location_city</mat-icon>
+            <mat-label>Departamento</mat-label>
+            <input
+              type="text"
+              matInput
+              formControlName="department"
+              [matAutocomplete]="autoDept"
+              placeholder="Escribe para buscar..."
+            />
+            <mat-icon matSuffix>map</mat-icon>
+            <mat-autocomplete #autoDept="matAutocomplete">
+              <mat-option *ngFor="let dept of filteredDepartments$ | async" [value]="dept">
+                {{ dept }}
+              </mat-option>
+            </mat-autocomplete>
+            <mat-error *ngIf="branchForm.get('department')?.hasError('required')">
+              El departamento es requerido
+            </mat-error>
           </mat-form-field>
 
           <mat-form-field appearance="outline" class="half-width-input">
-            <mat-label>Dirección</mat-label>
-            <input matInput [(ngModel)]="address" name="address" placeholder="Ej: Calle 100 #15-20">
-            <mat-icon matSuffix>map</mat-icon>
+            <mat-label>Ciudad</mat-label>
+            <input
+              type="text"
+              matInput
+              formControlName="city"
+              [matAutocomplete]="autoCity"
+              placeholder="Busca tu ciudad..."
+            />
+            <mat-icon matSuffix>location_city</mat-icon>
+            <mat-autocomplete #autoCity="matAutocomplete">
+              <mat-option *ngFor="let city of filteredCities$ | async" [value]="city">
+                {{ city }}
+              </mat-option>
+            </mat-autocomplete>
+            <mat-error *ngIf="branchForm.get('city')?.hasError('required')">
+              La ciudad es requerida
+            </mat-error>
+            <mat-hint *ngIf="branchForm.get('city')?.disabled">
+              Selecciona primero un departamento
+            </mat-hint>
           </mat-form-field>
         </div>
 
+        <mat-form-field appearance="outline" class="full-width-input">
+          <mat-label>Dirección</mat-label>
+          <input matInput formControlName="address" placeholder="Ej: Calle 100 #15-20" />
+          <mat-icon matSuffix>map</mat-icon>
+          <mat-error *ngIf="branchForm.get('address')?.hasError('required')">
+            La dirección es obligatoria
+          </mat-error>
+        </mat-form-field>
+
         <div class="actions">
-          <button mat-raised-button color="primary" class="submit-button" (click)="registerBranch()">
+          <button
+            mat-raised-button
+            color="primary"
+            class="submit-button"
+            type="submit"
+            [disabled]="branchForm.invalid"
+          >
             REGISTRAR SEDE
           </button>
           <button mat-button type="button" class="cancel-button" (click)="resetForm()">
