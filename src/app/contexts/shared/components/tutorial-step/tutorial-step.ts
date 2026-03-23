@@ -89,7 +89,6 @@ export class TutorialStep implements OnInit, OnDestroy {
       })
     );
 
-    // Listen to scroll and resize to update position
     this.renderer.listen('window', 'scroll', () => this.updatePosition());
     this.renderer.listen('window', 'resize', () => this.updatePosition());
   }
@@ -126,7 +125,6 @@ export class TutorialStep implements OnInit, OnDestroy {
 
     const target = document.getElementById(this.activeStep.elementId);
     if (!target) {
-      console.warn(`Element with ID ${this.activeStep.elementId} not found for tutorial.`);
       return;
     }
 

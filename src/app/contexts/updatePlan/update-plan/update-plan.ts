@@ -2,13 +2,12 @@ import { Component, OnInit, signal } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
-import { CurrencyPipe } from '@angular/common'; // Necesario para formatear la moneda
+import { DecimalPipe } from '@angular/common'; // Necesario para formatear el número
 import { SubscriptionService } from '../../../infraestructure/services/subscription/subscription.service';
 import { WompiService } from '../../../infraestructure/services/payment/wompi.service';
 import { AlertService } from '../../shared/services/alert.service';
 import { AuthService } from '../../../infraestructure/services/auth/auth.service';
 
-// Definición de la estructura de precios para la lógica
 interface PlanPrice {
   id: string;
   name: string;
@@ -17,12 +16,11 @@ interface PlanPrice {
 
 @Component({
   selector: 'app-update-plan',
-  imports: [MatCardModule, MatIconModule, MatButtonModule, CurrencyPipe],
+  imports: [MatCardModule, MatIconModule, MatButtonModule, DecimalPipe],
   templateUrl: './update-plan.html',
   styleUrl: './update-plan.css',
 })
 export class UpdatePlan implements OnInit {
-  // Configuración de los precios base y cálculo del descuento (15%)
   private readonly PRICE_DATA: PlanPrice[] = [
     {
       id: 'basico',
@@ -36,7 +34,6 @@ export class UpdatePlan implements OnInit {
     },
   ];
 
-  // Forzamos el ciclo de facturación a mensual
   billingCycle = signal<'mensual'>('mensual');
   isProcessing = signal<boolean>(false);
   currentUserPlanId = signal<string | null>(null);
@@ -65,7 +62,6 @@ export class UpdatePlan implements OnInit {
     return plan ? plan.monthly : 0;
   }
 
-  // Mapa de UUIDs desde la BD del backend
   private readonly PLAN_UUIDS: Record<string, string> = {
     'basico': 'c2c9636d-053c-4ba9-9941-51dd44271c8c',
     'premium': '37879279-47ea-49fb-8c7e-39f48e9b6dcb'

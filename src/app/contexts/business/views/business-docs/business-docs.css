@@ -1,16 +1,14 @@
-/* Mantiene tu selector original y el centrado de texto */
 .placeholder-card {
   max-width: 600px;
   margin: 20px auto;
   text-align: center;
   padding: 20px;
-  border-radius: 8px; /* Opcional: para suavizar los bordes */
+  border-radius: 8px;
 }
 
-/* Estilos para el banner de estado (dentro del card centrado) */
 .status-banner {
   display: flex;
-  justify-content: center; /* Centra el chip y el texto */
+  justify-content: center;
   align-items: center;
   gap: 10px;
   padding: 12px;
@@ -19,7 +17,6 @@
   margin-bottom: 20px;
 }
 
-/* Colores de los chips para identificar el estado */
 .status-pending {
   background-color: #ff9800 !important;
   color: white !important;
@@ -30,15 +27,12 @@
   color: white !important;
 }
 
-/* Alineación de la lista de documentos */
 mat-list-item {
-  text-align: left; /* Los items de la lista se ven mejor alineados a la izquierda */
+  text-align: left;
 }
-
-/* Caja de información inferior */
 .info-box {
   display: flex;
-  flex-direction: column; /* Alineación vertical para mantener el centro */
+  flex-direction: column;
   align-items: center;
   gap: 8px;
   margin-top: 20px;
@@ -53,7 +47,6 @@ mat-list-item {
   font-size: 0.85rem;
 }
 
-/* Botones de acción */
 mat-card-actions {
   display: flex;
   justify-content: center;

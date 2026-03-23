@@ -3,7 +3,6 @@ import { Toolbar } from '../../../contexts/shared/toolbar/toolbar';
 import { Login } from '../../../contexts/auth/login/login';
 import { Register } from '../../../contexts/auth/register/register';
 import { Functions } from '../../../contexts/shared/functions/functions';
-import { Prices } from '../../../contexts/shared/prices/prices';
 import { Contact } from '../../../contexts/shared/contact/contact';
 import { ViewportScroller } from '@angular/common';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';

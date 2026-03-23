@@ -1,8 +1,3 @@
-/*
-  ==========================================
-  1. Estilos del Contenedor Principal (Toolbar)
-  ==========================================
-*/
 .main-toolbar {
   background: rgba(255, 255, 255, 0.8) !important;
   backdrop-filter: blur(12px);
@@ -21,7 +16,6 @@
   box-shadow: 0 4px 30px rgba(0, 0, 0, 0.03);
 }
 
-/* 1.1. Contenedor de Contenido */
 .toolbar-content {
   max-width: 1300px;
   width: 100%;
@@ -31,16 +25,10 @@
   justify-content: space-between;
 }
 
-/* 2. Empujador de Espacio */
 .toolbar-spacer {
   flex: 1 1 auto;
 }
 
-/*
-  ==========================================
-  3. Estilos del Logo y Título
-  ==========================================
-*/
 .logo-container {
   display: flex;
   align-items: center;
@@ -53,11 +41,6 @@
   object-fit: contain;
 }
 
-/*
-  ==========================================
-  4. Estilos de los Enlaces de Navegación
-  ==========================================
-*/
 .nav-links {
   display: flex;
   align-items: center;
@@ -81,11 +64,6 @@
   transform: translateY(-1px);
 }
 
-/*
-  ==========================================
-  5. Botón de Llamada a la Acción (CTA)
-  ==========================================
-*/
 .cta-button {
   height: 44px !important;
   font-weight: 700 !important;
@@ -103,17 +81,27 @@
   box-shadow: 0 8px 25px rgba(0, 28, 48, 0.3) !important;
 }
 
-/* ==========================================
-  6. Responsive Design
-  ==========================================
-*/
+.mobile-menu-btn {
+  display: none;
+  color: var(--primary-dark);
+}
+
+::ng-deep .mobile-landing-menu {
+  border-radius: 16px !important;
+  min-width: 200px !important;
+}
+
 @media (max-width: 950px) {
   .nav-links,
   .cta-button {
     display: none;
   }
 
+  .mobile-menu-btn {
+    display: inline-flex;
+  }
+
   .toolbar-content {
-    justify-content: center;
+    justify-content: space-between;
   }
 }

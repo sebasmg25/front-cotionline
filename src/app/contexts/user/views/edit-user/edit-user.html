@@ -11,7 +11,6 @@
     </div>
 
     <mat-tab-group appearance="outline" color="primary" class="settings-tabs">
-      <!-- TAB 1: MI PERFIL -->
       <mat-tab>
         <ng-template mat-tab-label>
           <mat-icon class="tab-icon">person</mat-icon>
@@ -20,7 +19,6 @@
 
         <div class="tab-content profile-tab" *ngIf="!userNotFound; else notFoundTemplate">
           <div class="dual-view-container">
-            <!-- COLUMNA 1: DATOS ACTUALES -->
             <mat-card class="info-display-card">
               <mat-card-header>
                 <div class="header-icon">
@@ -68,7 +66,6 @@
               </mat-card-footer>
             </mat-card>
 
-            <!-- COLUMNA 2: FORMULARIO -->
             <mat-card class="edit-form-card">
               <mat-card-header>
                 <mat-card-title>Actualizar Datos</mat-card-title>
@@ -130,7 +127,6 @@
         </div>
       </mat-tab>
 
-      <!-- TAB 2: SEGURIDAD -->
       <mat-tab>
         <ng-template mat-tab-label>
           <mat-icon class="tab-icon">security</mat-icon>
@@ -141,7 +137,6 @@
         </div>
       </mat-tab>
 
-      <!-- TAB 3: SUSCRIPCIÓN -->
       <mat-tab>
         <ng-template mat-tab-label>
           <mat-icon class="tab-icon">workspace_premium</mat-icon>

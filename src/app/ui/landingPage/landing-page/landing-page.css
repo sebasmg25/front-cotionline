@@ -1,11 +1,5 @@
-/*
-  ==========================================
-  1. COMPENSACIÓN PARA LA TOOLBAR FIJA
-  ==========================================
-*/
+
 :host {
-  /* :host apunta al selector <app-landing-page>.
-     'display: block' es necesario para que se aplique el padding/margin. */
   display: block;
 
   padding-top: 70px;

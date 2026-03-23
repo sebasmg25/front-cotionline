@@ -44,7 +44,6 @@ export class NotificationDetail implements OnInit {
             this.loading = false;
             return;
         }
-        // Loads all notifications and finds the matching one, then marks it as read
         this.notificationService.getNotifications().subscribe({
             next: (notifications) => {
                 const found = notifications.find(n => n.id === id);
@@ -86,7 +85,6 @@ export class NotificationDetail implements OnInit {
     navigateToLink(): void {
         const link = this.notification?.link;
         if (link) {
-            console.log('Navegando hacia:', link);
             this.router.navigateByUrl(link).then(success => {
                 if (!success) {
                     console.error('La navegación falló para la URL:', link);

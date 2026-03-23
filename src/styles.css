@@ -79,6 +79,13 @@ html {
 }
 
 /* 3. Global Table Overrides */
+.responsive-table-container {
+  overflow-x: auto;
+  max-width: 100%;
+  display: block;
+  width: 100%;
+}
+
 .mat-mdc-table {
   background: transparent !important;
   border-radius: 16px !important;

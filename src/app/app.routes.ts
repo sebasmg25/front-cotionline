@@ -18,6 +18,10 @@ export const routes: Routes = [
     loadComponent: () => import('./contexts/auth/register/register').then((m) => m.Register),
   },
   {
+    path: 'reset-password',
+    loadComponent: () => import('./contexts/auth/reset-password/reset-password').then((m) => m.ResetPasswordComponent),
+  },
+  {
     path: 'collaborators/accept/:id',
     loadComponent: () =>
       import('./contexts/collaborator/views/accept-invitation/accept-invitation').then(
@@ -162,7 +166,6 @@ export const routes: Routes = [
 
       // --- PRODUCTOS (NUEVA SECCIÓN CONTEXTUAL) ---
       {
-        // Ruta para listar productos de una solicitud específica
         path: 'quotations/:quotationRequestId/products',
         canActivate: [hasBusinessGuard],
         loadComponent: () =>
@@ -171,7 +174,6 @@ export const routes: Routes = [
           ),
       },
       {
-        // Ruta para editar un producto específico
         path: 'products/edit/:id',
         canActivate: [hasBusinessGuard],
         loadComponent: () =>

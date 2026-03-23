@@ -30,7 +30,6 @@ export class EditProduct implements OnInit {
   productForm!: FormGroup;
   productId: string | null = null;
 
-  // Cambiamos el tipo para que coincida con el modelo (string | undefined)
   quotationRequestId?: string;
 
   productNotFound: boolean = false;
@@ -65,7 +64,6 @@ export class EditProduct implements OnInit {
     this.isLoading = true;
     this.productService.findById(id).subscribe({
       next: (product: Product) => {
-        // Ahora la asignación es directa y sin errores de tipos
         this.quotationRequestId = product.quotationRequestId;
 
         this.productForm.patchValue({
@@ -88,7 +86,6 @@ export class EditProduct implements OnInit {
     if (this.productForm.valid && this.productId) {
       this.isSaving = true;
 
-      // Usamos el modelo tal cual, enviando Partial<Product>
       const updatedData: Partial<Product> = {
         ...this.productForm.value,
         quotationRequestId: this.quotationRequestId,

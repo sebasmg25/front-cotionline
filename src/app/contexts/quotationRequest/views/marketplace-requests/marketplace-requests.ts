@@ -55,7 +55,6 @@ export class MarketplaceRequests implements OnInit, OnDestroy {
       city: ['']
     });
 
-    // Escuchar cambios en el departamento para actualizar las ciudades
     this.filterForm.get('department')?.valueChanges.subscribe(dept => {
       this.cities = dept ? COLOMBIAN_DATA[dept] || [] : [];
       this.filterForm.get('city')?.setValue('');
@@ -63,7 +62,6 @@ export class MarketplaceRequests implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    // Filtrado reactivo para marketplace - suscripción manual
     this.marketplaceSubscription = this.filterForm.valueChanges.pipe(
       startWith(this.filterForm.value),
       delay(0),

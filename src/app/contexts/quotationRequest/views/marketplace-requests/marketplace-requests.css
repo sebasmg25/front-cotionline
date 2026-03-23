@@ -117,7 +117,6 @@
   margin: 0;
 }
 
-/* --- FILTROS DE UBICACIÓN --- */
 .filters-container {
   background: white;
   border-radius: 16px;
@@ -162,7 +161,6 @@
   pointer-events: none;
 }
 
-/* --- LOADING STATE --- */
 .loading-overlay {
   display: flex;
   flex-direction: column;
@@ -179,7 +177,6 @@
   letter-spacing: 0.5px;
 }
 
-/* Ajuste para los mat-form-field appearance outline */
 ::ng-deep .filter-field .mat-mdc-form-field-subscript-wrapper {
-  display: none; /* Quitamos el espacio inferior de error/hint para que sea más compacto */
+  display: none;
 }

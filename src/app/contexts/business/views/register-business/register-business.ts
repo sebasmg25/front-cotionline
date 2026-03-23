@@ -40,8 +40,8 @@ export class RegisterBusiness implements OnInit {
 
   ngOnInit(): void {
     this.businessForm = this.fb.group({
-      nit: ['', [Validators.required, Validators.minLength(5)]], // Coherente con EditBusiness
-      name: ['', [Validators.required, Validators.minLength(3)]], // Coherente con EditBusiness
+      nit: ['', [Validators.required, Validators.minLength(5)]],
+      name: ['', [Validators.required, Validators.minLength(3)]],
       description: ['', [Validators.required]],
       address: ['', [Validators.required]],
     });
@@ -58,14 +58,10 @@ export class RegisterBusiness implements OnInit {
 
     this.isSaving = true;
 
-    // Enviamos un JSON simple al backend (Paso 2)
-    // El interceptor pondrá el Token automáticamente
     this.businessService.save(this.businessForm.value).subscribe({
       next: (savedBusiness) => {
         this.alertService.showSuccess('¡Paso 2 completado!', 'Datos del negocio registrados.');
         this.isSaving = false;
-
-        // Guardamos el ID en localStorage para que el Paso 3 sepa a quién subirle los archivos
         if (savedBusiness.id) {
           localStorage.setItem('pendingBusinessId', savedBusiness.id);
         }

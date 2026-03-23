@@ -1,17 +1,14 @@
 <div class="accept-container">
   <div class="card" [class.success-card]="success" [class.error-card]="error">
-    <!-- Header Decor -->
     <div class="header-accent"></div>
 
     <div class="content">
-      <!-- Loading State -->
       <div *ngIf="loading" class="state-container">
         <mat-spinner diameter="50"></mat-spinner>
         <h2>Procesando tu invitación...</h2>
         <p>Estamos validando tus credenciales de colaborador.</p>
       </div>
 
-      <!-- Success State -->
       <div *ngIf="success" class="state-container animate-fade-in">
         <div class="icon-wrapper success-icon">
           <mat-icon>handshake</mat-icon>
@@ -19,13 +16,12 @@
         <h1>¡Invitación Aceptada!</h1>
         <p>Has aceptado la invitación exitosamente. Al registrarte usando el botón de abajo, tu correo <strong>{{ acceptedEmail }}</strong> aparecerá pre-llenado automáticamente.</p>
         
-        <button mat-flat-button color="primary" class="action-button" (click)="goToRegister()">
+        <button mat-flat-button class="action-button btn-primary" (click)="goToRegister()">
           Ir a Registro
           <mat-icon>arrow_forward</mat-icon>
         </button>
       </div>
 
-      <!-- Error State -->
       <div *ngIf="error" class="state-container animate-fade-in">
         <div class="icon-wrapper error-icon">
           <mat-icon>error_outline</mat-icon>
@@ -33,7 +29,7 @@
         <h1>Algo salió mal</h1>
         <p>{{ errorMessage }}</p>
         
-        <button mat-stroked-button class="action-button" routerLink="/">
+        <button mat-stroked-button class="action-button btn-secondary" routerLink="/">
           Volver al Inicio
         </button>
       </div>

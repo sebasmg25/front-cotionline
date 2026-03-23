@@ -154,7 +154,6 @@ td.mat-cell {
     margin-bottom: 15px;
 }
 
-/* Premium Analysis Panel */
 .analysis-panel {
     display: flex;
     justify-content: space-between;
@@ -205,7 +204,6 @@ td.mat-cell {
     letter-spacing: 0.5px;
 }
 
-/* Winner Highlighting */
 .winner-row {
     background-color: rgba(63, 81, 181, 0.08) !important;
     transition: background-color 0.3s ease;
@@ -248,7 +246,6 @@ td.mat-cell {
     height: 12px;
 }
 
-/* Exclusive Accept Button */
 .btn-accept-winner {
     background-color: #3f51b5 !important;
     color: white !important;

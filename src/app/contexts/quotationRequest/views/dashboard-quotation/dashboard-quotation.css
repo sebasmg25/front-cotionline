@@ -28,7 +28,6 @@
 }
 
 .status-card {
-    /* mat-mdc-card global overrides handles the glassmorphism */
     padding: 24px !important;
 }
 
@@ -68,7 +67,6 @@ mat-card-title {
     font-size: 1.3rem !important;
 }
 
-/* Precise accents for cards */
 .published-card {
     border-left: 6px solid var(--accent-blue) !important;
 }

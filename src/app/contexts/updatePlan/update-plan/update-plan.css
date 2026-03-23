@@ -1,30 +1,19 @@
-/* Importante: Reemplaza todos los estilos de precios que tienes con esta estructura */
-
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
 
-/* ==========================================
-   1. CONTENEDOR HOST (CRÍTICO)
-   ========================================== */
 :host {
   display: flex;
   justify-content: center;
   padding: 40px 20px;
   font-family: 'Inter', sans-serif;
   background-color: #f8fafc;
-
-  /* ESTILO CRÍTICO: Aplica el margen de desplazamiento directamente a la etiqueta 
-     que contiene el ID de anclaje (es decir, <app-update-plan id="prices-section">) */
   scroll-margin-top: 70px;
 }
-
-/* Sección Principal */
 .pricing-section {
   max-width: 1200px;
   width: 100%;
   text-align: center;
 }
 
-/* Encabezado */
 .section-header h1 {
   font-size: 2.5rem;
   font-weight: 700;
@@ -38,7 +27,6 @@
   margin-bottom: 3rem;
 }
 
-/* Selector de Precios (Switcher) */
 .pricing-switcher-wrapper {
   display: flex;
   justify-content: center;
@@ -83,7 +71,6 @@
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-/* Grid de Planes */
 .plans-grid {
   display: grid;
   grid-template-columns: repeat(1, 1fr);
@@ -97,7 +84,6 @@
   }
 }
 
-/* Estilo de las Tarjetas de Plan */
 .plan-card {
   border-radius: 1rem;
   padding: 24px;
@@ -117,6 +103,24 @@
   border: 3px solid #3f51b5;
   position: relative;
   overflow: hidden;
+  transform: scale(1.05);
+  box-shadow: 0 10px 30px rgba(63, 81, 181, 0.3);
+  z-index: 5;
+}
+
+.best-seller:hover {
+  transform: scale(1.05) translateY(-5px);
+}
+
+@media (max-width: 768px) {
+  .best-seller {
+    transform: scale(1);
+    z-index: 1;
+  }
+  
+  .best-seller:hover {
+    transform: translateY(-5px);
+  }
 }
 
 .best-ribbon {
@@ -140,7 +144,6 @@
   margin-bottom: 0.5rem;
 }
 
-/* Precio */
 .plan-price {
   font-size: 3rem;
   font-weight: 700;
@@ -159,7 +162,6 @@
   color: #64748b;
 }
 
-/* Estilos de Ahorro Anual */
 .annual-save-message {
   color: #3f51b5;
   font-weight: 600;
@@ -181,7 +183,6 @@
   font-size: 0.8rem;
 }
 
-/* Lista de Características */
 .plan-features {
   list-style: none;
   padding: 0;
@@ -210,7 +211,6 @@
   font-size: 18px;
 }
 
-/* Botones */
 .card-actions-bottom {
   display: flex;
   justify-content: center;

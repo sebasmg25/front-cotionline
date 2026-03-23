@@ -8,7 +8,6 @@
   </header>
 
   <div class="pricing-switcher-wrapper">
-    <!-- Removido el selector anual por requerimiento del usuario -->
   </div>
 
   <div class="plans-grid">
@@ -18,24 +17,29 @@
         <p class="plan-price">$0<span class="price-period">/14 días</span></p>
 
         <ul class="plan-features">
-          <li class="feature-item"><mat-icon class="check-icon">check</mat-icon> 1 Usuario</li>
           <li class="feature-item">
-            <mat-icon class="check-icon">check</mat-icon> 100 cotizaciones
+            <mat-icon class="check-icon">check</mat-icon> 14 Días de Acceso
           </li>
           <li class="feature-item">
-            <mat-icon class="check-icon">check</mat-icon> Clientes ilimitados
+            <mat-icon class="check-icon">check</mat-icon> 3 Solicitudes de Cotización
           </li>
           <li class="feature-item">
-            <mat-icon class="check-icon">check</mat-icon> Seguimiento de cotizaciones
+            <mat-icon class="check-icon">check</mat-icon> Recepción de Oportunidades
           </li>
           <li class="feature-item">
-            <mat-icon class="check-icon">check</mat-icon> Registro de pagos y anticipos
+            <mat-icon class="check-icon">check</mat-icon> Seguimiento de Cotizaciones
           </li>
           <li class="feature-item">
-            <mat-icon class="check-icon">check</mat-icon> Envío por whatsapp
+            <mat-icon class="check-icon">check</mat-icon> Análisis Inteligente de Ofertas
           </li>
           <li class="feature-item">
-            <mat-icon class="check-icon">check</mat-icon> Descargas de pdf
+            <mat-icon class="check-icon">check</mat-icon> Gestión de Múltiples Sedes
+          </li>
+          <li class="feature-item">
+            <mat-icon class="close-icon" style="color: #999;">close</mat-icon> 0 Cotizaciones Generadas
+          </li>
+          <li class="feature-item">
+            <mat-icon class="close-icon" style="color: #999;">close</mat-icon> Colaboradores: 0
           </li>
         </ul>
       </mat-card-content>
@@ -46,63 +50,33 @@
 
     <mat-card class="plan-card">
       <mat-card-content>
-        <h2 class="plan-title">PROFESIONAL</h2>
+        <h2 class="plan-title">BÁSICO</h2>
         <p class="plan-price">$20.000<span class="price-period">/mes</span></p>
 
         <ul class="plan-features">
-          <li class="feature-item"><mat-icon class="check-icon">check</mat-icon> 1 Usuario</li>
           <li class="feature-item">
-            <mat-icon class="check-icon">check</mat-icon> 100 cotizaciones / mes
+            <mat-icon class="check-icon">check</mat-icon> Vigencia: 1 Mes
           </li>
           <li class="feature-item">
-            <mat-icon class="check-icon">check</mat-icon> Clientes ilimitados
+            <mat-icon class="check-icon">check</mat-icon> 10 Solicitudes de Cotización
           </li>
           <li class="feature-item">
-            <mat-icon class="check-icon">check</mat-icon> Seguimiento de cotizaciones
+            <mat-icon class="check-icon">check</mat-icon> 5 Cotizaciones Generadas
           </li>
           <li class="feature-item">
-            <mat-icon class="check-icon">check</mat-icon> Registro de pagos y anticipos
+            <mat-icon class="check-icon">check</mat-icon> 1 Colaborador Adicional
           </li>
           <li class="feature-item">
-            <mat-icon class="check-icon">check</mat-icon> Envío por whatsapp
+            <mat-icon class="check-icon">check</mat-icon> Recepción de Oportunidades
           </li>
           <li class="feature-item">
-            <mat-icon class="check-icon">check</mat-icon> Descargas de pdf
-          </li>
-        </ul>
-      </mat-card-content>
-      <mat-card-actions class="card-actions-bottom">
-        <button mat-flat-button color="primary" class="plan-button" (click)="selectPlan('basico')">Empezar</button>
-      </mat-card-actions>
-    </mat-card>
-
-    <mat-card class="plan-card">
-      <mat-card-content>
-        <h2 class="plan-title">PYME</h2>
-        <p class="plan-price">$20.000<span class="price-period">/mes</span></p>
-
-        <ul class="plan-features">
-          <li class="feature-item"><mat-icon class="check-icon">check</mat-icon> 2 Usuario</li>
-          <li class="feature-item">
-            <mat-icon class="check-icon">check</mat-icon> 200 Cotizaciones / mes
+            <mat-icon class="check-icon">check</mat-icon> Seguimiento de Cotizaciones
           </li>
           <li class="feature-item">
-            <mat-icon class="check-icon">check</mat-icon> Clientes ilimitados
+            <mat-icon class="check-icon">check</mat-icon> Gestión de Múltiples Sedes
           </li>
           <li class="feature-item">
-            <mat-icon class="check-icon">check</mat-icon> Seguimiento de cotizaciones
-          </li>
-          <li class="feature-item">
-            <mat-icon class="check-icon">check</mat-icon> Registro de pagos y anticipos
-          </li>
-          <li class="feature-item">
-            <mat-icon class="check-icon">check</mat-icon> Envío por whatsapp
-          </li>
-          <li class="feature-item">
-            <mat-icon class="check-icon">check</mat-icon> Descargas de pdf
-          </li>
-          <li class="feature-item">
-            <mat-icon class="check-icon">check</mat-icon> Descargas estados de cuenta
+            <mat-icon class="check-icon">check</mat-icon> Análisis Inteligente de Ofertas
           </li>
         </ul>
       </mat-card-content>
@@ -112,33 +86,35 @@
     </mat-card>
 
     <mat-card class="plan-card best-seller">
-      <div class="best-ribbon">BEST</div>
+      <div class="best-ribbon">Destacado</div>
       <mat-card-content>
-        <h2 class="plan-title">EMPRESA</h2>
+        <h2 class="plan-title">PREMIUM</h2>
         <p class="plan-price">$35.000<span class="price-period">/mes</span></p>
 
         <ul class="plan-features">
-          <li class="feature-item"><mat-icon class="check-icon">check</mat-icon> 3 Usuarios</li>
           <li class="feature-item">
-            <mat-icon class="check-icon">check</mat-icon> Cotizaciones ilimitadas
+            <mat-icon class="check-icon">check</mat-icon> Vigencia: 1 Mes
           </li>
           <li class="feature-item">
-            <mat-icon class="check-icon">check</mat-icon> Clientes ilimitados
+            <mat-icon class="check-icon">check</mat-icon> Solicitudes Ilimitadas
           </li>
           <li class="feature-item">
-            <mat-icon class="check-icon">check</mat-icon> Seguimiento de cotizaciones
+            <mat-icon class="check-icon">check</mat-icon> Cotizaciones Generadas Ilimitadas
           </li>
           <li class="feature-item">
-            <mat-icon class="check-icon">check</mat-icon> Registro de pagos y anticipos
+            <mat-icon class="check-icon">check</mat-icon> Colaboradores Ilimitados
           </li>
           <li class="feature-item">
-            <mat-icon class="check-icon">check</mat-icon> Envío por whatsapp
+            <mat-icon class="check-icon">check</mat-icon> Recepción de Oportunidades
           </li>
           <li class="feature-item">
-            <mat-icon class="check-icon">check</mat-icon> Descargas de pdf
+            <mat-icon class="check-icon">check</mat-icon> Seguimiento de Cotizaciones
           </li>
           <li class="feature-item">
-            <mat-icon class="check-icon">check</mat-icon> Descargas estados de cuenta
+            <mat-icon class="check-icon">check</mat-icon> Gestión de Múltiples Sedes
+          </li>
+          <li class="feature-item">
+            <mat-icon class="check-icon">check</mat-icon> Análisis Inteligente de Ofertas
           </li>
         </ul>
       </mat-card-content>

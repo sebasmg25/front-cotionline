@@ -1,7 +1,3 @@
-/**
- * Listado completo de departamentos y municipios de Colombia.
- * Organizado por departamento para facilitar el filtrado dinámico.
- */
 export const COLOMBIAN_DATA: Record<string, string[]> = {
   'Amazonas': [
     'Leticia', 'El Encanto', 'La Chorrera', 'La Pedrera', 'La Victoria',

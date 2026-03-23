@@ -1,11 +1,9 @@
 <mat-toolbar class="main-toolbar">
-  <!-- Nuevo contenedor para limitar el ancho y centrar el contenido -->
   <div class="toolbar-content">
     <div class="logo-container" (click)="emitScroll('home')" style="cursor: pointer;">
       <img src="assets/img/logo-cotionline.svg" alt="Cotionline Logo" class="logo-landing">
     </div>
 
-    <!-- El spacer ahora solo separa el logo del menú -->
     <span class="toolbar-spacer"></span>
 
     <nav class="nav-links">
@@ -19,8 +17,35 @@
       </button>
       <button mat-button class="nav-button" (click)="emitLogin()">INGRESAR</button>
     </nav>
-
-    <!-- Botón CTA con el color corregido -->
-    <button mat-flat-button color="primary" class="cta-button">Comienza tu prueba gratis</button>
+    <div class="actions-group">
+      <button mat-flat-button color="primary" class="cta-button" (click)="emitScroll('home')">Comienza tu prueba gratis</button>
+    </div>   
+    <button mat-icon-button class="mobile-menu-btn" [matMenuTriggerFor]="mobileMenu">
+      <mat-icon>menu</mat-icon>
+    </button>
+    
+    <mat-menu #mobileMenu="matMenu" class="mobile-landing-menu">
+      <button mat-menu-item (click)="emitScroll('home')">
+        <mat-icon>home</mat-icon>
+        <span>Inicio</span>
+      </button>
+      <button mat-menu-item (click)="emitScroll('functions-section')">
+        <mat-icon>featured_play_list</mat-icon>
+        <span>Funciones</span>
+      </button>
+      <button mat-menu-item (click)="emitScroll('prices-section')">
+        <mat-icon>attach_money</mat-icon>
+        <span>Precios</span>
+      </button>
+      <button mat-menu-item (click)="emitScroll('contact-section')">
+        <mat-icon>mail</mat-icon>
+        <span>Contacto</span>
+      </button>
+      <div style="height: 1px; background-color: #eee; margin: 8px 0;"></div>
+      <button mat-menu-item (click)="emitLogin()">
+        <mat-icon>login</mat-icon>
+        <span>Ingresar</span>
+      </button>
+    </mat-menu>
   </div>
 </mat-toolbar>

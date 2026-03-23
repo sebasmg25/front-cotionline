@@ -1,4 +1,3 @@
-/* 2. Cabecera (Logo y Toggle) */
 .sidenav-header {
   height: 80px;
   display: flex;
@@ -11,12 +10,12 @@
   flex-grow: 1;
   display: flex;
   align-items: center;
-  justify-content: center; /* Center the logo image */
+  justify-content: center;
 }
 
 .logo-image {
   max-width: 250px;
-  max-height: 250px; /* Adjust height as needed */
+  max-height: 250px;
   object-fit: contain;
 }
 
@@ -26,7 +25,6 @@
   border-radius: 10px;
 }
 
-/* 3. Lista de Navegación */
 .nav-list {
   padding: 0 14px;
 }
@@ -75,7 +73,6 @@
   justify-content: center;
 }
 
-/* 4. Submenu & Expansion Panel */
 .settings-accordion {
   margin: 8px 14px;
 }
@@ -165,7 +162,6 @@
   font-weight: 600;
 }
 
-/* 5. Mobile Adjustments */
 .close-mobile-btn {
   color: var(--primary-dark);
   opacity: 0.6;

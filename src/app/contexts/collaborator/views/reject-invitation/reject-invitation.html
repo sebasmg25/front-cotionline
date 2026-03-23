@@ -1,6 +1,5 @@
 <div class="invitation-container">
     <div class="invitation-card">
-        <!-- Loader -->
         <ng-container *ngIf="loading">
             <mat-spinner diameter="50"></mat-spinner>
             <h2 class="mat-h2">Procesando tu respuesta...</h2>
@@ -8,7 +7,6 @@
                 momento.</p>
         </ng-container>
 
-        <!-- Success Rejection -->
         <ng-container *ngIf="!loading && success">
             <div class="status-icon success">
                 <mat-icon>do_not_disturb_on</mat-icon>
@@ -18,7 +16,6 @@
             <p class="mat-body-2" style="margin-top: 20px;">Ya puedes cerrar esta pestaña.</p>
         </ng-container>
 
-        <!-- Error -->
         <ng-container *ngIf="!loading && error">
             <div class="status-icon error">
                 <mat-icon>error_outline</mat-icon>

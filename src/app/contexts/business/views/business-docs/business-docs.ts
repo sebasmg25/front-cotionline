@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 
-// Material Imports
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -47,14 +46,12 @@ export class BusinessDocs implements OnInit {
   loadBusiness(): void {
     this.isLoading = true;
 
-    // INTENTO 1: Buscar por el token de sesión (Usuario ya logueado)
     this.businessService.findByUser().subscribe({
       next: (data) => {
         if (data) {
           this.business = data;
           this.isLoading = false;
         } else {
-          // INTENTO 2: Si no devuelve nada, buscar el ID de registro pendiente
           this.checkPendingId();
         }
       },
@@ -79,13 +76,11 @@ export class BusinessDocs implements OnInit {
 
   private handleError(): void {
     this.isLoading = false;
-    // Solo redirigimos si realmente no hay forma de encontrar un negocio
     this.router.navigate(['/dashboard']);
   }
 
   openDoc(path: string | undefined): void {
     if (path) {
-      // Ajustamos el path para que sea una URL válida para el navegador
       const baseUrl = 'http://localhost:3000/';
       const cleanPath = path.replace(/\\/g, '/');
       window.open(`${baseUrl}${cleanPath}`, '_blank');

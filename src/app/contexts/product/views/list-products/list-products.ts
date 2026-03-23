@@ -37,7 +37,6 @@ export class ListProducts implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    // Obtenemos el ID de la solicitud desde la ruta (ej: /quotation-request/:quotationRequestId/products)
     this.quotationRequestId = this.route.snapshot.paramMap.get('quotationRequestId');
 
     if (this.quotationRequestId) {
@@ -62,7 +61,7 @@ export class ListProducts implements OnInit {
         console.error('Error loading products', error);
         this.alertService.showError(
           'Error',
-          'No se pudieron cargar los productos de esta solicitud.',
+          error.error?.message || 'No se pudieron cargar los productos de esta solicitud.',
         );
         this.isLoading = false;
       },
@@ -85,7 +84,7 @@ export class ListProducts implements OnInit {
               this.loadProducts();
             },
             error: (error) => {
-              this.alertService.showError('Error', 'No se pudo eliminar el producto');
+              this.alertService.showError('Error', error.error?.message || 'No se pudo eliminar el producto');
               console.error('Error deleting product', error);
             },
           });
@@ -98,7 +97,6 @@ export class ListProducts implements OnInit {
   }
 
   createProduct(): void {
-    // Si tenemos el ID de la solicitud, lo pasamos al registro
     if (this.quotationRequestId) {
       this.router.navigate([
         '/dashboard/products/register',

@@ -61,7 +61,7 @@ export class SubscriptionDetails implements OnInit {
                 this.isLoading = false;
             },
             error: (err) => {
-                this.alertService.showError('Error', 'No se pudo cargar la información de tu suscripción.');
+                this.alertService.showError('Error', err.error?.message || 'No se pudo cargar la información de tu suscripción.');
                 this.isLoading = false;
             }
         });

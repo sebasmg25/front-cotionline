@@ -65,13 +65,10 @@ export class RegisterBranch implements OnInit {
   }
 
   private setupGeographyFilters(): void {
-    // Filtro de Departamentos
     this.filteredDepartments$ = this.branchForm.get('department')!.valueChanges.pipe(
       startWith(''),
       map((value) => this._filter(value || '', this.departments)),
     );
-
-    // Escuchar cambios en Departamento para habilitar/actualizar Ciudades
     this.branchForm.get('department')!.valueChanges.subscribe((dept) => {
       this.updateCityState(dept);
     });
@@ -98,7 +95,6 @@ export class RegisterBranch implements OnInit {
   }
 
   private loadInitialData(): void {
-    // 1. Cargamos el negocio primero (Esencial para el businessId)
     this.businessService
       .findByUser()
       .pipe(take(1))
@@ -108,13 +104,11 @@ export class RegisterBranch implements OnInit {
             this.businessId = business.id;
             this.branchForm.patchValue({ businessName: business.name });
 
-            // 2. Intentamos cargar el perfil del usuario para ubicación predeterminada
-            // Lo hacemos por separado para que si falla el usuario, el negocio siga cargado
             this.userService
               .getProfile()
               .pipe(
                 take(1),
-                catchError(() => of(null)), // Si falla el perfil, devolvemos null y no rompemos el flujo
+                catchError(() => of(null)),
               )
               .subscribe((user) => {
                 if (user) {
@@ -122,7 +116,6 @@ export class RegisterBranch implements OnInit {
                     department: user.department || '',
                     city: user.city || '',
                   });
-                  // Forzamos la actualización de ciudades si ya viene un departamento
                   if (user.department) {
                     this.updateCityState(user.department);
                   }
@@ -132,7 +125,7 @@ export class RegisterBranch implements OnInit {
         },
         error: (err) => {
           console.error('Error loading business:', err);
-          this.alertService.showError('Error', 'No se pudo cargar la información de tu negocio.');
+          this.alertService.showError('Error', err.error?.message || 'No se pudo cargar la información de tu negocio.');
         },
       });
   }
@@ -143,10 +136,8 @@ export class RegisterBranch implements OnInit {
       return;
     }
 
-    // Usamos getRawValue() para obtener los datos incluso de campos deshabilitados (como businessName si se necesitara)
     const { name, address, city, department } = this.branchForm.getRawValue();
 
-    // El modelo Branch espera (name, address, city, businessId)
     const newBranch = new Branch(name, address, city, this.businessId);
 
     this.branchService.save(newBranch).subscribe({

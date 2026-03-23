@@ -37,11 +37,9 @@ export class Register implements OnInit {
   registerForm!: FormGroup;
   isSaving: boolean = false;
 
-  // Visibilidad de contraseñas
   hidePassword = signal(true);
   hideConfirmPassword = signal(true);
 
-  // Geography Data
   departments: string[] = DEPARTMENTS;
   filteredDepartments$!: Observable<string[]>;
   filteredCities$!: Observable<string[]>;
@@ -141,10 +139,8 @@ export class Register implements OnInit {
 
     this.isSaving = true;
 
-    // Ahora usamos authService.register
     this.authService.register(newUser).subscribe({
       next: (response) => {
-        // El interceptor ya sabe qué hacer, pero guardamos el token para futuras recargas
         this.authService.saveToken(response.token);
 
         if (response.user.role === UserRole.COLLABORATOR) {
@@ -165,7 +161,6 @@ export class Register implements OnInit {
       },
       error: (err) => {
         this.isSaving = false;
-        // Extraemos el mensaje de error que viene de nuestro controlador del Back
         const errorMessage =
           err.error?.message || 'No se pudo completar el registro. Inténtalo de nuevo.';
         this.alertService.showError('Error de registro', errorMessage);

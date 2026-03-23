@@ -37,10 +37,11 @@ mat-card-header {
   display: flex;
   gap: 16px;
   width: 100%;
+  flex-wrap: wrap;
 }
 
 .half-width-input {
-  flex: 1;
+  flex: 1 1 250px;
 }
 
 .card-actions-center {
@@ -72,15 +73,13 @@ mat-card-header {
   margin-bottom: 16px;
 }
 
-/* --- Agregado para el Spinner y Autocomplete --- */
-
 .loading-overlay {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   padding: 40px;
-  color: #3f51b5; /* Color primario de Angular Material */
+  color: #3f51b5;
 }
 
 .loading-overlay p {
@@ -89,12 +88,9 @@ mat-card-header {
   color: #666;
 }
 
-/* Estilo para resaltar las opciones del autocomplete al escribir */
 ::ng-deep .mat-mdc-option.mat-mdc-option-active {
   background-color: rgba(63, 81, 181, 0.1) !important;
 }
-
-/* Asegura que el spinner no desplace el contenido bruscamente */
 mat-spinner {
   margin: 0 auto;
 }

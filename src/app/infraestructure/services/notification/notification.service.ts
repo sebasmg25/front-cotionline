@@ -54,13 +54,11 @@ export class NotificationService {
     }
 
     markAllAsRead(): void {
-        // El backend no parece tener un "mark all", así que lo hacemos uno por uno o lo dejamos para después
         const current = this.notificationsSubject.value;
         current.filter(n => !n.isRead).forEach(n => this.markAsRead(n.id).subscribe());
     }
 
     deleteNotification(id: string): void {
-        // El backend no tiene delete por ahora según ví en las rutas
         const current = this.notificationsSubject.value;
         const updated = current.filter(n => n.id !== id);
         this.notificationsSubject.next(updated);

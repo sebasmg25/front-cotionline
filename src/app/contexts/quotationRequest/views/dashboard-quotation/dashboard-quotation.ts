@@ -59,7 +59,6 @@ export class DashboardQuotation implements OnInit {
   viewDetail(item: QuotationRequest): void {
     if (!item.id) return;
 
-    // Usamos rutas absolutas para evitar que el router se pierda
     if (item.status === 'DRAFT') {
       this.router.navigate(['/dashboard/quotations/edit', item.id], {
         queryParams: { origin: 'dashboard' },
@@ -76,13 +75,10 @@ export class DashboardQuotation implements OnInit {
   }
 
   viewAllPublished(): void {
-    // Apuntamos a la ruta de historial que ya tienes (list-quotation-requests)
     this.router.navigate(['/dashboard/quotations/published']);
   }
 
   viewAllDrafts(): void {
-    // Si no tienes una vista de lista de borradores separada,
-    // podrías usar la misma de 'published' pero pasando el queryParam DRAFT
     this.router.navigate(['/dashboard/quotations/drafts']);
   }
 }

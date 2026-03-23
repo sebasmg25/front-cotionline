@@ -15,7 +15,7 @@ interface DocUpload {
   description: string;
   status: 'pending' | 'uploaded';
   file?: File;
-  backendKey: string; // Para que coincida con el controlador del Back
+  backendKey: string;
 }
 
 @Component({
@@ -86,7 +86,6 @@ export class UploadBusinessDocs implements OnInit {
 
     this.isUploading = true;
 
-    // Construimos el FormData con los archivos
     const formData = new FormData();
     this.docs.forEach((doc) => {
       if (doc.file) {
@@ -94,7 +93,6 @@ export class UploadBusinessDocs implements OnInit {
       }
     });
 
-    // Llamamos al update del servicio (que hará el PATCH /business/:id)
     this.businessService.update(businessId, formData as any).subscribe({
       next: () => {
         this.isUploading = false;
@@ -108,7 +106,7 @@ export class UploadBusinessDocs implements OnInit {
       error: (err) => {
         this.isUploading = false;
         console.error('Error al subir docs:', err);
-        this.alertService.showError('Error', 'Hubo un problema al subir los archivos.');
+        this.alertService.showError('Error', err.error?.message || 'Hubo un problema al subir los archivos.');
       },
     });
   }

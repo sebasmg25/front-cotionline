@@ -18,7 +18,6 @@ export class QuotationRequestService implements QuotationRequestRepository {
     private productService: ProductService,
   ) {}
 
-  // Obtiene las solicitudes del usuario logueado (Borradores y Publicadas)
   getMyHistory(): Observable<QuotationRequest[]> {
     return this.http.get<any>(`${this.apiUrl}/my-history`).pipe(
       map((res) => {
@@ -28,7 +27,6 @@ export class QuotationRequestService implements QuotationRequestRepository {
     );
   }
 
-  // Obtiene solicitudes de otros para cotizar (Cartelera pública)
   getPublic(filters?: {
     department?: string;
     city?: string;
@@ -48,14 +46,12 @@ export class QuotationRequestService implements QuotationRequestRepository {
   }
 
   findById(id: string): Observable<QuotationRequest> {
-    console.log('QuotationRequestService: Buscando solicitud por ID:', id);
     return this.http.get<any>(`${this.apiUrl}/${id}`).pipe(
       map((response) => this.mapToModel(response.data || response)),
     );
   }
 
   findPublicById(id: string): Observable<QuotationRequest> {
-    console.log('QuotationRequestService: Buscando solicitud PUBLIC por ID:', id);
     return this.http.get<any>(`${this.apiUrl}/public/${id}`).pipe(
       map((response) => this.mapToModel(response.data || response)),
     );
@@ -71,37 +67,25 @@ export class QuotationRequestService implements QuotationRequestRepository {
     );
   }
 
-  /**
-   * CORREGIDO: Ahora retorna Observable<QuotationRequest> para que el componente
-   * obtenga el ID generado inmediatamente.
-   */
   save(request: Partial<QuotationRequest>): Observable<QuotationRequest> {
     return this.http
       .post<any>(`${this.apiUrl}/register`, request)
       .pipe(map((response) => this.mapToModel(response.data || response)));
   }
 
-  /**
-   * CORREGIDO: También retorna el objeto actualizado.
-   */
   update(id: string, request: Partial<QuotationRequest>): Observable<QuotationRequest> {
     return this.http
       .patch<any>(`${this.apiUrl}/${id}`, request)
       .pipe(map((response) => this.mapToModel(response.data || response)));
   }
 
-  /**
-   * Cierra una solicitud, seleccionando una oferta ganadora.
-   */
   close(id: string, selectedOfferId: string): Observable<void> {
     return this.http.patch<void>(`${this.apiUrl}/${id}/close`, { selectedOfferId });
   }
 
   duplicate(id: string): Observable<QuotationRequest> {
-    // 1. Obtenemos la solicitud original con todos sus datos y productos (ya mapeados por findById)
     return this.findById(id).pipe(
       switchMap((original: QuotationRequest) => {
-        // 2. Preparamos la nueva solicitud (limpia)
         const duplicateData: Partial<QuotationRequest> = {
           title: `${original.title} (Copia)`,
           description: original.description,
@@ -110,21 +94,19 @@ export class QuotationRequestService implements QuotationRequestRepository {
           status: 'DRAFT',
         };
 
-        // 3. Guardamos la nueva solicitud (cabecera)
         return this.save(duplicateData).pipe(
           switchMap((saved: QuotationRequest) => {
             if (!original.items || original.items.length === 0) {
               return of(saved);
             }
 
-            // 4. Clonamos cada uno de los productos manualmente
             const productClones$ = original.items.map((item) => {
               const productBody: any = {
                 name: item.name,
                 description: item.description,
                 amount: item.quantity,
                 unitOfMeasurement: item.unitOfMeasurement,
-                quotationRequestId: saved.id, // Vinculamos al nuevo ID
+                quotationRequestId: saved.id,
               };
               return this.productService.save(productBody);
             });
@@ -140,12 +122,9 @@ export class QuotationRequestService implements QuotationRequestRepository {
     return this.http.delete<void>(`${this.apiUrl}/${id}`);
   }
 
-  // Mapper centralizado
   private mapToModel(data: any): QuotationRequest {
     if (!data) return null as any;
 
-    // Si los items vienen del backend como Product[], los mapeamos a QuotationItem[]
-    // El backend puede enviar 'items' o 'products' según la implementación
     const rawItems = data.items || data.products || [];
     let modelItems: QuotationItem[] = [];
 

@@ -2,8 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
-
-// Angular Material Imports
 import { MatCardModule } from '@angular/material/card';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
@@ -21,13 +19,13 @@ import { Business } from '../../domain/models/business.model';
   imports: [
     CommonModule,
     ReactiveFormsModule,
-    RouterModule, // Para routerLink
+    RouterModule,
     MatCardModule,
     MatInputModule,
     MatButtonModule,
     MatIconModule,
     MatFormFieldModule,
-    MatDividerModule, // Se añade aquí para corregir el error del HTML
+    MatDividerModule,
   ],
   templateUrl: './edit-business.html',
   styleUrl: './edit-business.css',
@@ -81,7 +79,7 @@ export class EditBusiness implements OnInit {
         console.error('Error loading business', err);
         this.businessNotFound = true;
         this.isLoading = false;
-        this.alertService.showError('Error', 'No se pudo cargar la información de tu negocio.');
+        this.alertService.showError('Error', err.error?.message || 'No se pudo cargar la información de tu negocio.');
       },
     });
   }

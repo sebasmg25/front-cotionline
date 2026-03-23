@@ -37,10 +37,11 @@ mat-card-header {
   display: flex;
   gap: 16px;
   width: 100%;
+  flex-wrap: wrap;
 }
 
 .half-width-input {
-  flex: 1;
+  flex: 1 1 200px;
 }
 
 .card-actions-center {

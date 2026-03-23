@@ -56,8 +56,8 @@ export class ListBranches implements OnInit {
               this.branches = data;
               this.isLoading = false;
             },
-            error: () => {
-              this.alertService.showError('Error', 'No se pudieron cargar las sedes.');
+            error: (err) => {
+              this.alertService.showError('Error', err.error?.message || 'No se pudieron cargar las sedes.');
               this.isLoading = false;
             },
           });
@@ -65,9 +65,9 @@ export class ListBranches implements OnInit {
           this.isLoading = false;
         }
       },
-      error: () => {
+      error: (err) => {
         this.isLoading = false;
-        this.alertService.showError('Error', 'Error al obtener la información del negocio.');
+        this.alertService.showError('Error', err.error?.message || 'Error al obtener la información del negocio.');
       },
     });
   }
@@ -98,7 +98,6 @@ export class ListBranches implements OnInit {
 
   editBranch(id: string | undefined): void {
     if (id) {
-      // CORRECCIÓN: La ruta debe ser 'branch-edit' para coincidir con app.routes.ts
       this.router.navigate(['/dashboard/branch-edit', id]).catch((err) => {
         console.error('Error al navegar a edición:', err);
         this.alertService.showError('Error', 'No se pudo encontrar la ruta de edición.');

@@ -7,15 +7,11 @@
     </p>
   </header>
 
-  <!-- Selector Mensual/Anual -->
-
   <div class="pricing-switcher-wrapper" style="margin-bottom: 2rem;">
-    <!-- Facturación mensual única -->
   </div>
 
   <div class="plans-grid">
-    <!-- ======================= PLAN GRATUITO (Trial) ======================= -->
-    <mat-card class="plan-card free-plan">
+    <mat-card class="plan-card">
       <mat-card-content>
         <h2 class="plan-title">GRATUITO</h2>
         <p class="plan-price">$0<span class="price-period"> /14 días (Prueba)</span></p>
@@ -25,22 +21,25 @@
             <mat-icon class="check-icon">check</mat-icon> 14 Días de Acceso
           </li>
           <li class="feature-item">
-            <mat-icon class="check-icon">check</mat-icon> 5 Solicitudes de Cotización
+            <mat-icon class="check-icon">check</mat-icon> 3 Solicitudes de Cotización
           </li>
           <li class="feature-item">
-            <mat-icon class="check-icon">check</mat-icon> 5 Cotizaciones Generadas
+            <mat-icon class="check-icon">check</mat-icon> Recepción de Oportunidades
           </li>
           <li class="feature-item">
-            <mat-icon class="check-icon">check</mat-icon> Clientes Ilimitados
+            <mat-icon class="check-icon">check</mat-icon> Seguimiento de Cotizaciones
           </li>
           <li class="feature-item">
-            <mat-icon class="close-icon">close</mat-icon> Seguimiento de Cotizaciones
+            <mat-icon class="check-icon">check</mat-icon> Análisis Inteligente de Ofertas
           </li>
           <li class="feature-item">
-            <mat-icon class="close-icon">close</mat-icon> Gestión de Negocio
+            <mat-icon class="check-icon">check</mat-icon> Gestión de Múltiples Sedes
           </li>
           <li class="feature-item">
-            <mat-icon class="close-icon">close</mat-icon> Colaboradores: 0
+            <mat-icon class="close-icon" style="color: #999;">close</mat-icon> 0 Cotizaciones Generadas
+          </li>
+          <li class="feature-item">
+            <mat-icon class="close-icon" style="color: #999;">close</mat-icon> Colaboradores: 0
           </li>
         </ul>
       </mat-card-content>
@@ -51,13 +50,12 @@
       </mat-card-actions>
     </mat-card>
 
-    <!-- ======================= PLAN BÁSICO ======================= -->
     <mat-card class="plan-card" [class.current-plan]="currentUserPlanId() === 'c2c9636d-053c-4ba9-9941-51dd44271c8c'">
       <mat-card-content>
         <h2 class="plan-title">BÁSICO</h2>
         <p class="annual-save-message empty-placeholder"></p>
         <p class="plan-price">
-          {{ getCurrentPrice('basico') | currency : 'COP' : 'symbol' : '1.0-0' }}
+          ${{ getCurrentPrice('basico') | number : '1.0-0' }} COP
           <span class="price-period"> /Mes</span>
         </p>
 
@@ -66,22 +64,25 @@
             <mat-icon class="check-icon">check</mat-icon> Vigencia: 1 Mes
           </li>
           <li class="feature-item">
-            <mat-icon class="check-icon">check</mat-icon> 25 Solicitudes de Cotización
+            <mat-icon class="check-icon">check</mat-icon> 10 Solicitudes de Cotización
           </li>
           <li class="feature-item">
-            <mat-icon class="check-icon">check</mat-icon> 25 Cotizaciones Generadas
+            <mat-icon class="check-icon">check</mat-icon> 5 Cotizaciones Generadas
           </li>
           <li class="feature-item">
-            <mat-icon class="check-icon">check</mat-icon> Clientes Ilimitados
+            <mat-icon class="check-icon">check</mat-icon> 1 Colaborador Adicional
+          </li>
+          <li class="feature-item">
+            <mat-icon class="check-icon">check</mat-icon> Recepción de Oportunidades
           </li>
           <li class="feature-item">
             <mat-icon class="check-icon">check</mat-icon> Seguimiento de Cotizaciones
           </li>
           <li class="feature-item">
-            <mat-icon class="check-icon">check</mat-icon> Gestión de Negocio
+            <mat-icon class="check-icon">check</mat-icon> Gestión de Múltiples Sedes
           </li>
           <li class="feature-item">
-            <mat-icon class="check-icon">check</mat-icon> 1 Colaborador Adicional
+            <mat-icon class="check-icon">check</mat-icon> Análisis Inteligente de Ofertas
           </li>
         </ul>
       </mat-card-content>
@@ -92,14 +93,13 @@
       </mat-card-actions>
     </mat-card>
 
-    <!-- ======================= PLAN PREMIUM (Destacado) ======================= -->
     <mat-card class="plan-card best-seller" [class.current-plan]="currentUserPlanId() === '37879279-47ea-49fb-8c7e-39f48e9b6dcb'">
-      <div class="best-ribbon">MÁS POPULAR</div>
+      <div class="best-ribbon">Destacado</div>
       <mat-card-content>
         <h2 class="plan-title">PREMIUM</h2>
         <p class="annual-save-message empty-placeholder"></p>
         <p class="plan-price">
-          {{ getCurrentPrice('premium') | currency : 'COP' : 'symbol' : '1.0-0' }}
+          ${{ getCurrentPrice('premium') | number : '1.0-0' }} COP
           <span class="price-period"> /Mes</span>
         </p>
 
@@ -108,22 +108,25 @@
             <mat-icon class="check-icon">check</mat-icon> Vigencia: 1 Mes
           </li>
           <li class="feature-item">
-            <mat-icon class="check-icon">check</mat-icon> Solicitudes de Cotización Ilimitadas
+            <mat-icon class="check-icon">check</mat-icon> Solicitudes Ilimitadas
           </li>
           <li class="feature-item">
             <mat-icon class="check-icon">check</mat-icon> Cotizaciones Generadas Ilimitadas
           </li>
           <li class="feature-item">
-            <mat-icon class="check-icon">check</mat-icon> Clientes Ilimitados
+            <mat-icon class="check-icon">check</mat-icon> Colaboradores Ilimitados
+          </li>
+          <li class="feature-item">
+            <mat-icon class="check-icon">check</mat-icon> Recepción de Oportunidades
           </li>
           <li class="feature-item">
             <mat-icon class="check-icon">check</mat-icon> Seguimiento de Cotizaciones
           </li>
           <li class="feature-item">
-            <mat-icon class="check-icon">check</mat-icon> Gestión de Negocio
+            <mat-icon class="check-icon">check</mat-icon> Gestión de Múltiples Sedes
           </li>
           <li class="feature-item">
-            <mat-icon class="check-icon">check</mat-icon> Colaboradores Ilimitados
+            <mat-icon class="check-icon">check</mat-icon> Análisis Inteligente de Ofertas
           </li>
         </ul>
       </mat-card-content>

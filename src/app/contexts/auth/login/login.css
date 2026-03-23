@@ -1,15 +1,13 @@
-/* Main Wrapper for Standalone Page */
 .login-page-wrapper {
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: 90vh; /* Ajuste para que se vea bien con el toolbar fijo */
+  min-height: 90vh;
   padding: 100px 20px 60px 20px;
   background: radial-gradient(circle at top right, rgba(23, 107, 135, 0.1), transparent),
               radial-gradient(circle at bottom left, rgba(0, 28, 48, 0.05), transparent);
 }
 
-/* Standalone Card (Only when not in Dialog) */
 .login-standalone-card {
   max-width: 500px;
   width: 100%;
@@ -53,12 +51,11 @@
   margin-bottom: 30px;
 }
 
-/* Centering and sizing fields */
 .centered-form-fields {
   display: flex;
   flex-direction: column;
   width: 100%;
-  max-width: 350px; /* Constrain internal width */
+  max-width: 350px;
   margin: 0 auto;
 }
 
@@ -76,7 +73,6 @@
   font-size: 0.9rem;
 }
 
-/* Action Button Centering and Styling */
 .action-buttons-center {
   display: flex;
   justify-content: center;
@@ -86,7 +82,7 @@
 
 .access-button {
   width: 100%;
-  max-width: 200px; /* Smaller width for the button as requested */
+  max-width: 200px;
   height: 54px;
   font-size: 16px;
   font-weight: 700;
@@ -107,6 +103,27 @@
   top: 10px;
   right: 10px;
   color: #888;
+}
+
+.forgot-password-container {
+  text-align: right;
+  margin-top: -15px;
+  margin-bottom: 15px;
+  width: 100%;
+}
+
+.forgot-password-link {
+  color: #6366f1 !important;
+  font-size: 13px !important;
+  font-weight: 600 !important;
+  padding: 0 !important;
+  min-width: unset !important;
+  text-decoration: none;
+}
+
+.forgot-password-link:hover {
+  text-decoration: underline !important;
+  background: transparent !important;
 }
 
 @media (max-width: 600px) {

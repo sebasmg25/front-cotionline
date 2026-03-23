@@ -4,7 +4,6 @@ import { Router, RouterModule, NavigationEnd } from '@angular/router';
 import { Observable, of, BehaviorSubject } from 'rxjs';
 import { map, catchError, shareReplay, tap, filter, switchMap } from 'rxjs/operators';
 
-// Angular Material Imports
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatListModule } from '@angular/material/list';
 import { MatIconModule } from '@angular/material/icon';
@@ -12,7 +11,6 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatDividerModule } from '@angular/material/divider';
 
-// Services & Models
 import { BusinessService } from '../../../infraestructure/services/business/business.service';
 import { Business, BusinessStatus } from '../../../contexts/business/domain/models/business.model';
 import { AlertService } from '../../shared/services/alert.service';
@@ -40,7 +38,6 @@ export class Sidenav implements OnInit {
   @Input() isMobile: boolean = false;
   @Output() closeSidenav = new EventEmitter<void>();
 
-  // Usamos un BehaviorSubject para forzar refrescos manuales si fuera necesario
   private refreshBusiness$ = new BehaviorSubject<void>(undefined);
 
   hasBusiness$: Observable<boolean>;
@@ -55,7 +52,6 @@ export class Sidenav implements OnInit {
     private userService: UserService,
     private authService: AuthService,
   ) {
-    // Escuchamos los cambios del refresh o de la navegación
     const businessSource$ = this.refreshBusiness$.pipe(
       switchMap(() => this.businessService.findByUser()),
       tap((business) => (this.currentBusiness = business)),
@@ -78,9 +74,6 @@ export class Sidenav implements OnInit {
   }
 
   ngOnInit(): void {
-    // MAGIA DE REACTIVIDAD:
-    // Cada vez que el usuario navega a una ruta diferente dentro del dashboard,
-    // el Sidenav volverá a pedir el estado del negocio al servidor.
     this.router.events.pipe(filter((event) => event instanceof NavigationEnd)).subscribe(() => {
       this.refreshBusiness$.next();
     });
@@ -124,7 +117,6 @@ export class Sidenav implements OnInit {
   }
 
   private executeBusinessDeletion(): void {
-    // 1. Extraemos el ID y validamos que exista
     const businessId = this.currentBusiness?.id;
 
     if (!businessId) {
@@ -132,7 +124,6 @@ export class Sidenav implements OnInit {
       return;
     }
 
-    // 2. Ahora TypeScript está seguro de que businessId es string
     this.businessService.delete(businessId).subscribe({
       next: () => {
         this.currentBusiness = null;
@@ -141,7 +132,6 @@ export class Sidenav implements OnInit {
           'Tu negocio ha sido eliminado correctamente. Redirigiendo al registro...',
         );
 
-        // 3. Navegamos al registro
         this.router.navigate(['/register-business']);
       },
       error: (err) => {

@@ -54,12 +54,9 @@ export class ListQuotationRequests implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
   ) {
-    // Fuente de datos principal reactiva
     const dataStream$ = this.refreshData$.pipe(
       switchMap(() => this.quotationService.getMyHistory()),
     );
-
-    // Lógica de filtrado para PUBLICADAS (Status 'published', 'PENDING', 'QUOTED', 'CLOSED', 'EXPIRED')
     this.published$ = combineLatest([
       dataStream$,
       this.searchQueryPublished.pipe(startWith('')),
@@ -67,13 +64,12 @@ export class ListQuotationRequests implements OnInit {
       map(([list, search]) =>
         list.filter(
           (item) =>
-            item.status !== 'DRAFT' && // Muestra todo menos borradores
+            item.status !== 'DRAFT' &&
             item.title.toLowerCase().includes(search.toLowerCase()),
         ),
       ),
     );
 
-    // Lógica de filtrado para BORRADORES (Status 'draft' o 'DRAFT')
     this.drafts$ = combineLatest([dataStream$, this.searchQueryDrafts.pipe(startWith(''))]).pipe(
       map(([list, search]) =>
         list.filter(
@@ -85,7 +81,6 @@ export class ListQuotationRequests implements OnInit {
   }
 
   ngOnInit(): void {
-    // Escuchamos los queryParams para seleccionar la pestaña inicial
     this.route.queryParams.pipe(take(1)).subscribe((params) => {
       const status = params['status'];
       if (status === 'DRAFT') {
@@ -118,8 +113,6 @@ export class ListQuotationRequests implements OnInit {
   }
 
   viewDetail(id: string): void {
-    // Si estamos en la pestaña de borradores (o el item es DRAFT), vamos a edit
-    // Si estamos en publicadas, vamos a detail
     if (this.selectedTabIndex === 1) {
       this.router.navigate(['/dashboard/quotations/edit', id], {
         queryParams: { origin: 'list' },

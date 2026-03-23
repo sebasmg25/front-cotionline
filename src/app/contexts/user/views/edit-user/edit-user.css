@@ -40,7 +40,6 @@
   box-shadow: 0 4px 12px rgba(0,0,0,0.05);
 }
 
-/* TAB STYLING */
 .settings-tabs {
   background: rgba(255, 255, 255, 0.7);
   backdrop-filter: blur(20px);
@@ -72,7 +71,6 @@
   justify-content: center;
 }
 
-/* CARDS COMMON STYLES */
 .info-display-card,
 .edit-form-card,
 .error-card {
@@ -87,7 +85,6 @@
   flex-direction: column;
 }
 
-/* INFO DISPLAY CARD */
 .info-display-card {
   background: linear-gradient(135deg, #ffffff 0%, #f8faff 100%);
 }
@@ -147,7 +144,6 @@
   margin-top: 2px;
 }
 
-/* FORM STYLES */
 .user-form {
   padding: 12px 4px;
 }
@@ -155,10 +151,11 @@
 .form-row {
   display: flex;
   gap: 16px;
+  flex-wrap: wrap;
 }
 
 .full-width-input { width: 100%; }
-.half-width-input { flex: 1; }
+.half-width-input { flex: 1 1 250px; }
 
 .submit-button {
   width: 100%;

@@ -6,7 +6,6 @@
 
     <form [formGroup]="registerForm">
       <mat-card-content>
-        <!-- 1. Campo de Identificación -->
         <mat-form-field appearance="outline" class="full-width-input">
           <mat-label>Identificación</mat-label>
           <input
@@ -31,7 +30,6 @@
         </mat-form-field>
 
         <div class="form-row">
-          <!-- 2. Campo de Nombre -->
           <mat-form-field appearance="outline" class="half-width-input">
             <mat-label>Nombre</mat-label>
             <input formControlName="name" matInput placeholder="Juan" />
@@ -39,7 +37,6 @@
             <mat-error *ngIf="registerForm.get('name')?.hasError('required')">Requerido</mat-error>
           </mat-form-field>
 
-          <!-- 3. Campo de Apellido -->
           <mat-form-field appearance="outline" class="half-width-input">
             <mat-label>Apellido</mat-label>
             <input formControlName="lastName" matInput placeholder="Pérez" />
@@ -50,7 +47,6 @@
           </mat-form-field>
         </div>
 
-        <!-- 4. Campo de Correo Electrónico (Email) -->
         <mat-form-field appearance="outline" class="full-width-input">
           <mat-label>Correo Electrónico</mat-label>
           <input formControlName="email" matInput placeholder="ejemplo@dominio.com" type="email" />
@@ -61,8 +57,12 @@
           <mat-error *ngIf="registerForm.get('email')?.hasError('required')">Requerido</mat-error>
         </mat-form-field>
 
+        <div class="location-info-alert">
+          <mat-icon>info</mat-icon>
+          <span>Ten en cuenta: la ubicación de registro será asignada como la <strong>sede principal de tu negocio</strong>.</span>
+        </div>
+
         <div class="form-row">
-          <!-- 5. Campo de Departamento -->
           <mat-form-field appearance="outline" class="half-width-input">
             <mat-label>Departamento</mat-label>
             <input
@@ -83,7 +83,6 @@
             >
           </mat-form-field>
 
-          <!-- 6. Campo de Ciudad -->
           <mat-form-field appearance="outline" class="half-width-input">
             <mat-label>Ciudad</mat-label>
             <input
@@ -106,7 +105,6 @@
           </mat-form-field>
         </div>
 
-        <!-- 7. Campo de Contraseña -->
         <mat-form-field appearance="outline" class="full-width-input">
           <mat-label>Contraseña</mat-label>
           <input
@@ -140,7 +138,6 @@
           </mat-error>
         </mat-form-field>
 
-        <!-- 8. Campo de Confirmación de Contraseña -->
         <mat-form-field appearance="outline" class="full-width-input">
           <mat-label>Confirmar Contraseña</mat-label>
           <input

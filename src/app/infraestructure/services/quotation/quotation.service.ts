@@ -21,12 +21,6 @@ export class QuotationService {
     private quotationRequestService: QuotationRequestService,
   ) {}
 
-  // --- MÉTODOS DE FILTRADO PARA DASHBOARD ---
-
-  /**
-   * Obtiene todas las cotizaciones base para filtrar.
-   * Ahora consume el nuevo endpoint /my-history creado en el backend.
-   */
   private getAllQuotations(): Observable<Quotation[]> {
     return this.http.get<any>(`${this.apiUrl}/my-history`).pipe(
       map((res) => {
@@ -51,9 +45,6 @@ export class QuotationService {
     );
   }
 
-  /**
-   * Obtiene las cotizaciones recibidas para las solicitudes del usuario actual.
-   */
   getReceivedQuotations(): Observable<Quotation[]> {
     return this.http.get<any>(`${this.apiUrl}/received`).pipe(
       map((res) => {
@@ -82,7 +73,6 @@ export class QuotationService {
       ),
     }).pipe(
       map(({ requests, myQuotations }: { requests: QuotationRequest[], myQuotations: Quotation[] }) => {
-        // Obtenemos los IDs de las solicitudes a las que ya aplicamos (Draft o Enviadas)
         const myQuotedRequestIds = new Set(
           myQuotations.map((q: Quotation) => q.quotationRequestId).filter(id => !!id)
         );
@@ -94,8 +84,6 @@ export class QuotationService {
       })
     );
   }
-
-  // --- MÉTODOS DE ACCIÓN ---
 
   getReceivedQuotationsByRequestId(requestId: string): Observable<Quotation[]> {
     return this.http
@@ -138,8 +126,6 @@ export class QuotationService {
     return this.http.delete<void>(`${this.apiUrl}/${id}`);
   }
 
-  // --- MAPPERS ---
-
   private mapToFront(data: any): Quotation {
     if (!data) return null as any;
     return {
@@ -152,11 +138,10 @@ export class QuotationService {
       deliveryTime: this.safeParseDate(data.deliveryTime),
       description: data.description || '',
       status: (data.status as QuotationStatus) || 'PENDING',
-      businessName: data.businessName, // Might be undefined, handled in component
-      // UI Helpers
+      businessName: data.businessName,
       requestTitle: data.requestTitle || 'Solicitud de Cotización',
       createdAt: this.safeParseDate(data.issueDate),
-      individualValues: data.individualValues || [], // Breakdown
+      individualValues: data.individualValues || [],
     };
   }
 
@@ -172,8 +157,8 @@ export class QuotationService {
       responseDeadline: q.responseDeadline,
       deliveryTime: q.deliveryTime,
       description: q.description,
-      status: q.status, // Ya viene en mayúsculas por el tipo y validaciones de UI
-      individualValues: q.individualValues, // BREAKDOWN
+      status: q.status,
+      individualValues: q.individualValues,
     };
   }
 }

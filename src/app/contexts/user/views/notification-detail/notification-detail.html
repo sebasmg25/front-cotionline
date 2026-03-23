@@ -1,6 +1,5 @@
 <div class="detail-wrapper">
 
-    <!-- Header -->
     <div class="detail-header">
         <button mat-icon-button (click)="goBack()" class="back-btn">
             <mat-icon>arrow_back</mat-icon>
@@ -11,13 +10,11 @@
         </div>
     </div>
 
-    <!-- Loading -->
     <div class="loading-state" *ngIf="loading">
         <mat-icon class="spin-icon">sync</mat-icon>
         <p>Cargando...</p>
     </div>
 
-    <!-- Not Found -->
     <div class="not-found-state" *ngIf="!loading && notFound">
         <mat-icon>notifications_off</mat-icon>
         <h2>Notificación no encontrada</h2>
@@ -27,11 +24,9 @@
         </button>
     </div>
 
-    <!-- Notification Card -->
     <mat-card class="detail-card" *ngIf="!loading && notification">
         <mat-card-content>
 
-            <!-- Top row: type badge + date -->
             <div class="detail-meta">
                 <div class="type-chip" [ngClass]="notification.type.toLowerCase()">
                     <mat-icon>{{ getTypeIcon(notification.type) }}</mat-icon>
@@ -50,13 +45,10 @@
 
             <mat-divider class="divider"></mat-divider>
 
-            <!-- Title -->
             <h2 class="detail-title">{{ notification.title }}</h2>
 
-            <!-- Message -->
             <p class="detail-message">{{ notification.message }}</p>
 
-            <!-- Action button if there's a link -->
             <div class="detail-actions" *ngIf="notification.link">
                 <button mat-flat-button color="primary" (click)="navigateToLink()">
                     <mat-icon>open_in_new</mat-icon> Ir a la sección

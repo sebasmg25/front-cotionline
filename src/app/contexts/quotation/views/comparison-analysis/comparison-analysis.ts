@@ -128,7 +128,6 @@ export class ComparisonAnalysis implements OnInit {
           winner = selected[i];
         }
       } else {
-        // deliveryTime is a Date object (mapped in service)
         if (selected[i].deliveryTime.getTime() < winner.deliveryTime.getTime()) {
           winner = selected[i];
         }
@@ -150,7 +149,6 @@ export class ComparisonAnalysis implements OnInit {
   }
 
   acceptProposal(proposal: Quotation): void {
-    // CORRECCIÓN: Validar existencia del ID de la cotización
     if (!proposal.id) return;
 
     this.alertService

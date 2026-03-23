@@ -6,10 +6,6 @@ import { map } from 'rxjs/operators';
 import { User } from '../../../contexts/user/domain/models/user.model';
 import { AlertService } from '../../../contexts/shared/services/alert.service';
 
-/**
- * Guard para bloquear acceso a rutas que un colaborador NO debe ver.
- * Solo permite el paso si el usuario es OWNER.
- */
 export const ownerOnlyGuard: CanActivateFn = (route, state) => {
   const authService = inject(AuthService);
   const userService = inject(UserService);

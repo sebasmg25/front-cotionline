@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { ViewportScroller } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 
@@ -8,4 +9,10 @@ import { MatButtonModule } from '@angular/material/button';
   templateUrl: './contact.html',
   styleUrl: './contact.css',
 })
-export class Contact {}
+export class Contact {
+  constructor(private scroller: ViewportScroller) {}
+
+  scrollToTop(): void {
+    this.scroller.scrollToPosition([0, 0]);
+  }
+}

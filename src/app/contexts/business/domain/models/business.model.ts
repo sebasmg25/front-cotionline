@@ -10,7 +10,7 @@ export class Business {
     public name: string,
     public description: string,
     public address: string,
-    public userId?: string, // Opcional en el front porque lo pone el back
+    public userId?: string,
     public status?: BusinessStatus,
     public rutUrl?: string,
     public chamberOfCommerceUrl?: string,

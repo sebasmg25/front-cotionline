@@ -1,7 +1,3 @@
-/* ==========================================
-  1. Estilos del Contenedor Principal
-  ==========================================
-*/
 .features-section {
   padding: 120px 5vw;
   background-color: var(--soft-bg);
@@ -21,10 +17,6 @@
   z-index: 0;
 }
 
-/* ==========================================
-  2. Encabezado
-  ==========================================
-*/
 .section-header {
   text-align: center;
   margin-bottom: 80px;
@@ -49,10 +41,6 @@
   line-height: 1.6;
 }
 
-/* ==========================================
-  3. CSS Grid para la Disposición
-  ==========================================
-*/
 .features-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
@@ -63,10 +51,6 @@
   z-index: 1;
 }
 
-/* ==========================================
-  4. Estilos de la Tarjeta Individual (Feature Card)
-  ==========================================
-*/
 .feature-card {
   background: rgba(255, 255, 255, 0.6) !important;
   backdrop-filter: blur(10px);
@@ -86,7 +70,6 @@
   border-color: rgba(23, 107, 135, 0.2);
 }
 
-/* Contenedor del Ícono */
 .icon-wrapper {
   display: inline-flex;
   justify-content: center;
@@ -129,10 +112,6 @@
   margin: 0 auto;
 }
 
-/* ==========================================
-  5. Diseño Responsivo
-  ==========================================
-*/
 @media (max-width: 600px) {
   .features-section {
     padding: 80px 20px;

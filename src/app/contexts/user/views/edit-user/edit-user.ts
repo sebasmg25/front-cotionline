@@ -39,13 +39,10 @@ import { User } from '../../domain/models/user.model';
 })
 export class EditUser implements OnInit {
   userForm!: FormGroup;
-  // Ya no necesitamos forzar un ID '1', usaremos el perfil de la sesión
   currentUser: User | null = null;
   userNotFound: boolean = false;
   isLoading: boolean = false;
   isSaving: boolean = false;
-
-  // Geography Data
   departments: string[] = DEPARTMENTS;
   filteredDepartments$!: Observable<string[]>;
   filteredCities$!: Observable<string[]>;
@@ -70,8 +67,6 @@ export class EditUser implements OnInit {
     });
 
     this.setupGeographyFilters();
-
-    // Cargamos el perfil directamente
     this.loadUserData();
   }
 
@@ -104,7 +99,6 @@ export class EditUser implements OnInit {
 
   loadUserData(): void {
     this.isLoading = true;
-    // Cambio: Usamos getProfile() que no requiere ID (el back usa el Token)
     this.userService.getProfile().subscribe({
       next: (user) => {
         this.currentUser = user;
@@ -115,7 +109,6 @@ export class EditUser implements OnInit {
           email: user.email,
           department: user.department,
           city: user.city,
-          // No parcheamos el password por seguridad
         });
         this.isLoading = false;
       },
@@ -123,7 +116,7 @@ export class EditUser implements OnInit {
         console.error('Error loading user', err);
         this.userNotFound = true;
         this.isLoading = false;
-        this.alertService.showError('Error', 'No se pudo cargar la información de tu cuenta.');
+        this.alertService.showError('Error', err.error?.message || 'No se pudo cargar la información de tu cuenta.');
       },
     });
   }
@@ -132,7 +125,6 @@ export class EditUser implements OnInit {
     if (this.userForm.valid) {
       this.isSaving = true;
 
-      // Solo enviamos los campos que el backend permite actualizar
       const formData = {
         name: this.userForm.value.name,
         lastName: this.userForm.value.lastName,
@@ -140,7 +132,6 @@ export class EditUser implements OnInit {
         city: this.userForm.value.city,
       };
 
-      // Si hay password, lo incluimos
       const password = this.userForm.value.password;
       if (password && password.trim() !== '') {
         (formData as any).password = password;
@@ -148,7 +139,6 @@ export class EditUser implements OnInit {
 
       this.userService.updateProfile(formData).subscribe({
         next: (updatedUser) => {
-          console.log('Usuario Actualizado:', updatedUser);
           this.alertService.showSuccess('¡Éxito!', 'Perfil actualizado exitosamente');
           this.isSaving = false;
           this.router.navigate(['/dashboard']);

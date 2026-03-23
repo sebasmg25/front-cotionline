@@ -5,13 +5,15 @@ import { GuideService } from '../../../contexts/shared/services/guide.service';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { WelcomeDialog } from '../../../contexts/shared/components/welcome-dialog/welcome-dialog';
 import { TutorialStep } from '../../../contexts/shared/components/tutorial-step/tutorial-step';
+import { BusinessService } from '../../../infraestructure/services/business/business.service';
+import { BusinessStatus } from '../../../contexts/business/domain/models/business.model';
 import { CommonModule } from '@angular/common';
 
-// Material Imports for the Layout Shell
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatMenuModule } from '@angular/material/menu';
+import { MatDividerModule } from '@angular/material/divider';
 import { MatBadgeModule } from '@angular/material/badge';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatTooltipModule } from '@angular/material/tooltip';
@@ -20,6 +22,8 @@ import { NotificationService } from '../../../infraestructure/services/notificat
 import { Notification } from '../../../contexts/shared/models/notification.model';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { SlicePipe } from '@angular/common';
+import { AuthService } from '../../../infraestructure/services/auth/auth.service';
+import { AlertService } from '../../../contexts/shared/services/alert.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -34,6 +38,7 @@ import { SlicePipe } from '@angular/common';
     MatIconModule,
     MatButtonModule,
     MatMenuModule,
+    MatDividerModule,
     MatBadgeModule,
     MatTabsModule,
     MatTooltipModule,
@@ -61,7 +66,10 @@ export class Dashboard implements OnInit {
     private guideService: GuideService,
     private dialog: MatDialog,
     private notificationService: NotificationService,
-    private router: Router
+    private router: Router,
+    private authService: AuthService,
+    private alertService: AlertService,
+    private businessService: BusinessService
   ) {
     this.unreadCount$ = this.notificationService.getUnreadCount();
     this.allNotifications$ = this.notificationService.getNotifications();
@@ -71,19 +79,24 @@ export class Dashboard implements OnInit {
 
   ngOnInit(): void {
     if (this.guideService.isFirstTimeUser()) {
-      setTimeout(() => {
-        const dialogRef = this.dialog.open(WelcomeDialog, {
-          width: '500px',
-          disableClose: true
-        });
+      this.businessService.findByUser().subscribe((business) => {
+        if (business && business.status === BusinessStatus.VERIFIED) {
+          setTimeout(() => {
+            const dialogRef = this.dialog.open(WelcomeDialog, {
+              width: '500px',
+              maxWidth: '90vw',
+              disableClose: true
+            });
 
-        dialogRef.afterClosed().subscribe(startTour => {
-          this.guideService.markWelcomeAsSeen();
-          if (startTour) {
-            this.guideService.startGuide('welcome_tour');
-          }
-        });
-      }, 1000);
+            dialogRef.afterClosed().subscribe(startTour => {
+              this.guideService.markWelcomeAsSeen();
+              if (startTour) {
+                this.guideService.startGuide('welcome_tour');
+              }
+            });
+          }, 1000);
+        }
+      });
     }
   }
 
@@ -121,5 +134,21 @@ export class Dashboard implements OnInit {
     } else {
       this.guideService.startGuide('welcome_tour');
     }
+  }
+
+  logout(): void {
+    this.alertService
+      .confirmAction(
+        '¿Cerrar Sesión?',
+        '¿Estás seguro de que deseas salir?',
+        'Cerrar Sesión',
+        'Cancelar',
+      )
+      .then((confirmed: boolean) => {
+        if (confirmed) {
+          this.authService.logout();
+          this.router.navigate(['/']);
+        }
+      });
   }
 }

@@ -11,7 +11,7 @@
 
   <!-- 2. Main content area -->
   <mat-sidenav-content class="sidenav-content">
-    <!-- HEADER GLOBAL DEL DASHBOARD -->
+
     <header class="dashboard-global-header">
       <button mat-icon-button class="mobile-toggle" (click)="drawer.toggle()" *ngIf="isHandset$ | async">
         <mat-icon>menu</mat-icon>
@@ -19,12 +19,9 @@
       <div class="header-spacer"></div>
       
       <div class="header-actions">
-        <!-- Gatillo de Ayuda -->
         <button id="help-button" mat-icon-button (click)="startContextGuide()" matTooltip="Ayuda Interactiva" class="help-trigger">
           <mat-icon color="primary">help_outline</mat-icon>
         </button>
-
-        <!-- Gatillo de Notificaciones -->
         <button id="notif-bell" mat-icon-button [matMenuTriggerFor]="notificationMenu" matTooltip="Notificaciones" class="notif-trigger">
           <mat-icon [matBadge]="unreadCount$ | async" 
                     [matBadgeHidden]="(unreadCount$ | async) === 0" 
@@ -34,11 +31,24 @@
         </button>
 
         <!-- Menú de Usuario Rápido -->
-        <div class="user-avatar-circle" matTooltip="Mi Perfil">
+        <div class="user-avatar-circle" matTooltip="Opciones" [matMenuTriggerFor]="profileMenu" style="cursor: pointer;">
           <mat-icon>account_circle</mat-icon>
         </div>
       </div>
     </header>
+
+    <!-- MENÚ DESPLEGABLE DEL PERFIL -->
+    <mat-menu #profileMenu="matMenu" class="profile-tray-menu">
+      <button mat-menu-item routerLink="/dashboard/profile">
+        <mat-icon>manage_accounts</mat-icon>
+        <span>Mi Perfil</span>
+      </button>
+      <mat-divider></mat-divider>
+      <button mat-menu-item (click)="logout()">
+        <mat-icon>logout</mat-icon>
+        <span>Cerrar Sesión</span>
+      </button>
+    </mat-menu>
 
     <!-- MENÚ DE NOTIFICACIONES (TRAY) -->
     <mat-menu #notificationMenu="matMenu" class="notification-tray-menu">

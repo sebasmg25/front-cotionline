@@ -58,7 +58,6 @@ export class QuotationResponse implements OnInit {
     private requestService: QuotationRequestService,
     private alertService: AlertService,
   ) {
-    // Set minDate to tomorrow
     const tomorrow = new Date();
     tomorrow.setDate(tomorrow.getDate() + 1);
     this.minDate = tomorrow;
@@ -79,7 +78,6 @@ export class QuotationResponse implements OnInit {
     if (!this.initialValues) return false;
     const current = this.responseForm.getRawValue();
     
-    // Comparar campos básicos
     const basicChanged = 
       current.expirationDate?.toString() !== this.initialValues.expirationDate?.toString() ||
       current.deliveryTime?.toString() !== this.initialValues.deliveryTime?.toString() ||
@@ -87,7 +85,6 @@ export class QuotationResponse implements OnInit {
 
     if (basicChanged) return true;
 
-    // Comparar individualValues de forma robusta
     const currentIndividual = current.individualValues || [];
     const initialIndividual = this.initialValues.individualValues || [];
 
@@ -114,21 +111,12 @@ export class QuotationResponse implements OnInit {
       this.loadRequest(this.requestId);
     }
 
-    // Escuchar cambios para recalcular total y debug
     this.responseForm.valueChanges.subscribe(() => {
       this.calculateTotal();
       if (this.responseForm.invalid) {
         const controls = this.responseForm.controls;
-        for (const name in controls) {
-          if (controls[name].invalid) {
-            console.log('Campo inválido:', name, controls[name].errors);
-          }
-        }
         const individualValues = this.responseForm.get('individualValues') as FormArray;
         individualValues.controls.forEach((group, index) => {
-          if (group.invalid) {
-            console.log(`Producto ${index} inválido:`, (group as FormGroup).controls['individualValue'].errors);
-          }
         });
       }
     });
@@ -146,7 +134,6 @@ export class QuotationResponse implements OnInit {
             deliveryTime: q.deliveryTime,
             description: q.description,
           });
-          // Note: In the new model we might not have individualValues directly if the back doesn't send them
           this.draftValues = (q as any).individualValues || [];
 
           if (this.isViewMode) {
@@ -154,12 +141,11 @@ export class QuotationResponse implements OnInit {
           }
         }
       },
-      error: () => this.alertService.showError('Error', 'No se pudo cargar la cotización.'),
+      error: (err) => this.alertService.showError('Error', err.error?.message || 'No se pudo cargar la cotización.'),
     });
   }
 
   loadRequest(id: string): void {
-    console.log('QuotationResponse: Solicitando datos de la solicitud con ID:', id);
     this.requestService.findById(id).subscribe({
       next: (r: QuotationRequest) => {
         if (r) {
@@ -168,7 +154,6 @@ export class QuotationResponse implements OnInit {
       },
       error: (err) => {
         if (err.status === 404 || err.status === 403) {
-          console.log('QuotationResponse: Not found or forbidden on standard endpoint, trying public endpoint...');
           this.requestService.findPublicById(id).subscribe({
             next: (r: QuotationRequest) => this.handleRequestSuccess(r),
             error: (publicErr) => this.handleRequestError(publicErr),
@@ -181,16 +166,12 @@ export class QuotationResponse implements OnInit {
   }
 
   private handleRequestSuccess(r: QuotationRequest): void {
-    console.log('QuotationResponse: Datos de solicitud recibidos:', r);
-
     this.request = r;
-    console.log('QuotationResponse: Productos en la solicitud:', r.items);
     this.initIndividualValues(r.items || []);
     if ((this.isEditMode || this.isViewMode) && this.draftValues.length > 0) {
       this.patchDraftValues();
     }
     
-    // Capturar valores iniciales para comparar cambios después de que todo se haya cargado
     if (this.isEditMode) {
       setTimeout(() => {
         this.initialValues = this.responseForm.getRawValue();
@@ -200,7 +181,7 @@ export class QuotationResponse implements OnInit {
 
   private handleRequestError(err: any): void {
     console.error('QuotationResponse: Error al cargar solicitud:', err);
-    this.alertService.showError('Error', 'No se pudo cargar la solicitud de cotización.');
+    this.alertService.showError('Error', err.error?.message || 'No se pudo cargar la solicitud de cotización.');
   }
 
   initIndividualValues(items: any[]): void {
@@ -251,7 +232,6 @@ export class QuotationResponse implements OnInit {
   processSave(status: 'PENDING' | 'DRAFT', successMsg: string): void {
     const isDraft = status === 'DRAFT';
 
-    // 1. Validación base para ambos casos (Borrador y Enviar)
     const expirationValid = this.responseForm.get('expirationDate')?.valid;
     const deliveryValid = this.responseForm.get('deliveryTime')?.valid;
 
@@ -262,7 +242,6 @@ export class QuotationResponse implements OnInit {
       return;
     }
 
-    // 2. Validación estricta solo para Enviar
     if (!isDraft) {
       if (this.responseForm.invalid) {
         this.alertService.showError('Precios Inválidos', 'Para enviar la cotización debes ingresar precios mayores a $0 en los productos.');
@@ -297,13 +276,10 @@ export class QuotationResponse implements OnInit {
           this.isSaving = true;
           const formValue = this.responseForm.getRawValue();
 
-          // Sanitización: Si es borrador, algunos campos pudieron quedar vacíos (null => valdrá 0)
           const safeIndividualValues = formValue.individualValues.map((iv: any) => ({
             ...iv,
             individualValue: Number(iv.individualValue) || 0,
           }));
-
-          // Mapeo al modelo que el QuotationService espera
           const data: Partial<Quotation> = {
             id: this.quotationId || undefined,
             quotationRequestId: this.request?.id || '',

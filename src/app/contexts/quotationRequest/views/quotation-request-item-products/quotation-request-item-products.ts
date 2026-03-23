@@ -31,12 +31,9 @@ import { Product } from '../../../product/domain/models/product.model';
 export class QuotationRequestItemProducts implements OnInit {
   private _quotationId: string | null = null;
 
-  // Setter para reaccionar cuando el ID llega desde el Borrador asíncronamente
   @Input() set quotationId(value: string | null) {
     const previousId = this._quotationId;
     this._quotationId = value;
-
-    // Si recibimos un ID válido y es diferente al anterior, cargamos (o recargamos) desde el backend
     if (value && value !== previousId) {
       this.loadSavedProducts();
     }
@@ -60,11 +57,9 @@ export class QuotationRequestItemProducts implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    // Caso: El ID ya está presente al iniciar (ej. solicitudes publicadas)
     if (this.quotationId) {
       this.loadSavedProducts();
     } else {
-      // Caso: Es una solicitud nueva (sin ID aún)
       if (this.mode === 'EDIT' && this.items.length === 0) {
         setTimeout(() => {
           this.addNewRow();
@@ -73,9 +68,6 @@ export class QuotationRequestItemProducts implements OnInit {
     }
   }
 
-  /**
-   * Carga los productos asociados a la solicitud desde el backend
-   */
   loadSavedProducts(): void {
     if (!this.quotationId) return;
 
@@ -83,7 +75,6 @@ export class QuotationRequestItemProducts implements OnInit {
     this.productService.findAllByQuotationRequest(this.quotationId).subscribe({
       next: (products: Product[]) => {
         if (products && products.length > 0) {
-          // Mapeamos Product[] a QuotationItem[]
           this.items = products.map((p, idx) => ({
             id: p.id,
             name: p.name,
@@ -120,7 +111,7 @@ export class QuotationRequestItemProducts implements OnInit {
       quantity: 1,
       unitOfMeasurement: '',
       description: '',
-      refIndex: this.nextRefIndex++, // Índice persistente
+      refIndex: this.nextRefIndex++, 
     };
     this.items = [...this.items, newItem];
     this.notifyChange();
@@ -131,7 +122,7 @@ export class QuotationRequestItemProducts implements OnInit {
       ...item,
       id: 'temp-' + (Date.now() + Math.random()),
       unitOfMeasurement: this.asAny(item).unitOfMeasurement,
-      refIndex: this.nextRefIndex++, // Nuevo índice persistente para el clon
+      refIndex: this.nextRefIndex++, 
     };
     this.items = [...this.items, clonedItem];
     this.notifyChange();
@@ -149,15 +140,14 @@ export class QuotationRequestItemProducts implements OnInit {
       }
     };
 
-    // Si el item ya existe en la DB, lo eliminamos físicamente
     if (item.id && !item.id.startsWith('temp-')) {
       this.productService.delete(item.id).subscribe({
         next: () => {
           this.alertService.showSuccess('Eliminado', 'Producto quitado de la solicitud');
           doRemove();
         },
-        error: () =>
-          this.alertService.showError('Error', 'No se pudo eliminar el producto del servidor'),
+        error: (err) =>
+          this.alertService.showError('Error', err.error?.message || 'No se pudo eliminar el producto del servidor'),
       });
     } else {
       doRemove();

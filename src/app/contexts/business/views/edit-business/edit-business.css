@@ -16,7 +16,6 @@
   align-items: stretch;
 }
 
-/* CARDS COMMON STYLES */
 .info-display-card,
 .edit-form-card,
 .error-card {
@@ -121,10 +120,11 @@
   display: flex;
   gap: 16px;
   width: 100%;
+  flex-wrap: wrap;
 }
 
 .half-width-input {
-  flex: 1;
+  flex: 1 1 250px;
 }
 
 .card-actions-center {

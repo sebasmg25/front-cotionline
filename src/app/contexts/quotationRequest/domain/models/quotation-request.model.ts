@@ -3,7 +3,7 @@ export type QuotationStatus =
   | 'QUOTED'
   | 'EXPIRED'
   | 'CLOSED'
-  | 'DRAFT'; // Nuevo: El usuario está editando, nadie más la ve.
+  | 'DRAFT';
 
 export interface QuotationItem {
   id?: string;
@@ -11,7 +11,7 @@ export interface QuotationItem {
   quantity: number;
   description?: string;
   unitOfMeasurement: string;
-  refIndex?: number; // Identificador persistente para la UI
+  refIndex?: number;
 }
 
 export class QuotationRequest {

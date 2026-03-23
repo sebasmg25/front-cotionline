@@ -59,8 +59,6 @@ export class DashboardSummary implements OnInit {
   ngOnInit(): void {
     const business$ = this.businessService.findByUser().pipe(
       tap((business) => {
-        // CORRECCIÓN CRÍTICA: Si al entrar al dashboard no existe negocio,
-        // redirigimos inmediatamente al registro.
         if (!business) {
           this.router.navigate(['/register-business']);
         }
@@ -89,7 +87,6 @@ export class DashboardSummary implements OnInit {
   private checkPendingSubscription(): void {
     const pendingPlan = localStorage.getItem('pendingSubscriptionPlan');
     if (pendingPlan) {
-      // Remover para no ciclar el pago si recarga la página
       localStorage.removeItem('pendingSubscriptionPlan');
       
       this.alertService.showInfo('Iniciando pago...', 'Preparando la pasarela de pago para tu plan seleccionado.');
@@ -99,8 +96,6 @@ export class DashboardSummary implements OnInit {
           this.wompiService.openWidget(paymentData)
             .then((transaction: any) => {
                this.alertService.showSuccess('Pago exitoso', 'Tu pago ha sido procesado. Pendiente de verificación por Webhook.');
-               // Aquí podríamos recargar el estado del usuario o redirigirlo,
-               // por ahora simplemente recargamos la página o dejamos que disfrute.
                setTimeout(() => window.location.reload(), 2000);
             })
             .catch((err: any) => {

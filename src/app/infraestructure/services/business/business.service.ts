@@ -13,10 +13,6 @@ export class BusinessService implements BusinessRepository {
 
   constructor(private http: HttpClient) {}
 
-  /**
-   * NUEVO: Obtiene el negocio del usuario logueado.
-   * El Backend identificará al usuario por el Token.
-   */
   findByUser(): Observable<Business> {
     return this.http
       .get<{ data: Business }>(`${this.url}/my-business`)
@@ -43,7 +39,6 @@ export class BusinessService implements BusinessRepository {
     return this.http.delete<void>(`${this.url}/${id}`);
   }
 
-  // Método administrativo
   verify(id: string, status: string): Observable<Business> {
     return this.http
       .patch<{ data: Business }>(`${this.url}/${id}/verify`, { status })

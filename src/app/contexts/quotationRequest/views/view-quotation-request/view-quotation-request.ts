@@ -35,7 +35,7 @@ import { QuotationRequestItemProducts } from '../quotation-request-item-products
   styleUrl: './view-quotation-request.css',
 })
 export class ViewQuotationRequest implements OnInit {
-  quotation: any = null; // Usamos any temporalmente para evitar el conflicto de tipos string vs object en la rama
+  quotation: any = null;
   isLoading: boolean = true;
   quotationId: string | null = null;
 
@@ -67,7 +67,6 @@ export class ViewQuotationRequest implements OnInit {
           
           if (typeof this.quotation.branch === 'string') {
             if (this.quotation.branch === 'sede-principal-automatica' || this.quotation.branch === 'principal') {
-              // Reconstruir nombre de sede principal dinámicamente
               forkJoin({
                 business: this.businessService.findByUser(),
                 user: this.userService.getProfile()
@@ -87,7 +86,6 @@ export class ViewQuotationRequest implements OnInit {
                 }
               });
             } else if (!/^[0-9a-f]{8}-[0-9a-f]{4}-[0-5][0-9a-f]{3}-[089ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(this.quotation.branch)) {
-              // Si no es UUID, es la cadena de la sede extraída directamente de la BD (nuevo formato)
               this.quotation.branch = { name: this.quotation.branch };
               this.isLoading = false;
             } else {
@@ -122,7 +120,6 @@ export class ViewQuotationRequest implements OnInit {
     });
   }
 
-  // Función auxiliar para el HTML
   getBranchName(): string {
     if (!this.quotation?.branch) return 'No especificada';
     return typeof this.quotation.branch === 'object'
@@ -147,7 +144,7 @@ export class ViewQuotationRequest implements OnInit {
               this.alertService.showSuccess('Eliminado', 'Solicitud eliminada con éxito');
               this.router.navigate(['/dashboard/quotations']);
             },
-            error: () => this.alertService.showError('Error', 'No se pudo eliminar la solicitud'),
+            error: (err) => this.alertService.showError('Error', err.error?.message || 'No se pudo eliminar la solicitud'),
           });
         }
       });

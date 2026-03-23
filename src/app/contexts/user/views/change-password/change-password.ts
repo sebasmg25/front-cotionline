@@ -10,7 +10,6 @@ import {
 } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 
-// Angular Material
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -56,7 +55,6 @@ export class ChangePassword {
             Validators.required,
             Validators.minLength(8),
             Validators.maxLength(12),
-            // Sincronizado con tu backend: Mayúscula, Minúscula, Número y Caracter Especial
             Validators.pattern(
               /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,12}$/,
             ),
@@ -68,7 +66,6 @@ export class ChangePassword {
     );
   }
 
-  // Validador personalizado para asegurar que ambas coinciden
   passwordMatchValidator(control: AbstractControl): ValidationErrors | null {
     const password = control.get('password');
     const confirmPassword = control.get('confirmPassword');

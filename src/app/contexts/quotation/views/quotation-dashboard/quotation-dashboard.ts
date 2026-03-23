@@ -61,21 +61,17 @@ export class QuotationDashboard implements OnInit {
       city: ['']
     });
 
-    // Listen to department changes to update city list
     this.filterForm.get('department')?.valueChanges.subscribe(dept => {
       this.cities = dept ? COLOMBIAN_DATA[dept] || [] : [];
       this.filterForm.get('city')?.setValue('');
     });
-
-    // Inicialización de flujos desde el servicio corregido
     this.sentQuotations$ = this.quotationService.getSentQuotations();
     this.receivedQuotations$ = this.quotationService.getReceivedQuotations();
     this.draftQuotations$ = this.quotationService.getDraftQuotations();
 
-    // Reactive filtering for incoming requests - subscribed manually to avoid *ngIf deadlock
     this.marketplaceSubscription = this.filterForm.valueChanges.pipe(
       startWith(this.filterForm.value),
-      delay(0), // Evita ExpressionChangedAfterItHasBeenCheckedError
+      delay(0),
       tap(() => this.isMarketplaceLoading = true),
       switchMap(filters => this.quotationService.getIncomingRequests({
         department: filters.department || undefined,

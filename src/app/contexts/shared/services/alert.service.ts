@@ -8,15 +8,12 @@ export class AlertService {
 
     constructor() { }
 
-    /**
-     * Shows a generic beautiful alert
-     */
     private showAlert(title: string, message: string, icon: SweetAlertIcon) {
         Swal.fire({
             title: title,
             text: message,
             icon: icon,
-            confirmButtonColor: '#3f51b5', // Angular Material Primary Color
+            confirmButtonColor: '#3f51b5',
             confirmButtonText: 'Entendido',
             timer: 4000,
             timerProgressBar: true,
@@ -45,14 +42,6 @@ export class AlertService {
         this.showAlert(title, message, 'info');
     }
 
-    /**
-     * Prompts the user with a confirmation dialog before proceeding
-     * @param title Title of the confirmation box
-     * @param text Detailed text
-     * @param confirmText Text for the confirm button
-     * @param cancelText Text for the cancel button
-     * @returns Promise that resolves to true if confirmed, false otherwise
-     */
     confirmAction(
         title: string,
         text: string,
@@ -64,7 +53,7 @@ export class AlertService {
             text: text,
             icon: 'question',
             showCancelButton: true,
-            confirmButtonColor: '#f44336', // Warn color for destructive actions
+            confirmButtonColor: '#f44336',
             cancelButtonColor: '#9e9e9e',
             confirmButtonText: confirmText,
             cancelButtonText: cancelText,

@@ -27,7 +27,7 @@ import { DEPARTMENTS, COLOMBIAN_DATA } from '../../../shared/data/cities.data';
     MatIconModule,
     MatFormFieldModule,
     MatAutocompleteModule,
-    MatProgressSpinnerModule, // Añadido
+    MatProgressSpinnerModule,
   ],
   templateUrl: './edit-branch.html',
   styleUrl: './edit-branch.css',
@@ -40,7 +40,6 @@ export class EditBranch implements OnInit {
   isSaving: boolean = false;
   initialValues: any = null;
 
-  // Lógica de Geografía
   departments: string[] = DEPARTMENTS;
   filteredDepartments$!: Observable<string[]>;
   filteredCities$!: Observable<string[]>;
@@ -79,7 +78,7 @@ export class EditBranch implements OnInit {
   private initForm(): void {
     this.branchForm = this.fb.group({
       name: ['', [Validators.required, Validators.minLength(3)]],
-      department: ['', [Validators.required]], // Campo necesario para filtrar ciudades
+      department: ['', [Validators.required]],
       city: [{ value: '', disabled: true }, [Validators.required]],
       address: ['', [Validators.required]],
       businessId: ['', [Validators.required]],
@@ -121,7 +120,6 @@ export class EditBranch implements OnInit {
     this.isLoading = true;
     this.branchService.findById(id).subscribe({
       next: (branch) => {
-        // Encontrar el departamento al que pertenece la ciudad guardada
         const foundDept =
           this.departments.find((dept) => COLOMBIAN_DATA[dept].includes(branch.city)) || '';
 
@@ -140,17 +138,16 @@ export class EditBranch implements OnInit {
         this.initialValues = this.branchForm.getRawValue();
         this.isLoading = false;
       },
-      error: (error) => {
+      error: (err) => {
         this.branchNotFound = true;
         this.isLoading = false;
-        this.alertService.showError('Error', 'No se pudo cargar la información de la sede.');
+        this.alertService.showError('Error', err.error?.message || 'No se pudo cargar la información de la sede.');
       },
     });
   }
 
   onSubmit(): void {
     if (this.branchForm.valid && this.branchId) {
-      // Validar que la ciudad escrita exista realmente en el departamento seleccionado
       const { department, city } = this.branchForm.getRawValue();
       if (!COLOMBIAN_DATA[department]?.includes(city)) {
         this.alertService.showWarning(
@@ -161,7 +158,6 @@ export class EditBranch implements OnInit {
       }
 
       this.isSaving = true;
-      // Enviamos solo los campos que el modelo Branch espera
       const updateData = {
         name: this.branchForm.value.name,
         city: this.branchForm.value.city,
@@ -173,9 +169,9 @@ export class EditBranch implements OnInit {
           this.alertService.showSuccess('Éxito', 'Sede actualizada correctamente');
           this.router.navigate(['/dashboard/branches']);
         },
-        error: (error) => {
+        error: (err) => {
           this.isSaving = false;
-          this.alertService.showError('Error', 'No se pudo actualizar la sede.');
+          this.alertService.showError('Error', err.error?.message || 'No se pudo actualizar la sede.');
         },
       });
     }

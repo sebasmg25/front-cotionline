@@ -10,7 +10,7 @@ export class User {
   public email: string;
   public password: string;
   public city: string;
-  public department: string; // New field
+  public department: string;
   public id?: string;
   public planId?: string;
   public planStartDate?: Date;

@@ -14,7 +14,6 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { forkJoin, of } from 'rxjs';
 import { catchError, switchMap, map } from 'rxjs/operators';
 
-// Servicios
 import { QuotationRequestService } from '../../../../infraestructure/services/quotation-request/quotation-request.service';
 import { ProductService } from '../../../../infraestructure/services/product/product.service';
 import { BranchService } from '../../../../infraestructure/services/branch/branch.service';
@@ -22,7 +21,6 @@ import { BusinessService } from '../../../../infraestructure/services/business/b
 import { UserService } from '../../../../infraestructure/services/user/user.service';
 import { AlertService } from '../../../../contexts/shared/services/alert.service';
 
-// Modelos y Componentes
 import {
   QuotationStatus,
   QuotationItem,
@@ -107,16 +105,12 @@ export class RegisterQuotationRequest implements OnInit {
   ngOnInit(): void {
     this.loadBranches();
 
-    // Capturamos el origen de la navegación
     this.route.queryParamMap.subscribe((params) => {
       this.navigationOrigin = params.get('origin');
     });
-
-    // Usamos paramMap para reaccionar a cambios en el ID de la URL de forma reactiva
     this.route.paramMap.pipe(
       switchMap(params => {
         const id = params.get('id');
-        // Siempre cargamos las sedes primero
         return this.loadBranches().pipe(
           map(branches => ({ id, branches }))
         );
@@ -145,8 +139,8 @@ export class RegisterQuotationRequest implements OnInit {
             map(({ branches, user }) => ({ branches, business, user }))
           );
         }),
-        catchError(() => {
-          this.alertService.showError('Error', 'No se pudieron cargar las sedes.');
+        catchError((err) => {
+          this.alertService.showError('Error', err.error?.message || 'No se pudieron cargar las sedes.');
           return of({ branches: [], business: null, user: null });
         }),
         map(({ branches, business, user }) => {
@@ -161,7 +155,6 @@ export class RegisterQuotationRequest implements OnInit {
               businessId: business.id
             } as Branch;
 
-            // Formatear las sedes secundarias para que luzcan igual a la principal
             const formattedBranches = branches.map(b => ({
               ...b,
               name: `${b.name} (${user.department}, ${b.city} - ${b.address || 'Sin dirección'})`
@@ -188,7 +181,6 @@ export class RegisterQuotationRequest implements OnInit {
         let branchValue =
           typeof quotation.branch === 'object' ? (quotation.branch as any).id : quotation.branch;
         
-        // Normalización específica para la sede principal de legado/automatica
         if (branchValue === 'sede-principal-automatica') {
           branchValue = 'principal';
         }
@@ -205,14 +197,10 @@ export class RegisterQuotationRequest implements OnInit {
         if (this.currentStatus !== 'DRAFT') {
           this.quotationForm.disable();
         }
-
-        // Ya no llamamos aquí a updateInitialHash porque los productos
-        // pueden estar cargándose asíncronamente en el componente hijo
       }
     });
   }
 
-  // Nuevo método para recibir la señal de que los productos iniciales se cargaron
   onProductsLoaded(): void {
     if (!this.initialFormHash) {
       this.updateInitialHash();
@@ -260,7 +248,6 @@ export class RegisterQuotationRequest implements OnInit {
   }
 
   saveAsDraft(): void {
-    // Validar sede explícitamente (por si el valor no coincide con las opciones)
     const branchId = this.quotationForm.get('branch')?.value;
     const branchExists = this.branches.find(b => b.id === branchId);
     
@@ -285,14 +272,10 @@ export class RegisterQuotationRequest implements OnInit {
       return;
     }
 
-    /* Duplicate name check removed at user request */
-
-
     this.processSave('DRAFT', 'Borrador guardado exitosamente');
   }
 
   publish(): void {
-    // Validar sede explícitamente
     const branchId = this.quotationForm.get('branch')?.value;
     const branchExists = this.branches.find(b => b.id === branchId);
 
@@ -303,7 +286,6 @@ export class RegisterQuotationRequest implements OnInit {
     }
 
     if (!this.isListValid()) {
-      // Re-validamos nombres duplicados para el mensaje específico
       const names = this.selectedProducts.map(p => p.name.trim().toLowerCase());
       const hasDuplicates = names.length !== new Set(names).size;
 
@@ -318,9 +300,6 @@ export class RegisterQuotationRequest implements OnInit {
       return;
     }
 
-    /* Duplicate name check removed at user request */
-
-
     this.alertService
       .confirmAction('¿Publicar?', 'Se enviará a los proveedores.', 'Publicar', 'Cancelar')
       .then((confirmed) => {
@@ -331,13 +310,10 @@ export class RegisterQuotationRequest implements OnInit {
   public isListValid(): boolean {
     if (!this.selectedProducts || this.selectedProducts.length === 0) return false;
 
-    // 1. Validar campos obligatorios
     const allFieldsFilled = this.selectedProducts.every(
       (p) => p.name?.trim() && p.quantity > 0 && p.unitOfMeasurement?.trim(),
     );
     if (!allFieldsFilled) return false;
-
-    // 2. Validar nombres únicos (intra-solicitud, case-insensitive)
     const names = this.selectedProducts.map(p => p.name.trim().toLowerCase());
     const uniqueNames = new Set(names);
     return names.length === uniqueNames.size;
@@ -347,7 +323,6 @@ export class RegisterQuotationRequest implements OnInit {
 
   private processSave(status: QuotationStatus, successMsg: string): void {
     this.isSaving = true;
-    // getRawValue incluye campos deshabilitados si fuera necesario
     const formValues = this.quotationForm.getRawValue();
 
     const quotationData: Partial<QuotationRequest> = {
@@ -355,9 +330,6 @@ export class RegisterQuotationRequest implements OnInit {
       status: status,
     };
 
-
-
-    // 1. Guardamos o actualizamos la solicitud (padre)
     const request$ =
       this.isEditMode && this.quotationId
         ? this.quotationService.update(this.quotationId, quotationData)
@@ -372,12 +344,9 @@ export class RegisterQuotationRequest implements OnInit {
             throw new Error('ID no encontrado tras guardar la solicitud');
           }
 
-          // 2. Preparamos las operaciones de los productos
-          // FILTRO: Solo procesamos productos que tengan nombre (evitamos enviar filas vacías)
           const validProducts = this.selectedProducts.filter((item) => item.name?.trim());
 
           if (validProducts.length === 0) {
-            console.log('No hay productos válidos para guardar');
             return of(savedQuotation);
           }
 
@@ -393,8 +362,6 @@ export class RegisterQuotationRequest implements OnInit {
             if (String(item.id).startsWith('temp-')) {
               return this.productService.save(productBody);
             } else {
-              // OPTIMIZACIÓN: Solo actualizar si realmente cambió este producto específico
-              // Buscamos el estado inicial en el hash (si existe)
               const isChanged = this.checkIfProductChanged(item);
               if (isChanged) {
                 return this.productService.update(item.id!, productBody);
@@ -435,9 +402,14 @@ export class RegisterQuotationRequest implements OnInit {
       .confirmAction('¿Eliminar?', 'Esta acción es irreversible.', 'Eliminar', 'Cancelar')
       .then((confirmed) => {
         if (confirmed) {
-          this.quotationService.delete(this.quotationId!).subscribe(() => {
-            this.alertService.showSuccess('Eliminado', 'Solicitud eliminada con éxito');
-            this.performRedirect();
+          this.quotationService.delete(this.quotationId!).subscribe({
+            next: () => {
+              this.alertService.showSuccess('Eliminado', 'Solicitud eliminada con éxito');
+              this.performRedirect();
+            },
+            error: (err) => {
+              this.alertService.showError('Error', err.error?.message || 'No se pudo eliminar la solicitud');
+            }
           });
         }
       });
@@ -472,7 +444,6 @@ export class RegisterQuotationRequest implements OnInit {
     const initial = JSON.parse(this.initialFormHash);
     const initialProducts = initial.products as any[];
     
-    // Como queremos mantener el orden, usamos el refIndex o el nombre si es único
     const original = initialProducts.find((p, idx) => p.id === item.id || (idx + 1 === item.refIndex));
     if (!original) return true;
 

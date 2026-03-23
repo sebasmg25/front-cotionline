@@ -42,7 +42,6 @@ td.mat-cell {
     color: #333;
 }
 
-/* Search Filters Styling */
 .search-container {
     margin: 10px 0 20px 0;
     display: flex;
@@ -55,7 +54,6 @@ td.mat-cell {
     max-width: 100%;
 }
 
-/* Ensure labels don't overlap by giving enough room */
 .mat-mdc-form-field {
     display: block;
 }
@@ -66,7 +64,6 @@ td.mat-cell {
     }
 }
 
-/* Status Badges */
 .status-badge {
     display: inline-block;
     padding: 4px 8px;

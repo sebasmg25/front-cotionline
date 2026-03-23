@@ -1,12 +1,10 @@
 <app-toolbar *ngIf="!isDialog"></app-toolbar>
 
-<!-- Unificador de estilo para cuando sea página completa -->
 <div [class.login-page-wrapper]="!isDialog">
   <mat-card [class.login-standalone-card]="!isDialog">
     
     <h2 mat-dialog-title class="dialog-title-container" [class.standalone-title]="!isDialog">
       <span class="title-text">¡Ingresa a Cotionline!</span>
-      <!-- Botón de cierre solo en Diálogo -->
       <button mat-icon-button [mat-dialog-close]="true" class="close-button" *ngIf="isDialog">
         <mat-icon>close</mat-icon>
       </button>
@@ -42,9 +40,12 @@
               <mat-icon matPrefix>lock</mat-icon>
             </mat-form-field>
 
-            <div class="checkbox-container">
-              <mat-checkbox color="primary" class="remember-checkbox">Recordar sesión</mat-checkbox>
+            <div class="forgot-password-container">
+              <button mat-button type="button" class="forgot-password-link" (click)="openForgotPassword()">
+                ¿Olvidaste tu contraseña?
+              </button>
             </div>
+
           </div>
         </form>
       </div>

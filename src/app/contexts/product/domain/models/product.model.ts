@@ -2,9 +2,9 @@ export class Product {
   public id?: string;
   public name: string;
   public description: string;
-  public amount: number; // Antes: stock
-  public unitOfMeasurement: string; // Antes: measure_unit
-  public quotationRequestId?: string; // Vinculación con la solicitud
+  public amount: number;
+  public unitOfMeasurement: string;
+  public quotationRequestId?: string;
 
   constructor(
     name: string,

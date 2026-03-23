@@ -5,7 +5,6 @@
     </div>
 
     <div class="content-grid" *ngIf="!isLoading && currentPlan">
-        <!-- PLAN ACTUAL -->
         <mat-card class="subscription-card" [class.premium-border]="currentPlan.name === 'PREMIUM'">
             <mat-card-header>
                 <div mat-card-avatar class="plan-icon">

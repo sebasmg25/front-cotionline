@@ -56,7 +56,7 @@
 
 .form-row {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   gap: 20px;
 }
 
@@ -71,7 +71,6 @@
   flex: 1 1 auto;
 }
 
-/* Products Section Styles */
 .products-section {
   padding: 20px 0;
 }
@@ -158,7 +157,7 @@
 
 .qty-field {
   width: 80px;
-  margin-bottom: -1.25em; /* Compensate for form field spacing */
+  margin-bottom: -1.25em; 
 }
 
 .empty-products-state {

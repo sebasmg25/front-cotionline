@@ -65,9 +65,9 @@ export class CollaboratorManagement implements OnInit {
                 this.alertService.showSuccess('Invitación Enviada', `Se ha invitado a ${newInv.email}`);
                 this.refreshList();
             },
-            error: () => {
+            error: (err) => {
                 this.isSaving = false;
-                this.alertService.showError('Error', 'No se pudo enviar la invitación');
+                this.alertService.showError('Error', err.error?.message || 'No se pudo enviar la invitación');
             }
         });
     }
@@ -84,9 +84,14 @@ export class CollaboratorManagement implements OnInit {
             'Cancelar'
         ).then(confirmed => {
             if (confirmed) {
-                this.collaboratorService.deleteInvitation(inv.id).subscribe(() => {
-                    this.alertService.showSuccess('Eliminado', 'La invitación ha sido eliminada');
-                    this.refreshList();
+                this.collaboratorService.deleteInvitation(inv.id).subscribe({
+                    next: () => {
+                        this.alertService.showSuccess('Eliminado', 'La invitación ha sido eliminada');
+                        this.refreshList();
+                    },
+                    error: (err) => {
+                        this.alertService.showError('Error', err.error?.message || 'No se pudo eliminar la invitación');
+                    }
                 });
             }
         });

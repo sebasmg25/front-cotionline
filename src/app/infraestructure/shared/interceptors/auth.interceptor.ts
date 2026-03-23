@@ -19,7 +19,6 @@ export const authInterceptor: HttpInterceptorFn = (
   const router = inject(Router);
   const token = authService.getToken();
 
-  // 1. Clonamos la petición para añadir el Header si el token existe
   let authReq = req;
   if (token) {
     authReq = req.clone({
@@ -29,17 +28,13 @@ export const authInterceptor: HttpInterceptorFn = (
     });
   }
 
-  // 2. Enviamos la petición y manejamos posibles errores de respuesta
   return next(authReq).pipe(
     catchError((error: HttpErrorResponse) => {
-      // Si el backend responde 401, el token expiró o es inválido
       if (error.status === 401) {
-        console.warn('Sesión expirada o no autorizada. Limpiando datos...');
-        authService.logout(); // Borra el token del localStorage
-        router.navigate(['/login']); // Redirige al login
+        authService.logout();
+        router.navigate(['/login']);
       }
 
-      // Lanzamos el error para que el servicio/componente también pueda manejarlo si quiere
       return throwError(() => error);
     }),
   );

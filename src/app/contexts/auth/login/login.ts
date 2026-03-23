@@ -13,12 +13,13 @@ import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { Toolbar } from '../../shared/toolbar/toolbar';
 import { Optional } from '@angular/core';
-import { MatDialogRef } from '@angular/material/dialog';
+import { MatDialogRef, MatDialog } from '@angular/material/dialog';
 import { AlertService } from '../../shared/services/alert.service';
+import { ForgotPasswordDialog } from './forgot-password-dialog/forgot-password-dialog';
 
 @Component({
   selector: 'app-login',
-  standalone: true, // Asegúrate de tener esto si es standalone
+  standalone: true,
   imports: [
     FormsModule,
     MatCardModule,
@@ -39,9 +40,10 @@ export class Login implements OnInit {
   isLoading: boolean = false;
 
   constructor(
-    private authService: AuthService, // ✅ Inyectamos el nuevo servicio
+    private authService: AuthService,
     private router: Router,
     private alertService: AlertService,
+    private dialog: MatDialog,
     @Optional() private dialogRef: MatDialogRef<Login>,
   ) {
     this.isDialog = !!this.dialogRef;
@@ -64,10 +66,8 @@ export class Login implements OnInit {
       password: this.password,
     };
 
-    // ✅ Usamos el método login de AuthService
     this.authService.login(credentials).subscribe({
       next: (response: LoginResponse) => {
-        // ✅ Guardamos el token en LocalStorage a través del AuthService
         this.authService.saveToken(response.token);
         this.isLoading = false;
 
@@ -78,10 +78,8 @@ export class Login implements OnInit {
         this.router.navigate(['/dashboard']);
       },
       error: (err) => {
-        // ✅ Tipado preventivo para TypeScript
         this.isLoading = false;
 
-        // Intentamos extraer el mensaje real del backend (ej: "Usuario no encontrado")
         const errorMessage =
           err.error?.message || 'Correo o contraseña incorrectos. Por favor intenta de nuevo.';
         this.alertService.showError('Error de acceso', errorMessage);
@@ -89,8 +87,15 @@ export class Login implements OnInit {
         console.error('Error al iniciar sesión', err);
       },
       complete: () => {
-        console.log('Flujo de login completado');
       },
+    });
+  }
+
+  openForgotPassword(): void {
+    this.dialog.open(ForgotPasswordDialog, {
+      width: '400px',
+      maxWidth: '90vw',
+      disableClose: false
     });
   }
 }

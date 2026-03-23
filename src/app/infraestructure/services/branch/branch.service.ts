@@ -13,10 +13,6 @@ export class BranchService implements BranchRepository {
 
   constructor(private http: HttpClient) {}
 
-  /**
-   * RECORRECIÓN: findAll() ahora llama a la ruta correcta del backend.
-   * Si no tienes el businessId global, lo ideal es obtenerlo del perfil del usuario.
-   */
   findAll(): Observable<Branch[]> {
     const businessId = localStorage.getItem('businessId');
     if (!businessId) return of([]);

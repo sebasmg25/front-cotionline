@@ -29,7 +29,6 @@
     margin: 4px 0 0;
 }
 
-/* States */
 .loading-state, .not-found-state {
     text-align: center;
     padding: 80px 40px;
@@ -60,7 +59,6 @@
     to { transform: rotate(360deg); }
 }
 
-/* Card */
 .detail-card {
     border-radius: 24px !important;
     background: var(--surface-glass) !important;
@@ -70,7 +68,6 @@
     padding: 8px;
 }
 
-/* Meta row */
 .detail-meta {
     display: flex;
     align-items: center;
@@ -141,7 +138,6 @@
     opacity: 0.3;
 }
 
-/* Content */
 .detail-title {
     font-size: 1.5rem;
     font-weight: 700;

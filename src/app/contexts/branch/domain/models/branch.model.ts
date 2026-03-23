@@ -1,9 +1,9 @@
 export class Branch {
-  public id?: string; // codigo
-  public name: string; // nombre
-  public address: string; // dirección
-  public city: string; // ciudad (keep for context)
-  public businessId: string; // negocio (clave foranea)
+  public id?: string;
+  public name: string;
+  public address: string;
+  public city: string;
+  public businessId: string;
 
   constructor(name: string, address: string, city: string, businessId: string, id?: string) {
     this.name = name;

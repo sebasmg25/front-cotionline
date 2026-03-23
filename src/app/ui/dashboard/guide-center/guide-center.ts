@@ -101,7 +101,6 @@ export class GuideCenter implements OnInit {
     const targetRoute = routeMap[guideId];
     if (targetRoute) {
       this.router.navigate([targetRoute]).then(() => {
-        // Un pequeño delay para que la vista se cargue antes de iniciar el tour
         setTimeout(() => this.guideService.startGuide(guideId), 600);
       });
     } else {
