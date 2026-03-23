@@ -7,7 +7,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialogModule } from '@angular/material/dialog';
-import { AuthService } from '../../../infraestructure/services/auth/auth.service'; // ✅ Cambio: Usar AuthService
+import { AuthService } from '../../../infraestructure/services/auth/auth.service';
 import { LoginResponse } from '../../user/domain/user.repository';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';

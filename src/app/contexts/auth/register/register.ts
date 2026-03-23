@@ -7,7 +7,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { DEPARTMENTS, COLOMBIAN_DATA } from '../../shared/data/cities.data';
 import { User, UserRole } from '../../user/domain/models/user.model';
-import { AuthService } from '../../../infraestructure/services/auth/auth.service'; // Cambio de servicio
+import { AuthService } from '../../../infraestructure/services/auth/auth.service'; 
 import { Router, ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import { startWith, map } from 'rxjs/operators';

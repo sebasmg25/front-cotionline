@@ -1,5 +1,5 @@
-import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core'; // Importado de @angular/core
-import { ReactiveFormsModule, FormsModule } from '@angular/forms'; // Importado de @angular/forms
+import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';

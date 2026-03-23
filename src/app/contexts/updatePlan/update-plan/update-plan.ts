@@ -2,7 +2,7 @@ import { Component, OnInit, signal } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
-import { DecimalPipe } from '@angular/common'; // Necesario para formatear el número
+import { DecimalPipe } from '@angular/common';
 import { SubscriptionService } from '../../../infraestructure/services/subscription/subscription.service';
 import { WompiService } from '../../../infraestructure/services/payment/wompi.service';
 import { AlertService } from '../../shared/services/alert.service';
